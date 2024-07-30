@@ -3,7 +3,7 @@ import {Typography} from "@mui/material";
 const Main = () => {
 
     return (
-        <Typography variant="h5">
+        <Typography variant="div" style={{margin:"auto", width:"100%"}}>
             Test in cssssssss
         </Typography>
     )
