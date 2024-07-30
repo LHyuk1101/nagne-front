@@ -7,6 +7,7 @@ import MenuIcon from '@mui/icons-material/Menu';
 import RightDrawer from '../UI/RightTemporaryDrawer.jsx';
 import {WINDOW_MD_WIDTH_SIZE} from "../../constants/constant.js";
 import Box from "@mui/material/Box";
+import logo from '../../assets/images/nagne_logo.png';
 
 const Header = () => {
     const [open, setOpen] = useState(false);
@@ -42,10 +43,10 @@ const Header = () => {
                 <Toolbar>
                     <Box sx={{display: 'flex', alignItems: 'center', flexGrow: 1}}>
                         <img
-                            src="/path/to/your/logo.png"
+                            src={logo}
                             alt="Logo"
                             style={{
-                                height: '30px',
+                                height: '46px',
                                 marginRight: '10px'
                             }}
                         />

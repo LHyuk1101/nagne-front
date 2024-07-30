@@ -1,7 +1,6 @@
 import '../App.css'
 import {BrowserRouter} from "react-router-dom";
 import Router from "../router/index.jsx";
-import Header from "../components/Layout/Header";
 import {createTheme, ThemeProvider} from "@mui/material";
 import DefaultLayout from "../components/Layout/DefaultLayout.jsx";
 
@@ -17,14 +16,20 @@ function App() {
                 contrastText: '#364D1C',
             },
         },
+        breakpoints: {
+            values: {
+                xs: 0,
+                sm: 768
+            }
+        }
     });
     return (
         <ThemeProvider theme={theme}>
-            <DefaultLayout>
-                <BrowserRouter basename="/">
-                    <Router/>
-                </BrowserRouter>
-            </DefaultLayout>
+            <BrowserRouter basename="/">
+                <DefaultLayout>
+                        <Router/>
+                </DefaultLayout>
+            </BrowserRouter>
         </ThemeProvider>
     )
 }
