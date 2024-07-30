@@ -5,7 +5,7 @@ import Main from "../pages/Main.jsx";
 const Router = () => {
     return (
         <Routes>
-            <Route path="/" element={<Main />}/>
+            <Route path="" element={<Main />}/>
         </Routes>
     )
 }

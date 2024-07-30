@@ -1,50 +1,42 @@
 import React from 'react';
 import { AppBar, Box, Button, Container, Toolbar, Typography } from '@mui/material';
-import { styled } from '@mui/material/styles';
 
-const OverlayGroup = styled(Box)(({ theme }) => ({
-    position: 'relative',
-    width: '235px',
-    height: '91px',
-}));
+const OverlayGroup = (props) => (
+    <Box
+        {...props}
+        sx={{
+            position: 'relative',
+            width: '100%',
+            maxWidth: '235px',
+            height: '91px',
+        }}
+    />
+);
 
-const NagneImage = styled('img')(({ theme }) => ({
-    width: '111px',
-    objectFit: 'cover',
-    position: 'absolute',
-    height: '91px',
-    top: 0,
-    left: 0,
-}));
-
-const AreaImage = styled('img')(({ theme }) => ({
-    width: '159px',
-    height: '162px',
-}));
+const AreaImage = (props) => (
+    <Box
+        component="img"
+        {...props}
+        sx={{
+            width: '100%',
+            maxWidth: '100%',
+            height: 'auto',
+        }}
+    />
+);
 
 const NavBar = () => (
     <AppBar position="static" sx={{ backgroundColor: '#ffffff', boxShadow: 'none' }}>
         <Toolbar sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
-            <div style={{ display: 'flex', alignItems: 'center' }}>
-                <img src="https://ifh.cc/g/P714sJ.png" style={{ marginRight: '30px', height: '60px' }} />
-                <Typography variant="h6" sx={{ color: '#000000' }}>
-                    Nagne
-                </Typography>
-            </div>
-            <Button color="inherit" sx={{ color: '#000000', fontSize: '2rem',
-                minWidth: 'auto',
-                padding: '6px 12px'  }}>
-                =
-            </Button>
         </Toolbar>
     </AppBar>
 );
 
 const Logo = () => (
-    <Box sx={{ position: 'relative', width: '584px', height: '90.54px' }}>
+    <Box sx={{ position: 'relative', width: '100%', height: '90.54px' }}>
         <Box sx={{ position: 'relative', height: '91px' }}>
             <OverlayGroup>
-                <Typography variant="h5" sx={{ position: 'absolute', top: '23px', left: '83px', textAlign: 'center' , color: '#000000' }}>
+                <Typography variant="h5" sx={{ position: 'absolute', top: '23px', left: '50%', transform: 'translateX(-50%)', textAlign: 'center', color: '#000000' }}>
                 </Typography>
             </OverlayGroup>
         </Box>
@@ -52,53 +44,53 @@ const Logo = () => (
 );
 
 const MainContent = () => (
-    <Box sx={{ position: 'relative', width: '604px', height: '962px' }}>
-        <Box sx={{ position: 'absolute', width: '604px', height: '439px', top: '416px', left: 0 }}>
-            <Typography variant="h4" sx={{ position: 'absolute', top: '28px', left: '20px', color: '#000000' }}>
+    <Box sx={{ position: 'relative', width: '100%', paddingBottom: '16px' }}>
+        <Box sx={{ padding: '16px 20px' }}>
+            <Typography variant="h4" sx={{ color: '#000000', marginBottom: '16px' }}>
                 Travel Destination
             </Typography>
-            <Box sx={{ position: 'absolute', top: '168px', left: '20px', display: 'flex', gap: 2 }}>
-                <Box>
-                    <AreaImage src="area-3-image.svg" alt="Area 1" />
-                    <Typography variant="h6" sx={{ textAlign: 'center', color: '#000000' }}> {/* Updated text color */}
+            <Box sx={{ display: 'flex', justifyContent: 'space-between', flexWrap: 'wrap', gap: 1 }}>
+                <Box sx={{ width: 'calc(33% - 8px)' }}>
+                    <AreaImage src="https://ifh.cc/g/P714sJ.png" alt="Area 1" />
+                    <Typography variant="h6" sx={{ textAlign: 'center', color: '#000000', marginTop: '8px' }}>
                         Area 1
                     </Typography>
                 </Box>
-                <Box>
-                    <AreaImage src="area-2-image.svg" alt="Area 2" />
-                    <Typography variant="h6" sx={{ textAlign: 'center', color: '#000000' }}> {/* Updated text color */}
+                <Box sx={{ width: 'calc(33% - 8px)' }}>
+                    <AreaImage src="https://ifh.cc/g/P714sJ.png" alt="Area 2" />
+                    <Typography variant="h6" sx={{ textAlign: 'center', color: '#000000', marginTop: '8px' }}>
                         Area 2
                     </Typography>
                 </Box>
-                <Box>
-                    <AreaImage src="area-1-image.svg" alt="Area 3" />
-                    <Typography variant="h6" sx={{ textAlign: 'center', color: '#000000' }}> {/* Updated text color */}
+                <Box sx={{ width: 'calc(33% - 8px)' }}>
+                    <AreaImage src="https://ifh.cc/g/P714sJ.png" alt="Area 3" />
+                    <Typography variant="h6" sx={{ textAlign: 'center', color: '#000000', marginTop: '8px' }}>
                         Area 3
                     </Typography>
                 </Box>
             </Box>
         </Box>
-        <Box sx={{ position: 'absolute', width: '604px', height: '368px', top: '22px', left: 0 }}>
-            <Typography variant="h3" sx={{ position: 'absolute', top: '-1px', left: '20px', color: '#000000' }}>
-                <span>Get recommended <br />hidden hot places <br />in Korea and <br />make a travel plan!<br /><br /></span>
-                <span style={{ fontSize: '25px' }}>Are you ready?</span>
+        <Box sx={{ padding: '16px 20px', textAlign: 'center' }}>
+            <Typography variant="h3" sx={{ color: '#000000', marginBottom: '16px', fontSize: '5vw' }}>
+                Get recommended <br />hidden hot places <br />in Korea and <br />make a travel plan!
             </Typography>
-            <Box sx={{ position: 'absolute', width: '180px', height: '68px', top: '298px', right: '20px' }}>
-                <Button variant="contained" sx={{ width: '100%', height: '100%', backgroundColor: '#3561f1', border: '1px solid #000' }}>
-                    <Typography variant="h6" sx={{ color: '#ffffff' }}>
-                        Let’s Start!
-                    </Typography>
-                </Button>
-            </Box>
+            <Typography variant="h5" sx={{ fontSize: '4vw', color: '#000000', marginBottom: '16px' }}>
+                Are you ready?
+            </Typography>
+            <Button variant="contained" sx={{ width: '80%', maxWidth: '300px', height: '48px', backgroundColor: '#3561f1', border: '1px solid #000', margin: '0 auto' }}>
+                <Typography variant="h6" sx={{ color: '#ffffff' }}>
+                    Let’s Start!
+                </Typography>
+            </Button>
         </Box>
     </Box>
 );
 
 const App = () => {
     return (
-        <Container sx={{ backgroundColor: '#ffffff', height: '100%', padding: 2 }}>
+        <Container sx={{ backgroundColor: '#ffffff', minHeight: '100vh', padding: 0 }}>
             <NavBar />
-            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6 }}>
+            <Box sx={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6 }}>
                 <Logo />
                 <MainContent />
             </Box>
