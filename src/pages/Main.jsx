@@ -2,7 +2,6 @@ import React from 'react';
 import { AppBar, Box, Button, Container, Toolbar, Typography } from '@mui/material';
 import { styled } from '@mui/material/styles';
 
-// Styled components for the images and layout
 const OverlayGroup = styled(Box)(({ theme }) => ({
     position: 'relative',
     width: '235px',
