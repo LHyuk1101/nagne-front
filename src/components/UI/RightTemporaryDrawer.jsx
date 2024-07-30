@@ -7,10 +7,12 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Box from '@mui/material/Box';
 import PersonIcon from '@mui/icons-material/Person';
+import {Divider} from "@mui/material";
+import {Link} from "react-router-dom";
 
 const NaviItems = [
     {
-        icon: <PersonIcon />,
+        icon: <PersonIcon/>,
         text: 'login',
         isLogin: false
     }, {
@@ -37,7 +39,6 @@ const NaviItems = [
 
 const RightDrawer = ({open, onClose}) => {
 
-
     const list = () => (
         <Box
             sx={{width: 200}}
@@ -45,6 +46,16 @@ const RightDrawer = ({open, onClose}) => {
             onClick={onClose}
             onKeyDown={onClose}
         >
+            <List>
+                <Link to='/login'>
+                <ListItemButton>
+                    <ListItemText primary="로그인하기 >">
+
+                    </ListItemText>
+                </ListItemButton>
+                </Link>
+                <Divider/>
+            </List>
             <List>
                 {NaviItems.map((item) => (
                     <ListItem key={item.text} disablePadding>
