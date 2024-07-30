@@ -20,11 +20,11 @@ function App() {
     });
     return (
         <ThemeProvider theme={theme}>
-            <DefaultLayout>
-                <BrowserRouter basename="/">
-                    <Router/>
-                </BrowserRouter>
-            </DefaultLayout>
+            <BrowserRouter basename="/">
+                <DefaultLayout>
+                        <Router/>
+                </DefaultLayout>
+            </BrowserRouter>
         </ThemeProvider>
     )
 }
