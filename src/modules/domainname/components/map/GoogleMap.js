@@ -23,7 +23,6 @@ const locations = [
 const PoiMarkers = ({pois}) => {
     const [markerRef, marker] = useAdvancedMarkerRef();
 
-
     const [infoWindowShown, setInfoWindowShown] = useState(false);
 
     const handleMarkerClick = useCallback(
