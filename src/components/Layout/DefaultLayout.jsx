@@ -6,7 +6,7 @@ const DefaultLayout = ({children}) => {
     return (
         <>
             <Header />
-            <Container style={{width: '100%', marginTop: '1rem'}} >
+            <Container style={{width: '100%', marginTop: '3.25rem'}} >
                 <Grid
                     container
                     spacing={2}
