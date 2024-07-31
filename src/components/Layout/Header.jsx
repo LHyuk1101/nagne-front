@@ -9,6 +9,7 @@ import RightSideMenu from '../UI/RightSideMenu.jsx';
 import {WINDOW_MD_WIDTH_SIZE} from "../../constants/constant.js";
 import Box from "@mui/material/Box";
 import logo from '../../assets/images/nagne_logo.png';
+import titleLogo from '../../assets/images/nagne_title_logo.png';
 
 /**
  * @typedef {Object} NaviItem
@@ -107,7 +108,14 @@ const Header = () => {
                             }}
                         />
                         <Typography variant="h6" component="div">
-                            Nagne
+                        <img
+                            src={titleLogo}
+                            alt="titleLogo"
+                            style={{
+                                height: '50px',
+                                marginRight: '10px'
+                            }}
+                        />
                         </Typography>
                     </Box>
                     {isMobile ? (
