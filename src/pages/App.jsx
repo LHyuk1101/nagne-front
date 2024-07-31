@@ -21,6 +21,17 @@ function App() {
                 xs: 0,
                 sm: 768
             }
+        },
+        components: {
+            MuiButton: {
+                styleOverrides: {
+                    root: {
+                        '&:focus': {
+                            outline: 'none',
+                        }
+                    }
+                }
+            }
         }
     });
     return (
