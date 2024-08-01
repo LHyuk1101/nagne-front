@@ -43,7 +43,7 @@ const theme = createTheme({
     },
 });
 
-const App = () => {
+const Home = () => {
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -188,4 +188,4 @@ const App = () => {
     );
 };
 
-export default App;
+export default Home;
