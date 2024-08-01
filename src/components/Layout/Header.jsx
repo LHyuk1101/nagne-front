@@ -9,6 +9,7 @@ import { WINDOW_MD_WIDTH_SIZE } from "../../constants/constant.js";
 import Box from "@mui/material/Box";
 import logo from "../../assets/images/nagne_logo.png";
 import titleLogo from "../../assets/images/nagne_title_logo.png";
+import { Link } from "react-router-dom";
 
 /**
  * @typedef {Object} NaviItem
@@ -101,6 +102,7 @@ const Header = () => {
                 marginRight: "10px",
               }}
             />
+            <Link to={'/'}>
             <Typography variant="h6" component="div">
               <img
                 src={titleLogo}
@@ -111,6 +113,7 @@ const Header = () => {
                 }}
               />
             </Typography>
+            </Link>
           </Box>
           <IconButton
             size="large"
