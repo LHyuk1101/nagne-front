@@ -3,6 +3,8 @@ import Header from "./Header.jsx";
 
 const StyledDiv = styled(Container)(({ theme }) => ({
   maxWidth: "600px",
+  padding: 0,
+  margin: "0 auto",
 }));
 
 const DefaultLayout = ({ children }) => {
@@ -12,7 +14,7 @@ const DefaultLayout = ({ children }) => {
       <Container style={{ maxWidth: "600px", marginTop: "3.25rem" }}>
         <Grid
           container
-          spacing={2}
+          spacing={0}
           alignItems="flex-start"
           justifyContent="flex-start"
         >
