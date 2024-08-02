@@ -3,15 +3,39 @@ import Header from "./Header.jsx";
 
 const StyledDiv = styled(Container)(({ theme }) => ({
   maxWidth: "600px",
-  padding: 0,
+  padding: "0",
   margin: "0 auto",
+  position: "relative",
+  "&::before, &::after": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    bottom: 0,
+    width: "1px",
+    background: theme.palette.divider,
+    display: "none",
+  },
+
+  "&::before": {
+    left: "-1px",
+  },
+
+  "&::after": {
+    right: "-1px",
+  },
+
+  "@media (min-width: 601px)": {
+    "&::before, &::after": {
+      display: "block",
+    },
+  },
 }));
 
 const DefaultLayout = ({ children }) => {
   return (
     <StyledDiv>
       <Header />
-      <Container style={{ maxWidth: "600px", marginTop: "3.25rem" }}>
+      <Container style={{ maxWidth: "600px", marginTop: "1rem", padding: "0" }}>
         <Grid
           container
           spacing={0}
