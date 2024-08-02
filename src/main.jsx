@@ -5,16 +5,22 @@ import "./assets/styles/index.css";
 import { ThemeProvider } from "@mui/material";
 import { BrowserRouter } from "react-router-dom";
 import DefaultLayout from "./components/Layout/DefaultLayout.jsx";
-import { theme } from "./assets/styles/globalStyle.jsx";
+import { CustomGlobalStyles, theme } from "./assets/styles/globalStyle.jsx";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+
+const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
   <React.StrictMode>
-    <ThemeProvider theme={theme}>
-      <BrowserRouter basename="/">
-        <DefaultLayout>
-          <App />
-        </DefaultLayout>
-      </BrowserRouter>
-    </ThemeProvider>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        {CustomGlobalStyles}
+        <BrowserRouter basename="/">
+          <DefaultLayout>
+            <App />
+          </DefaultLayout>
+        </BrowserRouter>
+      </ThemeProvider>
+    </QueryClientProvider>
   </React.StrictMode>,
 );
