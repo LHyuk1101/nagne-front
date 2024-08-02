@@ -55,14 +55,14 @@ const CreatePlan = () => {
                 />
             </Box>
             {error && (
-                <Typography variant="body2" color="error" style={{ marginTop: '1rem' }}>
+                <Typography variant="body2" color="error" style={{ marginTop: '3rem' }}>
                     {error}
                 </Typography>
             )}
             <Button 
                 variant="contained" 
                 color="primary" 
-                style={{ marginTop: '1rem' }} 
+                style={{ marginTop: '3rem' }} 
                 disabled={isNextButtonDisabled}
                 onClick={toggleOpen}
             >

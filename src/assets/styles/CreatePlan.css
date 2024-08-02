@@ -1,9 +1,9 @@
-/* src/styles/CreatePlan.css */
-
 .react-datepicker {
     font-family: 'Montserrat, sans-serif';
     margin-top: 1rem;
     border: none;
+    transform: scale(1.2);
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
 }
 
 .react-datepicker__header {
