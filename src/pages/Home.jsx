@@ -18,6 +18,7 @@ const theme = createTheme({
         fontFamily: 'Montserrat, sans-serif',
     },
     palette: {
+        mode: "light",
         primary: {
             main: '#3a86ff',
         },
