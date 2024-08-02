@@ -2,6 +2,7 @@ import { Container, Grid, styled } from "@mui/material";
 import Header from "./Header.jsx";
 
 const StyledDiv = styled(Container)(({ theme }) => ({
+  minHeight: "100vh",
   maxWidth: "600px",
   padding: "0",
   margin: "0 auto",

@@ -18,6 +18,7 @@ const theme = createTheme({
         fontFamily: 'Montserrat, sans-serif',
     },
     palette: {
+        mode: "light",
         primary: {
             main: '#3a86ff',
         },
@@ -48,13 +49,6 @@ const Home = () => {
         <ThemeProvider theme={theme}>
             <CssBaseline />
             <Box sx={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
-                {/*<AppBar position="fixed" color="transparent" elevation={0}>*/}
-                {/*    <Container>*/}
-                {/*        <Toolbar disableGutters>*/}
-                {/*        </Toolbar>*/}
-                {/*    </Container>*/}
-                {/*</AppBar>*/}
-
                 <Box sx={{
                     backgroundImage: 'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://ifh.cc/g/CDKS51.jpg")',
                     backgroundSize: 'cover',
