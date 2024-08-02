@@ -1,4 +1,4 @@
-import { createTheme } from "@mui/material";
+import { createTheme, GlobalStyles } from "@mui/material";
 
 export const theme = createTheme({
   typography: {
@@ -6,8 +6,11 @@ export const theme = createTheme({
   },
   palette: {
     mode: "light",
+    text: {
+      primary: "#464555",
+    },
     primary: {
-      main: "#8BC34A",
+      main: "#3561F1",
     },
     secondary: {
       main: "#FF9800",
@@ -18,7 +21,10 @@ export const theme = createTheme({
   breakpoints: {
     values: {
       xs: 0,
-      sm: 768,
+      sm: 5000,
+      lg: 5000,
+      md: 5000,
+      xl: 5000,
     },
   },
   components: {
@@ -31,5 +37,44 @@ export const theme = createTheme({
         },
       },
     },
+    MuiTab: {
+      styleOverrides: {
+        root: {
+          "&:focus": {
+            outline: "none",
+          },
+          "&::after": {
+            display: "none",
+          },
+        },
+      },
+    },
   },
 });
+export const CustomGlobalStyles = () => {
+  return (
+    <GlobalStyles
+      styles={{
+        ":root": {
+          fontFamily: "Inter, system-ui, Avenir, Helvetica, Arial, sans-serif",
+          lineHeight: 1.5,
+          fontWeight: 400,
+          colorScheme: "light",
+          color: "rgba(0, 0, 0, 0.87)",
+          backgroundColor: "#ffffff",
+          fontSynthesis: "none",
+          textRendering: "optimizeLegibility",
+          WebkitFontSmoothing: "antialiased",
+          MozOsxFontSmoothing: "grayscale",
+        },
+        body: {
+          margin: 0,
+          display: "flex",
+          placeItems: "center",
+          minWidth: "320px",
+          minHeight: "100vh",
+        },
+      }}
+    />
+  );
+};
