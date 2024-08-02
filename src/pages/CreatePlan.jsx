@@ -56,6 +56,7 @@ const CreatePlan = () => {
             </Box>
             {error && (
                 <Typography variant="body2" color="error" style={{ marginTop: '3rem' }}>
+
                     {error}
                 </Typography>
             )}
