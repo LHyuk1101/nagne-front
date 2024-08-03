@@ -128,10 +128,11 @@ const Home = () => {
                     </Typography>
                     <Grid container spacing={2}>
                         {[
-                            { name: 'Bali, Indonesia', description: 'Experience the magic of tropical paradise', image: 'https://ifh.cc/g/BMJLko.png' },
-                            { name: 'Paris, France', description: 'Indulge in romance and culture', image: 'https://ifh.cc/g/BMJLko.png' },
-                            { name: 'New York, USA', description: 'Discover the city that never sleeps', image: 'https://ifh.cc/g/BMJLko.png' },
-                            { name: 'Tokyo, Japan', description: 'Immerse yourself in futuristic wonders', image: 'https://ifh.cc/g/BMJLko.png' },
+                            { name: '\n' +
+                                    'Seongsan Sunrise Peak', description: 'Experience the magic of tropical paradise', image: 'https://cdn.pixabay.com/photo/2019/09/07/09/55/sunrise-4458433_1280.jpg' },
+                            { name: 'Gyeongbokgung (Palace)', description: 'Indulge in romance and culture', image: 'https://cdn.pixabay.com/photo/2020/11/02/15/16/palace-5707010_1280.jpg' },
+                            { name: 'Changgyeonggung (Palace)', description: 'Discover the city that never sleeps', image: 'https://cdn.pixabay.com/photo/2020/11/21/23/55/changgyeonggung-5765370_1280.jpg' },
+                            { name: 'Yeosu', description: 'Immerse yourself in futuristic wonders', image: 'https://cdn.pixabay.com/photo/2018/10/21/04/05/night-view-3762230_1280.jpg' },
                         ].map((destination, index) => (
                             <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
                                 <Card sx={{
@@ -177,7 +178,13 @@ const Home = () => {
                     </Grid>
                 </Container>
 
-                <Box component="footer" sx={{ bgcolor: 'text.secondary', py: 6, color: 'white', mt: 'auto' }}>
+                <Box component="footer" sx={{
+                                            bgcolor: 'text.secondary',
+                                            py: 6,
+                                            color: 'white',
+                                            mt: 'auto'
+                                        }}
+                                    >
                     <Container maxWidth="lg">
                         <Typography variant="body2" align="center" sx={{ fontWeight: 300 }}>
                             © 2024 Nagne Travel. All rights reserved.

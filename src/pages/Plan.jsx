@@ -17,6 +17,7 @@ import {
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
+// import GoogleMap from '../modules/domainname/components/map/GoogleMap.js';
 
 const Plan = () => {
     const navigate = useNavigate();
@@ -30,8 +31,8 @@ const Plan = () => {
                 day: 1,
                 date: new Date("2024-08-02"),
                 places: [
-                    { time: "20:50-22:00", type: "명소", name: "성산 일출봉", image: "https://cdn.pixabay.com/photo/2019/10/30/07/43/jeju-4588910_960_720.jpg" },
-                    { time: "23:35-23:35", type: "숙소", name: "스위트호텔 제주", image: "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg", action: "예약하기" }
+                    { time: "20:50-22:00", type: "Location", name: "성산 일출봉", image: "https://cdn.pixabay.com/photo/2019/10/30/07/43/jeju-4588910_960_720.jpg" },
+                    { time: "23:35-23:35", type: "Accommodation", name: "스위트호텔 제주", image: "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg", action: "예약하기" }
                 ],
                 travel: { duration: "95분" }
             },
@@ -39,9 +40,45 @@ const Plan = () => {
                 day: 2,
                 date: new Date("2024-08-03"),
                 places: [
-                    { time: "12:39-12:39", type: "숙소", name: "스위트호텔 제주", image: "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg", action: "예약하기" }
+                    { time: "12:39-12:39", type: "Accommodation", name: "스위트호텔 제주", image: "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg", action: "예약하기" }
                 ],
                 travel: { duration: "76분" }
+            },
+            {
+                day: 3,
+                date: new Date("2024-08-04"),
+                places: [
+                    { time: "20:50-22:00", type: "Location", name: "성산 일출봉", image: "https://cdn.pixabay.com/photo/2019/10/30/07/43/jeju-4588910_960_720.jpg" },
+                    { time: "23:35-23:35", type: "Accommodation", name: "스위트호텔 제주", image: "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg", action: "예약하기" }
+                ],
+                travel: { duration: "95분" }
+            },
+            {
+                day: 4,
+                date: new Date("2024-08-05"),
+                places: [
+                    { time: "20:50-22:00", type: "Location", name: "성산 일출봉", image: "https://cdn.pixabay.com/photo/2019/10/30/07/43/jeju-4588910_960_720.jpg" },
+                    { time: "23:35-23:35", type: "Accommodation", name: "스위트호텔 제주", image: "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg", action: "예약하기" }
+                ],
+                travel: { duration: "95분" }
+            },
+            {
+                day: 5,
+                date: new Date("2024-08-06"),
+                places: [
+                    { time: "20:50-22:00", type: "Location", name: "성산 일출봉", image: "https://cdn.pixabay.com/photo/2019/10/30/07/43/jeju-4588910_960_720.jpg" },
+                    { time: "23:35-23:35", type: "Accommodation", name: "스위트호텔 제주", image: "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg", action: "예약하기" }
+                ],
+                travel: { duration: "95분" }
+            },
+            {
+                day: 6,
+                date: new Date("2024-08-07"),
+                places: [
+                    { time: "20:50-22:00", type: "Location", name: "성산 일출봉", image: "https://cdn.pixabay.com/photo/2019/10/30/07/43/jeju-4588910_960_720.jpg" },
+                    { time: "23:35-23:35", type: "Accommodation", name: "스위트호텔 제주", image: "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg", action: "예약하기" }
+                ],
+                travel: { duration: "95분" }
             }
         ]
     };
@@ -65,6 +102,10 @@ const Plan = () => {
         navigate('/mypage');
     };
 
+    const handleAddAPlace = () => {
+        navigate('/plan/:location')
+    }
+
     return (
         <Container maxWidth="sm" sx={{ height: '100vh', display: 'flex', flexDirection: 'column', py: 2 }}>
             <Box sx={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', mb: 2 }}>
@@ -76,19 +117,20 @@ const Plan = () => {
                 </Box>
             </Box>
 
-            <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-                <GoogleMap
-                    mapContainerStyle={mapContainerStyle}
-                    center={center}
-                    zoom={10}
-                >
-                    <Marker position={center} />
-                </GoogleMap>
-            </LoadScript>
+            {/*<LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">*/}
+            {/*    <GoogleMap*/}
+            {/*        mapContainerStyle={mapContainerStyle}*/}
+            {/*        center={center}*/}
+            {/*        zoom={10}*/}
+            {/*    >*/}
+            {/*        <Marker position={center} />*/}
+            {/*    </GoogleMap>*/}
+            {/*</LoadScript>*/}
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, mb: 2 }}>
                 <Button
                     variant="contained"
+                    onClick={handleAddAPlace}
                     sx={{
                         width: '37.5%',
                         backgroundColor: '#3a86ff',
@@ -105,7 +147,7 @@ const Plan = () => {
                 {itinerary.map((day) => (
                     <Accordion key={day.day} sx={{ mb: 1 }}>
                         <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography sx={{ flexGrow: 1 }}>{day.day}일차</Typography>
+                            <Typography sx={{ flexGrow: 1 }}>day {day.day}</Typography>
                             <Typography>{formatDate(day.date)}</Typography>
                         </AccordionSummary>
                         <AccordionDetails>
