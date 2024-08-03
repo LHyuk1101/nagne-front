@@ -7,6 +7,7 @@ import CreatePlan from "../pages/CreatePlan.jsx";
 import PlanFirst from "../pages/PlanFirst.jsx";
 import Plan from "../pages/Plan.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
+import MyPage from "../pages/MyPage.jsx"
 
 const Router = () => {
   return (
@@ -18,6 +19,7 @@ const Router = () => {
       <Route path="/create" element={<CreatePlan />} />
       <Route path="plan/:location" element={<PlanFirst />} />
       <Route path="*" element={<ErrorPage />} />
+        <Route path="/mypage" element={<MyPage />} />
     </Routes>
   );
 };

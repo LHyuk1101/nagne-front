@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Typography,
     Button,
@@ -45,6 +46,11 @@ const theme = createTheme({
 });
 
 const Home = () => {
+    const navigate = useNavigate();
+    const handleStartPlanning = () => {
+        navigate('/create');
+    };
+
     return (
         <ThemeProvider theme={theme}>
             <CssBaseline />
@@ -87,6 +93,7 @@ const Home = () => {
                         </Typography>
                         <Button
                             variant="contained"
+                            onClick={handleStartPlanning}
                             color="primary"
                             size="large"
                             sx={{

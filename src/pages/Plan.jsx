@@ -1,4 +1,5 @@
 import React from 'react';
+import { useNavigate } from 'react-router-dom';
 import {
     Typography,
     Box,
@@ -18,10 +19,11 @@ import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
 import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
 
 const Plan = () => {
+    const navigate = useNavigate();
     const travelData = {
         area: "SEOUL",
         startDate: new Date("2024-08-02"),
-        endDate: new Date("2024-08-05"),
+        endDate: new Date("2024-08-11"),
         center: { lat: 37.5665, lng: 126.9780 },
         itinerary: [
             {
@@ -53,6 +55,14 @@ const Plan = () => {
     const mapContainerStyle = {
         width: '100%',
         height: '200px'
+    };
+
+    const handlePrevious = () => {
+        navigate('/create');
+    };
+
+    const handleNext = () => {
+        navigate('/mypage');
     };
 
     return (
@@ -91,60 +101,63 @@ const Plan = () => {
                 </Button>
             </Box>
 
-            {itinerary.map((day) => (
-                <Accordion key={day.day} sx={{ mb: 1 }}>
-                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                        <Typography sx={{ flexGrow: 1 }}>{day.day}일차</Typography>
-                        <Typography>{formatDate(day.date)}</Typography>
-                    </AccordionSummary>
-                    <AccordionDetails>
-                        <List>
-                            {day.places.map((place, index) => (
-                                <React.Fragment key={index}>
-                                    <ListItem alignItems="flex-start">
-                                        <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>{index + 1}</Avatar>
-                                        <ListItemText
-                                            primary={
-                                                <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                    <Typography variant="subtitle1">{place.time}</Typography>
-                                                    <Typography variant="body2">{place.type}</Typography>
-                                                </Box>
-                                            }
-                                            secondary={
-                                                <React.Fragment>
-                                                    <Typography variant="body1" component="span">{place.name}</Typography>
-                                                    {place.action && (
-                                                        <Button size="small" color="primary" sx={{ ml: 1 }}>
-                                                            {place.action}
-                                                        </Button>
-                                                    )}
-                                                </React.Fragment>
-                                            }
-                                        />
-                                        <Box
-                                            component="img"
-                                            src={place.image}
-                                            alt={place.name}
-                                            sx={{ width: 80, height: 80, borderRadius: 1 }}
-                                        />
-                                    </ListItem>
-                                    {index < day.places.length - 1 && (
-                                        <ListItem>
-                                            <DirectionsCarIcon sx={{ mr: 1 }} />
-                                            <Typography variant="body2">{day.travel.duration}</Typography>
+            <Box sx={{ flexGrow: 1, overflowY: 'auto', mb: 2 }}>
+                {itinerary.map((day) => (
+                    <Accordion key={day.day} sx={{ mb: 1 }}>
+                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                            <Typography sx={{ flexGrow: 1 }}>{day.day}일차</Typography>
+                            <Typography>{formatDate(day.date)}</Typography>
+                        </AccordionSummary>
+                        <AccordionDetails>
+                            <List>
+                                {day.places.map((place, index) => (
+                                    <React.Fragment key={index}>
+                                        <ListItem alignItems="flex-start">
+                                            <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>{index + 1}</Avatar>
+                                            <ListItemText
+                                                primary={
+                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
+                                                        <Typography variant="subtitle1">{place.time}</Typography>
+                                                        <Typography variant="body2">{place.type}</Typography>
+                                                    </Box>
+                                                }
+                                                secondary={
+                                                    <React.Fragment>
+                                                        <Typography variant="body1" component="span">{place.name}</Typography>
+                                                        {place.action && (
+                                                            <Button size="small" color="primary" sx={{ ml: 1 }}>
+                                                                {place.action}
+                                                            </Button>
+                                                        )}
+                                                    </React.Fragment>
+                                                }
+                                            />
+                                            <Box
+                                                component="img"
+                                                src={place.image}
+                                                alt={place.name}
+                                                sx={{ width: 80, height: 80, borderRadius: 1 }}
+                                            />
                                         </ListItem>
-                                    )}
-                                    {index < day.places.length - 1 && <Divider variant="inset" component="li" />}
-                                </React.Fragment>
-                            ))}
-                        </List>
-                    </AccordionDetails>
-                </Accordion>
-            ))}
+                                        {index < day.places.length - 1 && (
+                                            <ListItem>
+                                                <DirectionsCarIcon sx={{ mr: 1 }} />
+                                                <Typography variant="body2">{day.travel.duration}</Typography>
+                                            </ListItem>
+                                        )}
+                                        {index < day.places.length - 1 && <Divider variant="inset" component="li" />}
+                                    </React.Fragment>
+                                ))}
+                            </List>
+                        </AccordionDetails>
+                    </Accordion>
+                ))}
+            </Box>
 
             <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
                 <Button
                     variant="contained"
+                    onClick={handlePrevious}
                     sx={{
                         backgroundColor: '#3a86ff',
                         '&:hover': {
@@ -156,6 +169,7 @@ const Plan = () => {
                 </Button>
                 <Button
                     variant="contained"
+                    onClick={handleNext}
                     sx={{
                         backgroundColor: '#3a86ff',
                         '&:hover': {
