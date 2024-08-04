@@ -53,6 +53,7 @@
     translate: -50% -50%;
     box-shadow: 0 10px 30px rgb(0 0 0 / 24%);
     box-sizing: border-box;
+    position: relative;
 }
 
 .overlay.open .modal {
