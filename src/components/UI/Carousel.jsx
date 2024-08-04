@@ -138,10 +138,10 @@ export const Carousel = () => {
                 key={slide.title}
                 style={{
                   backgroundImage: `url(${slide.image})`,
-                  backgroundSize: '210px 400px', // 이미지 크기 설정
+                  backgroundSize: '235px 400px', // 이미지 크기 설정
                   backgroundRepeat: 'no-repeat',
                   backgroundPosition: 'center',
-                  width: '210px', // 슬라이드의 너비 설정
+                  width: '235px', // 슬라이드의 너비 설정
                   height: '400px', // 슬라이드의 높이 설정
                 }}
               >
