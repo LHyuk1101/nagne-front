@@ -32,7 +32,7 @@ const slides = [
         image: image1,
     },
     {
-        title: "INCEHON",
+        title: "INCHEON",
         image: image2,
     },
     {
@@ -88,7 +88,7 @@ const slides = [
     image: image15,
   },
   {
-    title: "JEOLLANAMDO",
+    title: "JEONLANAMDO",
     image: image16,
   },
   {
@@ -112,7 +112,7 @@ export const Carousel = () => {
               color: 'primary.main',
               fontSize: { xs: '1.5rem', sm: '2rem', md: '2.5rem' }
           }}
-          marginTop={'2rem'}
+          marginTop={'1rem'}
         >
           Please select a travel destination!
         </Typography>
