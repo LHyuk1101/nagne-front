@@ -43,7 +43,8 @@
 
 .modal {
     z-index: 2;
-    width: 500px;
+    width: 100%;
+    max-width: 550px;
     top: 50%;
     left: 50%;
     background: #ffffff;
@@ -51,6 +52,7 @@
     padding: 0 40px 50px;
     translate: -50% -50%;
     box-shadow: 0 10px 30px rgb(0 0 0 / 24%);
+    box-sizing: border-box;
 }
 
 .overlay.open .modal {
