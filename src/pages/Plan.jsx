@@ -117,15 +117,15 @@ const Plan = () => {
                 </Box>
             </Box>
 
-            {/*<LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">*/}
-            {/*    <GoogleMap*/}
-            {/*        mapContainerStyle={mapContainerStyle}*/}
-            {/*        center={center}*/}
-            {/*        zoom={10}*/}
-            {/*    >*/}
-            {/*        <Marker position={center} />*/}
-            {/*    </GoogleMap>*/}
-            {/*</LoadScript>*/}
+            <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
+                <GoogleMap
+                    mapContainerStyle={mapContainerStyle}
+                    center={center}
+                    zoom={10}
+                >
+                    <Marker position={center} />
+                </GoogleMap>
+            </LoadScript>
 
             <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, mb: 2 }}>
                 <Button
