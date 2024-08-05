@@ -18,7 +18,6 @@
     left: 0;
     right: 0;
     bottom: 0;
-    background: rgb(0 0 0 / 75%);
 }
 
 .overlay.open {
@@ -58,5 +57,5 @@
 .overlay.open .modal {
     opacity: 1;
     visibility: visible;
-    animation: modal-in 1s;
+    animation: modal-in 0.5s;
 }
