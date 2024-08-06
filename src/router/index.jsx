@@ -7,7 +7,7 @@ import CreatePlan from "../pages/CreatePlan.jsx";
 import PlanFirst from "../pages/PlanFirst.jsx";
 import Plan from "../pages/Plan.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
-import LINKS from "../utils/Links.jsx";
+import LINKS from "./Links.jsx";
 
 const Router = () => {
   return (
