@@ -16,8 +16,8 @@ import {
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import GoogleMap from "../modules/domainname/components/map/GoogleMap.jsx";
-import PlanHeader from "../modules/plan/components/PlanHeader.jsx";
+import GoogleMap from "../../components/map/GoogleMap.jsx";
+import PlanHeader from "./PlanHeader.jsx";
 
 const Plan = () => {
   const navigate = useNavigate();
