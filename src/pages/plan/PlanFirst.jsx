@@ -9,8 +9,8 @@ import {
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useState } from "react";
-import PlanHeader from "../modules/plan/components/PlanHeader.jsx";
-import GoogleMap from "../modules/domainname/components/map/GoogleMap.jsx";
+import PlanHeader from "./PlanHeader.jsx";
+import GoogleMap from "../../components/map/GoogleMap.jsx";
 
 const Container = styled(Box)(({ theme }) => ({
   maxWidth: "600px",
@@ -29,7 +29,7 @@ const Container = styled(Box)(({ theme }) => ({
 
 const Map = styled(Box)(({ theme }) => ({
   width: "100%",
-  height: 220,
+  height: 300,
 }));
 
 const StyledTabs = styled(Tabs)({
