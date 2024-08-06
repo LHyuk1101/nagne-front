@@ -10,6 +10,8 @@ import ErrorPage from "../pages/ErrorPage.jsx";
 import LINKS from "./Links.jsx";
 import TemplateMain from "../pages/TemplateMain.jsx";
 import MyPage from "../pages/MyPage.jsx";
+import TravelInfo from "../pages/TravelInfo.jsx";
+import PlaceDetail from "../pages/PlaceDetail.jsx";
 
 const Router = () => {
   return (
@@ -23,6 +25,8 @@ const Router = () => {
       <Route path="*" element={<ErrorPage />} />
       <Route path={LINKS.TEMPLATE.path} element={<TemplateMain />} />
       <Route path={LINKS.MYPAGE.path} element={<MyPage />} />
+      <Route path={LINKS.TRAVEL.path} element={<TravelInfo/>} />
+      <Route path="/place-detail" element={<PlaceDetail/>}/>
     </Routes>
   );
 };
