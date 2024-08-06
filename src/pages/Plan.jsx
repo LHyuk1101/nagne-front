@@ -16,8 +16,7 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import DirectionsCarIcon from '@mui/icons-material/DirectionsCar';
-import { GoogleMap, LoadScript, Marker } from '@react-google-maps/api';
-// import GoogleMap from '../modules/domainname/components/map/GoogleMap.js';
+import GoogleMap from '../modules/domainname/components/map/GoogleMap.jsx';
 
 const Plan = () => {
     const navigate = useNavigate();
@@ -62,11 +61,6 @@ const Plan = () => {
         return date.toLocaleDateString('ko-KR', { year: 'numeric', month: '2-digit', day: '2-digit', weekday: 'short' });
     };
 
-    const mapContainerStyle = {
-        width: '100%',
-        height: '200px'
-    };
-
     const handlePrevious = () => {
         navigate('/create');
     };
@@ -90,110 +84,48 @@ const Plan = () => {
                 </Box>
             </Box>
 
-            <LoadScript googleMapsApiKey="YOUR_GOOGLE_MAPS_API_KEY">
-                <GoogleMap
-                    mapContainerStyle={mapContainerStyle}
-                    center={center}
-                    zoom={10}
-                >
-                    <Marker position={center} />
-                </GoogleMap>
-            </LoadScript>
-
-            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 2, mb: 2 }}>
-                <Button
-                    variant="contained"
-                    onClick={handleAddAPlace}
-                    sx={{
-                        width: '37.5%',
-                        backgroundColor: '#3a86ff',
-                        '&:hover': {
-                            backgroundColor: '#2a76ef'
-                        }
-                    }}
-                >
-                    Add a place
+            <Box sx={{ width: '100%', height: '150px', overflow: 'hidden'}}>
+                <GoogleMap center={center} />
+            </Box>
+            <Box sx={{ display: 'flex', justifyContent: 'flex-end', mt: 1 }}>
+                <Button variant="contained" onClick={handleAddAPlace} size="small">
+                    Add a Place
                 </Button>
             </Box>
 
-            <Box sx={{ flexGrow: 1, overflowY: 'auto', mb: 2 }}>
-                {itinerary.map((day) => (
-                    <Accordion key={day.day} sx={{ mb: 1 }}>
-                        <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-                            <Typography sx={{ flexGrow: 1 }}>day {day.day}</Typography>
-                            <Typography>{formatDate(day.date)}</Typography>
-                        </AccordionSummary>
-                        <AccordionDetails>
-                            <List>
-                                {day.places.map((place, index) => (
-                                    <React.Fragment key={index}>
-                                        <ListItem alignItems="flex-start">
-                                            <Avatar sx={{ bgcolor: 'primary.main', mr: 2 }}>{index + 1}</Avatar>
-                                            <ListItemText
-                                                primary={
-                                                    <Box sx={{ display: 'flex', justifyContent: 'space-between' }}>
-                                                        <Typography variant="subtitle1">{place.time}</Typography>
-                                                        <Typography variant="body2">{place.type}</Typography>
-                                                    </Box>
-                                                }
-                                                secondary={
-                                                    <React.Fragment>
-                                                        <Typography variant="body1" component="span">{place.name}</Typography>
-                                                        {place.action && (
-                                                            <Button size="small" color="primary" sx={{ ml: 1 }}>
-                                                                {place.action}
-                                                            </Button>
-                                                        )}
-                                                    </React.Fragment>
-                                                }
-                                            />
-                                            <Box
-                                                component="img"
-                                                src={place.image}
-                                                alt={place.name}
-                                                sx={{ width: 80, height: 80, borderRadius: 1 }}
-                                            />
+            {itinerary.map((day, index) => (
+                <Accordion key={index}>
+                    <AccordionSummary expandIcon={<ExpandMoreIcon />}>
+                        <Typography>{`Day ${day.day} - ${formatDate(day.date)}`}</Typography>
+                    </AccordionSummary>
+                    <AccordionDetails>
+                        <List>
+                            {day.places.map((place, placeIndex) => (
+                                <React.Fragment key={placeIndex}>
+                                    <ListItem>
+                                        <Avatar src={place.image} alt={place.name} />
+                                        <ListItemText
+                                            primary={place.name}
+                                            secondary={`${place.time} - ${place.type}`}
+                                        />
+                                    </ListItem>
+                                    {placeIndex < day.places.length - 1 && (
+                                        <ListItem>
+                                            <DirectionsCarIcon />
+                                            <ListItemText primary={`Travel time: ${day.travel.duration}`} />
                                         </ListItem>
-                                        {index < day.places.length - 1 && (
-                                            <ListItem>
-                                                <DirectionsCarIcon sx={{ mr: 1 }} />
-                                                <Typography variant="body2">{day.travel.duration}</Typography>
-                                            </ListItem>
-                                        )}
-                                        {index < day.places.length - 1 && <Divider variant="inset" component="li" />}
-                                    </React.Fragment>
-                                ))}
-                            </List>
-                        </AccordionDetails>
-                    </Accordion>
-                ))}
-            </Box>
+                                    )}
+                                    {placeIndex < day.places.length - 1 && <Divider />}
+                                </React.Fragment>
+                            ))}
+                        </List>
+                    </AccordionDetails>
+                </Accordion>
+            ))}
 
-            <Box sx={{ display: 'flex', justifyContent: 'space-between', mt: 2 }}>
-                <Button
-                    variant="contained"
-                    onClick={handlePrevious}
-                    sx={{
-                        backgroundColor: '#3a86ff',
-                        '&:hover': {
-                            backgroundColor: '#2a76ef'
-                        }
-                    }}
-                >
-                    Previous
-                </Button>
-                <Button
-                    variant="contained"
-                    onClick={handleNext}
-                    sx={{
-                        backgroundColor: '#3a86ff',
-                        '&:hover': {
-                            backgroundColor: '#2a76ef'
-                        }
-                    }}
-                >
-                    Next
-                </Button>
+            <Box sx={{ mt: 'auto', display: 'flex', justifyContent: 'space-between' }}>
+                <Button variant="contained" onClick={handlePrevious}>Previous</Button>
+                <Button variant="contained" onClick={handleNext}>Next</Button>
             </Box>
         </Container>
     );
