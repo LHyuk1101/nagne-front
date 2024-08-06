@@ -7,17 +7,22 @@ import CreatePlan from "../pages/CreatePlan.jsx";
 import PlanFirst from "../pages/PlanFirst.jsx";
 import Plan from "../pages/Plan.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
+import LINKS from "./Links.jsx";
+import TemplateMain from "../pages/TemplateMain.jsx";
+import MyPage from "../pages/MyPage.jsx";
 
 const Router = () => {
   return (
     <Routes>
-      <Route path="/" element={<Home />} />
-      <Route path="/login" element={<LoginPage />} />
-      <Route path="/plan" element={<Plan />} />
+      <Route path={LINKS.HOME.path} element={<Home />} />
+      <Route path={LINKS.LOGIN.path} element={<LoginPage />} />
+      <Route path={LINKS.PLAN.path} element={<Plan />} />
       <Route path="/ModernCustomTemplate" element={<ModernCustomTemplate />} />
-      <Route path="/create" element={<CreatePlan />} />
+      <Route path={LINKS.CREATE.path} element={<CreatePlan />} />
       <Route path="plan/:location" element={<PlanFirst />} />
       <Route path="*" element={<ErrorPage />} />
+      <Route path={LINKS.TEMPLATE.path} element={<TemplateMain />} />
+      <Route path={LINKS.MYPAGE.path} element={<MyPage />} />
     </Routes>
   );
 };

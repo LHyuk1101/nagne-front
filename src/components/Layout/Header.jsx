@@ -5,52 +5,10 @@ import Typography from "@mui/material/Typography";
 import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import RightSideMenu from "../UI/RightSideMenu.jsx";
-import { WINDOW_MD_WIDTH_SIZE } from "../../constants/constant.js";
 import Box from "@mui/material/Box";
 import logo from "../../assets/images/nagne_logo.png";
 import titleLogo from "../../assets/images/nagne_title_logo.png";
 import { Link } from "react-router-dom";
-
-/**
- * @typedef {Object} NaviItem
- * @property {string} text - 화면에서 보이는 메뉴 Text
- * @property {string} route - route 주소
- * @property {boolean|null} isLogin - login 상태인지 확인. true = 로그인중, false = 로그인 이전, null = 기본으로 보여줘야할 데이터
- */
-
-/** @type {NaviItem[]} */
-const NaviItems = [
-  {
-    text: "Travel Destinations",
-    route: "/travel",
-    isLogin: null,
-  },
-  {
-    text: "Templates",
-    route: "/templates",
-    isLogin: null,
-  },
-  {
-    text: "Community",
-    route: "/community",
-    isLogin: null,
-  },
-  {
-    text: "Support",
-    route: "/support",
-    isLogin: null,
-  },
-  {
-    text: "Login",
-    route: "/login",
-    isLogin: false,
-  },
-  {
-    text: "Logout",
-    route: "/logout",
-    isLogin: true,
-  },
-];
 
 const Header = () => {
   const [open, setOpen] = useState(false);
@@ -102,17 +60,17 @@ const Header = () => {
                 marginRight: "10px",
               }}
             />
-            <Link to={'/'}>
-            <Typography variant="h6" component="div">
-              <img
-                src={titleLogo}
-                alt="titleLogo"
-                style={{
-                  height: "50px",
-                  marginRight: "10px",
-                }}
-              />
-            </Typography>
+            <Link to={"/"}>
+              <Typography variant="h6" component="div">
+                <img
+                  src={titleLogo}
+                  alt="titleLogo"
+                  style={{
+                    height: "50px",
+                    marginRight: "10px",
+                  }}
+                />
+              </Typography>
             </Link>
           </Box>
           <IconButton

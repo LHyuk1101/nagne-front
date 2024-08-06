@@ -1,4 +1,4 @@
-.overlay, .modal{
+.overlay, .modal {
     position: fixed;
     opacity: 0;
     visibility: hidden;
@@ -18,11 +18,9 @@
     left: 0;
     right: 0;
     bottom: 0;
-
-    background: rgb(0 0 0 / 75%);
 }
 
-.overlay.open{
+.overlay.open {
     visibility: visible;
     opacity: 1;
     animation: overlay-in 1s both;
@@ -30,12 +28,12 @@
 
 @keyframes modal-in {
     0%,
-    66%{
+    66% {
         opacity: 0;
         visibility: hidden;
         translate: -50% -40%;
     }
-    100%{
+    100% {
         opacity: 1;
         visibility: visible;
     }
@@ -43,18 +41,21 @@
 
 .modal {
     z-index: 2;
-    width: 500px;
+    width: 100%;
+    max-width: 550px;
     top: 50%;
     left: 50%;
     background: #ffffff;
     border-radius: 12px;
-    padding: 0 40px 50px;
+    padding: 0 40px 30px;
     translate: -50% -50%;
     box-shadow: 0 10px 30px rgb(0 0 0 / 24%);
+    box-sizing: border-box;
+    position: relative;
 }
 
 .overlay.open .modal {
     opacity: 1;
     visibility: visible;
-    animation: modal-in 1s;
+    animation: modal-in 0.5s;
 }
