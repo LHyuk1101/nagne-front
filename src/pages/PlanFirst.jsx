@@ -9,6 +9,8 @@ import {
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useState } from "react";
+import PlanHeader from "../modules/plan/components/PlanHeader.jsx";
+import GoogleMap from "../modules/domainname/components/map/GoogleMap.jsx";
 
 const Container = styled(Box)(({ theme }) => ({
   maxWidth: "600px",
@@ -23,54 +25,6 @@ const Container = styled(Box)(({ theme }) => ({
   height: "100vh",
   position: "relative",
   paddingBottom: "60px",
-}));
-
-const Header = styled(Box)(({ theme }) => ({
-  display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  minHeight: 120,
-  backgroundColor: "#ffffff",
-  padding: theme.spacing(3),
-  boxSizing: "border-box",
-  width: "100%",
-}));
-
-const HeaderColumn = styled(Box)({
-  display: "flex",
-  alignItems: "center",
-});
-
-const DestinationColumn = styled(HeaderColumn)({
-  flex: "0 0 35%",
-});
-
-const DateColumn = styled(HeaderColumn)({
-  flex: "0 0 40%",
-});
-
-const EmptyColumn = styled(HeaderColumn)({
-  flex: "0 0 10%",
-});
-
-const Destination = styled(Typography)(({ theme }) => ({
-  fontSize: 32,
-  fontWeight: 700,
-  color: "#464555",
-  letterSpacing: "-0.5px",
-}));
-
-const DateRange = styled(Box)({
-  display: "flex",
-  flexDirection: "column",
-  alignItems: "flex-start",
-});
-
-const DateText = styled(Typography)(({ theme }) => ({
-  fontSize: 20,
-  color: "#464555",
-  letterSpacing: "0.25px",
-  alignSelf: "center",
 }));
 
 const Map = styled(Box)(({ theme }) => ({
@@ -278,21 +232,10 @@ const SeoulTripUI = () => {
 
   return (
     <Container>
-      <Header>
-        <DestinationColumn>
-          <Destination>SEOUL</Destination>
-        </DestinationColumn>
-        <EmptyColumn />
-        <DateColumn>
-          <DateRange>
-            <DateText>2024.08.19(MON)</DateText>
-            <DateText style={{ margin: "4px 0" }}>TO</DateText>
-            <DateText>2024.08.22(THU)</DateText>
-          </DateRange>
-        </DateColumn>
-      </Header>
-
-      <Map></Map>
+      <PlanHeader />
+      <Map>
+        <GoogleMap />
+      </Map>
       <StyledTabs value={tabValue} onChange={handleTabChange}>
         <StyledTab label="Places" />
         <StyledTab label="Accommodation" />
