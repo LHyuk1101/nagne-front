@@ -263,6 +263,29 @@ const PlanFirst = () => {
     },
   ];
 
+  const responseDataEx = {
+    startDay: "",
+    endDay: "",
+    place: [
+      {
+        name: "",
+        contentTypeId: "",
+        lat: "",
+        lng: "",
+        overview: "",
+      },
+    ],
+    맛집: [
+      {
+        name: "",
+        contentTypeId: "",
+        lat: "",
+        lng: "",
+        overview: "",
+      },
+    ],
+  };
+
   return (
     <Container>
       <PlanHeader
@@ -276,7 +299,6 @@ const PlanFirst = () => {
       <StyledTabs value={tabValue} onChange={handleTabChange}>
         <StyledTab label="Places" />
         <StyledTab label="Accommodation" />
-        <StyledTab label="Restaurants" />
       </StyledTabs>
 
       <PlaceHeader>
