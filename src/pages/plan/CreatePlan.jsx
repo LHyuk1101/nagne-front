@@ -9,11 +9,9 @@ import DatePicker from "react-datepicker";
 import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
 import { addDays, addMonths } from "date-fns";
-import "../assets/styles/CreatePlan.css";
-import { SelectDestinationModal } from "../components/UI/SelectDestinationModal";
-import { theme } from "../assets/styles/globalStyle";
-import { Link } from "react-router-dom";
-import LINKS from "../router/Links";
+import "../../styles/CreatePlan.css";
+import { SelectDestinationModal } from "../../components/UI/SelectDestinationModal";
+import { theme } from "../../styles/globalStyle";
 
 const CreatePlan = () => {
   const [startDate, setStartDate] = useState(null);

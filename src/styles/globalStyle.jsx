@@ -11,11 +11,15 @@ export const theme = createTheme({
     },
     primary: {
       main: "#3561F1",
+      matchFirst: "#008bef",
     },
     secondary: {
       main: "#FF9800",
       light: "#FFEB3B",
       contrastText: "#364D1C",
+    },
+    action: {
+      hoverGreen: "#008bef",
     },
   },
   breakpoints: {

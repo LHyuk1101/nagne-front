@@ -1,17 +1,19 @@
 import { Route, Routes } from "react-router-dom";
+import "../styles/index.css";
 
 import LoginPage from "../pages/LoginPage.jsx";
 import Home from "../pages/Home.jsx";
 import ModernCustomTemplate from "../pages/ModernCustomTemplate.jsx";
-import CreatePlan from "../pages/CreatePlan.jsx";
-import PlanFirst from "../pages/PlanFirst.jsx";
-import Plan from "../pages/Plan.jsx";
+import CreatePlan from "../pages/plan/CreatePlan.jsx";
+import PlanFirst from "../pages/plan/PlanFirst.jsx";
+import Plan from "../pages/plan/Plan.jsx";
 import ErrorPage from "../pages/ErrorPage.jsx";
 import LINKS from "./Links.jsx";
 import TemplateMain from "../pages/TemplateMain.jsx";
 import MyPage from "../pages/MyPage.jsx";
 import TravelInfo from "../pages/TravelInfo.jsx";
 import PlaceDetail from "../pages/PlaceDetail.jsx";
+import TravelInfoMore from "../pages/TravelInfoMore.jsx";
 
 const Router = () => {
   return (
@@ -26,6 +28,7 @@ const Router = () => {
       <Route path={LINKS.MYPAGE.path} element={<MyPage />} />
       <Route path={LINKS.TRAVEL.path} element={<TravelInfo />} />
       <Route path="/place-detail" element={<PlaceDetail />} />
+      <Route path="/TravelInfoMore" element={<TravelInfoMore />} />
       <Route path="*" element={<ErrorPage />} />
     </Routes>
   );

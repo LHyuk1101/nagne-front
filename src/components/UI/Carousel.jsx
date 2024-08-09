@@ -24,7 +24,7 @@ import image15 from "../../assets/images/jeonlanamdo.jpg";
 import image16 from "../../assets/images/jejudo.jpg";
 
 import { Button, Typography } from "@mui/material";
-import LINKS from "../../router/Links";
+import LINKS from "../../routes/Links";
 import { Link } from "react-router-dom";
 
 const slides = [

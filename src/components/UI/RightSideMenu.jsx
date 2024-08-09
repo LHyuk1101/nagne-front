@@ -12,7 +12,7 @@ import ExploreIcon from "@mui/icons-material/Explore.js";
 import TemplateIcon from "@mui/icons-material/Dashboard.js";
 import ForumIcon from "@mui/icons-material/Forum.js";
 import SupportIcon from "@mui/icons-material/Support.js";
-import LINKS from "../../router/Links.jsx";
+import LINKS from "../../routes/Links.jsx";
 
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
