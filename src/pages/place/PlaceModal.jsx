@@ -14,6 +14,7 @@ import {
   styled,
 } from "@mui/material";
 import { Search, ArrowBack, Add, Check, Place } from "@mui/icons-material";
+import SelectedPlacesThumbnails from "./SelectedPlacesThumbnails.jsx";
 
 const ModalContainer = styled(Box)(({ theme }) => ({
   position: "absolute",
@@ -97,12 +98,6 @@ const PlaceItem = styled(ListItem)(({ theme }) => ({
   borderBottom: `1px solid ${theme.palette.divider}`,
 }));
 
-const SelectedPlaces = styled(Box)(({ theme }) => ({
-  padding: theme.spacing(2),
-  borderTop: `1px solid ${theme.palette.divider}`,
-  backgroundColor: theme.palette.background.default,
-}));
-
 const ButtonContainer = styled(Box)(({ theme }) => ({
   display: "flex",
   justifyContent: "center",
@@ -125,16 +120,81 @@ const PlaceModal = ({ open, onClose }) => {
   const places = [
     {
       id: 1,
-      name: "제주 빛의 벙커",
+      name: "jeju light bunker",
       description: "제주시(제주) 오션뷰 카페",
       image:
         "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
     },
-    { id: 2, name: "빛의 벧킹", description: "20년 숙성된 제주의 비밀 빵집" },
-    { id: 3, name: "성산 일출봉", description: "명소 ♥ 14558 ★ 4.7" },
-    { id: 4, name: "제주동문시장", description: "명소 ♥ 13611 ★ 4" },
-    { id: 5, name: "섭지코지", description: "명소 ♥ 12522 ★ 4.4" },
-    { id: 6, name: "함덕해변", description: "명소 ♥ 10888 ★ 4.6" },
+    {
+      id: 2,
+      name: "light bellking",
+      description: "20년 숙성된 제주의 비밀 빵집",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 3,
+      name: "sungsan bong",
+      description: "명소",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 4,
+      name: "jejuEast",
+      description: "명소",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 5,
+      name: "subzicozi",
+      description: "명소",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 6,
+      name: "hamduck beach",
+      description: "명소",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 7,
+      name: "빛의 벧킹",
+      description: "20년 숙성된 제주의 비밀 빵집",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 8,
+      name: "성산 일출봉",
+      description: "명소",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 9,
+      name: "제주동문시장",
+      description: "명소",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 10,
+      name: "섭지코지",
+      description: "명소",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
+    {
+      id: 11,
+      name: "함덕해변",
+      description: "명소",
+      image:
+        "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG",
+    },
   ];
 
   const handleCategorySelect = (category) => {
@@ -147,6 +207,10 @@ const PlaceModal = ({ open, onClose }) => {
     } else {
       setSelectedPlaces([...selectedPlaces, place]);
     }
+  };
+
+  const handlePlaceRemove = (placeId) => {
+    setSelectedPlaces(selectedPlaces.filter((p) => p.id !== placeId));
   };
 
   return (
@@ -213,19 +277,10 @@ const PlaceModal = ({ open, onClose }) => {
           ))}
         </PlaceList>
 
-        <SelectedPlaces>
-          <Typography variant="subtitle1" gutterBottom>
-            선택한 장소 ({selectedPlaces.length})
-          </Typography>
-          {selectedPlaces.map((place) => (
-            <StyledChip
-              key={place.id}
-              label={place.name}
-              onDelete={() => handlePlaceSelect(place)}
-              selected={true}
-            />
-          ))}
-        </SelectedPlaces>
+        <SelectedPlacesThumbnails
+          selectedPlaces={selectedPlaces}
+          onRemove={handlePlaceRemove}
+        />
 
         <ButtonContainer>
           <StyledButton variant="contained" color="primary" onClick={onClose}>

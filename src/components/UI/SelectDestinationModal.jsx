@@ -3,7 +3,12 @@ import CloseIcon from "@mui/icons-material/Close";
 import "./SelectDestinationModal.css";
 import { Carousel } from "./Carousel";
 
-export const SelectDestinationModal = ({ isOpen, toggleOpen }) => (
+export const SelectDestinationModal = ({
+  isOpen,
+  toggleOpen,
+  startDate,
+  endDate,
+}) => (
   <Container
     style={{ maxWidth: "600px", textAlign: "center", marginTop: "3rem" }}
   >
@@ -16,7 +21,7 @@ export const SelectDestinationModal = ({ isOpen, toggleOpen }) => (
         >
           <CloseIcon />
         </IconButton>
-        <Carousel />
+        <Carousel startDate={startDate} endDate={endDate} />
       </div>
     </div>
   </Container>

@@ -56,7 +56,7 @@ const CreatePlan = () => {
             inline
             showDisabledMonthNavigation
             calendarStartDay={1}
-            filterDate={filterDate} // 추가된 필터링 함수
+            filterDate={filterDate}
           />
         </Box>
         <Button
@@ -68,7 +68,12 @@ const CreatePlan = () => {
         >
           NEXT
         </Button>
-        <SelectDestinationModal isOpen={isOpen} toggleOpen={toggleOpen} />
+        <SelectDestinationModal
+          isOpen={isOpen}
+          toggleOpen={toggleOpen}
+          startDate={startDate}
+          endDate={endDate}
+        />
       </Container>
     </ThemeProvider>
   );
