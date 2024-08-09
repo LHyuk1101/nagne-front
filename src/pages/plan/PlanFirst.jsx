@@ -8,11 +8,14 @@ import {
   IconButton,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useLocation } from "react-router-dom";
 import PlanHeader from "./PlanHeader.jsx";
 import GoogleMap from "../../components/map/GoogleMap.jsx";
 import PlaceModal from "../place/PlaceModal.jsx";
+import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
+import { useNavigate } from "react-router-dom";
+import LINKS from "../../routes/Links.jsx";
 
 const Container = styled(Box)(({ theme }) => ({
   maxWidth: "600px",
@@ -192,15 +195,38 @@ const backgroundColors = [
 
 const PlanFirst = () => {
   const location = useLocation();
-  const { selectedSlide, startDate, endDate } = location.state || {};
+  const { selectedPlaceName, startDate, endDate } = location.state || {};
 
   console.log("startDate:", startDate);
   console.log("endDate :", endDate);
-  console.log("장소 : ", selectedSlide);
+  console.log("장소 : ", selectedPlaceName);
 
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlaces, setSelectedPlaces] = useState([]);
+  const navigate = useNavigate();
+
+  useEffect(() => {
+    initRender();
+  }, []);
+
+  const initRender = () => {
+    redirectStartDate(selectedPlaceName, startDate, endDate);
+  };
+
+  const redirectStartDate = (placeName, planStartDate, planEndDate) => {
+    if (
+      placeName === undefined ||
+      planStartDate === undefined ||
+      planEndDate === undefined
+    ) {
+      navigate({
+        pathname: LINKS.CREATE.path,
+      });
+    }
+  };
+
+  const renderRefreshNotification = () => {};
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
@@ -240,7 +266,7 @@ const PlanFirst = () => {
   return (
     <Container>
       <PlanHeader
-        selectedSlide={selectedSlide}
+        selectedPlaceName={selectedPlaceName}
         startDate={startDate}
         endDate={endDate}
       />

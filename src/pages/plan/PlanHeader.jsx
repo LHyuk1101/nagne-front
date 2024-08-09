@@ -7,13 +7,16 @@ import {
   DateRange,
   DateText,
 } from "./PlanHeader.style.jsx";
+import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
 
-const PlanHeader = ({ selectedSlide, startDate, endDate }) => {
+const PlanHeader = ({ selectedPlaceName, startDate, endDate }) => {
   return (
     <Header>
       <DestinationColumn>
         <Destination>
-          {selectedSlide ? selectedSlide.toUpperCase() : "UNKNOWN DESTINATION"}
+          {selectedPlaceName
+            ? selectedPlaceName.toUpperCase()
+            : PLAN_HEADER_TITLE}
         </Destination>
       </DestinationColumn>
       <EmptyColumn />

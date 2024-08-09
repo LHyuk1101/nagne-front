@@ -27,6 +27,7 @@ import image16 from "../../assets/images/jejudo.jpg";
 import { Button, Typography } from "@mui/material";
 import LINKS from "../../routes/Links";
 import { Link } from "react-router-dom";
+import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
 
 const slides = [
   {
@@ -96,7 +97,7 @@ const slides = [
 ];
 
 export const Carousel = ({ startDate, endDate }) => {
-  const [selectedSlide, setSelectedSlide] = useState(slides[0].title);
+  const [selectedSlide, setSelectedSlide] = useState(PLAN_HEADER_TITLE);
   console.log(startDate);
   console.log(endDate);
 
@@ -162,7 +163,7 @@ export const Carousel = ({ startDate, endDate }) => {
       {console.log(selectedSlide)}
       <Link
         to={`${LINKS.PLAN_FIRST.link}/${selectedSlide}`}
-        state={{ startDate, endDate, selectedSlide }}
+        state={{ startDate, endDate, selectedPlaceName: selectedSlide }}
       >
         <Button
           variant="contained"
