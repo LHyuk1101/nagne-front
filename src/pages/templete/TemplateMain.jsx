@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
-import AreaScroll from "../components/Template/AreaScroll";
-import TemplateCardComponent from "../components/Template/TemplateCard";
+import AreaScroll from "../../components/Template/AreaScroll";
+import TemplateCardComponent from "../../components/Template/TemplateCard";
 
 const TemplateMain = () => {
   const [selectedArea, setSelectedArea] = useState("Seoul");

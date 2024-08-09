@@ -1,9 +1,9 @@
 import React, { useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import useUserStore from "../store/useUserStore";
+import useUserStore from "../../store/useUserStore";
 import { Container, Typography, Box } from "@mui/material";
-import FacebookIcon from "@mui/icons-material/Facebook";
-import GoogleIcon from "@mui/icons-material/Google";
+import FacebookLogo from "../../assets/images/logo/Facebook_login_icon.svg";
+import GoogleLogo from "../../assets/images/logo/google_login_icon.svg";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -70,13 +70,25 @@ const LoginPage = () => {
         Sign in with
       </Typography>
       <Box display="flex" justifyContent="center" mt={2}>
-        <FacebookIcon
+        <img
+          src={FacebookLogo}
+          alt="FacebookLogo"
           onClick={handleSocialMediaAccountLogin("Facebook")}
-          style={{ fontSize: 80, cursor: "pointer", marginRight: "1rem" }}
+          style={{
+            cursor: "pointer",
+            height: "256px",
+            marginRight: "10px",
+          }}
         />
-        <GoogleIcon
+        <img
+          src={GoogleLogo}
+          alt="GoogleLogo"
           onClick={handleSocialMediaAccountLogin("Google")}
-          style={{ fontSize: 80, cursor: "pointer" }}
+          style={{
+            cursor: "pointer",
+            height: "256px",
+            marginRight: "10px",
+          }}
         />
       </Box>
     </Container>
