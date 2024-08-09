@@ -9,33 +9,10 @@ import {
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useEffect, useState } from "react";
-import { useLocation } from "react-router-dom";
-import PlanHeader from "./PlanHeader.jsx";
-import GoogleMap from "../../components/map/GoogleMap.jsx";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import PlaceModal from "../place/PlaceModal.jsx";
-import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
-import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
-
-const Container = styled(Box)(({ theme }) => ({
-  maxWidth: "600px",
-  width: "100%",
-  margin: "0 auto",
-  boxSizing: "border-box",
-  backgroundColor: "#ffffff",
-  borderRadius: theme.shape.borderRadius,
-  overflow: "hidden",
-  display: "flex",
-  flexDirection: "column",
-  height: "100vh",
-  position: "relative",
-  paddingBottom: "60px",
-}));
-
-const Map = styled(Box)(({ theme }) => ({
-  width: "100%",
-  height: 300,
-}));
+import { useStartPlan } from "../../store/PlanContext.jsx";
 
 const StyledTabs = styled(Tabs)({
   borderBottom: "1px solid #e0e0e0",
@@ -177,6 +154,7 @@ export const PlaceImage = styled("img")({
   height: "100%",
   objectFit: "cover",
 });
+
 export const PlaceItemActions = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -194,24 +172,18 @@ const backgroundColors = [
 ];
 
 const PlanFirst = () => {
-  const location = useLocation();
-  const { selectedPlaceName, startDate, endDate } = location.state || {};
-
-  console.log("startDate:", startDate);
-  console.log("endDate :", endDate);
-  console.log("장소 : ", selectedPlaceName);
-
+  const { startDate, endDate, placeName } = useStartPlan();
+  const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlaces, setSelectedPlaces] = useState([]);
-  const navigate = useNavigate();
 
   useEffect(() => {
     initRender();
   }, []);
 
   const initRender = () => {
-    redirectStartDate(selectedPlaceName, startDate, endDate);
+    redirectStartDate(placeName, startDate, endDate);
   };
 
   const redirectStartDate = (placeName, planStartDate, planEndDate) => {
@@ -245,6 +217,10 @@ const PlanFirst = () => {
     e.preventDefault();
   };
 
+  const handleRedirectButton = (e) => {
+    e.preventDefault();
+    navigate(LINKS.PLAN.path);
+  };
   const placeItems = [
     {
       id: 1,
@@ -287,15 +263,7 @@ const PlanFirst = () => {
   };
 
   return (
-    <Container>
-      <PlanHeader
-        selectedPlaceName={selectedPlaceName}
-        startDate={startDate}
-        endDate={endDate}
-      />
-      <Map>
-        <GoogleMap />
-      </Map>
+    <>
       <StyledTabs value={tabValue} onChange={handleTabChange}>
         <StyledTab label="Places" />
         <StyledTab label="Accommodation" />
@@ -338,7 +306,10 @@ const PlanFirst = () => {
       </ContentArea>
 
       <ButtonContainer>
-        <CreateScheduleButton variant="contained">
+        <CreateScheduleButton
+          onClick={handleRedirectButton}
+          variant="contained"
+        >
           Create Schedule
         </CreateScheduleButton>
       </ButtonContainer>
@@ -349,7 +320,7 @@ const PlanFirst = () => {
         onPlacesSelected={handlePlacesSelected}
         selectedPlaces={selectedPlaces}
       />
-    </Container>
+    </>
   );
 };
 

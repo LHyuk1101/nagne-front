@@ -8,15 +8,28 @@ import {
   DateText,
 } from "./PlanHeader.style.jsx";
 import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
+import LINKS from "../../routes/Links.jsx";
+import { useStartPlan } from "../../store/PlanContext.jsx";
+import { useNavigate } from "react-router-dom";
 
-const PlanHeader = ({ selectedPlaceName, startDate, endDate }) => {
+const PlanHeader = () => {
+  const { startDate, endDate, placeName } = useStartPlan();
+  const navigate = useNavigate();
+
+  if (
+    startDate === undefined ||
+    endDate === undefined ||
+    placeName === undefined
+  ) {
+    navigate({
+      pathname: LINKS.CREATE.path,
+    });
+  }
   return (
     <Header>
       <DestinationColumn>
         <Destination>
-          {selectedPlaceName
-            ? selectedPlaceName.toUpperCase()
-            : PLAN_HEADER_TITLE}
+          {placeName !== "" ? placeName.toUpperCase() : PLAN_HEADER_TITLE}
         </Destination>
       </DestinationColumn>
       <EmptyColumn />
