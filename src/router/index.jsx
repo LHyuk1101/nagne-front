@@ -21,12 +21,12 @@ const Router = () => {
       <Route path={LINKS.PLAN.path} element={<Plan />} />
       <Route path="/ModernCustomTemplate" element={<ModernCustomTemplate />} />
       <Route path={LINKS.CREATE.path} element={<CreatePlan />} />
-      <Route path="plan/:location" element={<PlanFirst />} />
-      <Route path="*" element={<ErrorPage />} />
+      <Route path={LINKS.PLAN_FIRST.path} element={<PlanFirst />} />
       <Route path={LINKS.TEMPLATE.path} element={<TemplateMain />} />
       <Route path={LINKS.MYPAGE.path} element={<MyPage />} />
-      <Route path={LINKS.TRAVEL.path} element={<TravelInfo/>} />
-      <Route path="/place-detail" element={<PlaceDetail/>}/>
+      <Route path={LINKS.TRAVEL.path} element={<TravelInfo />} />
+      <Route path="/place-detail" element={<PlaceDetail />} />
+      <Route path="*" element={<ErrorPage />} />
     </Routes>
   );
 };

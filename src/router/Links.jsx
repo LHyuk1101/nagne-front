@@ -39,6 +39,10 @@ const LINKS = {
     path: "/support",
     link: "/support",
   },
+  PLAN_FIRST: {
+    path: "/plan/:location",
+    link: "/plan",
+  },
 };
 
 export default LINKS;
