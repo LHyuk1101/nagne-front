@@ -36,7 +36,7 @@ const DefaultLayout = ({ children }) => {
   return (
     <StyledDiv>
       <Header />
-      <Container style={{ maxWidth: "600px", marginTop: "1rem", padding: "0" }}>
+      <Container style={{ maxWidth: "600px", padding: "0" }}>
         <Grid
           container
           spacing={0}
