@@ -27,9 +27,17 @@ const LINKS = {
     path: "/travel",
     link: "/travel",
   },
+  TRAVEL_INFO: {
+    path: "/travel/info",
+    link: "/travel/info",
+  },
   TEMPLATE: {
     path: "/template",
     link: "/template",
+  },
+  TEMPLATE_DETAIL: {
+    path: "/template/detail",
+    link: "/template/detail",
   },
   COMMUNITY: {
     path: "/community",
@@ -42,6 +50,10 @@ const LINKS = {
   PLAN_FIRST: {
     path: "/plan/:location",
     link: "/plan",
+  },
+  PLACE: {
+    path: "/place",
+    link: "/place",
   },
 };
 
