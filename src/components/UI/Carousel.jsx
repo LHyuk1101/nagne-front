@@ -26,8 +26,9 @@ import image16 from "../../assets/images/jejudo.jpg";
 
 import { Button, Typography } from "@mui/material";
 import LINKS from "../../routes/Links";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
+import { useStartPlan } from "../../store/PlanContext.jsx";
 
 const slides = [
   {
@@ -98,9 +99,14 @@ const slides = [
 
 export const Carousel = ({ startDate, endDate }) => {
   const [selectedSlide, setSelectedSlide] = useState(PLAN_HEADER_TITLE);
-  console.log(startDate);
-  console.log(endDate);
-
+  const { setStartDate, setEndDate, setPlaceName } = useStartPlan();
+  const navigate = useNavigate();
+  const handleRedirectPlan = () => {
+    setStartDate(startDate);
+    setEndDate(endDate);
+    setPlaceName(selectedSlide);
+    navigate(`${LINKS.PLAN_FIRST.link}/${selectedSlide}`);
+  };
   return (
     <>
       <Typography
@@ -160,7 +166,6 @@ export const Carousel = ({ startDate, endDate }) => {
           ))}
         </Swiper>
       </section>
-      {console.log(selectedSlide)}
       <Link
         to={`${LINKS.PLAN_FIRST.link}/${selectedSlide}`}
         state={{ startDate, endDate, selectedPlaceName: selectedSlide }}
@@ -169,6 +174,7 @@ export const Carousel = ({ startDate, endDate }) => {
           variant="contained"
           color="primary"
           style={{ marginTop: "1rem" }}
+          onClick={handleRedirectPlan}
         >
           CREATE PLAN!
         </Button>
