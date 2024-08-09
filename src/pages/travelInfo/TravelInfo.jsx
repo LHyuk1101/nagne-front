@@ -1,8 +1,8 @@
 import { Box, ThemeProvider, Typography } from "@mui/material";
 import { useState } from "react";
-import AreaScrollforTravelInfo from "../components/Template/AreaScrollforTravelInfo";
-import { theme } from "../styles/globalStyle";
-import RecommendedSection from "../components/Template/RecommendedSection";
+import { theme } from "../../styles/globalStyle";
+import RecommendedSection from "../../components/Template/RecommendedSection";
+import AreaScrollforTravelInfo from "../../components/Template/AreaScrollforTravelInfo";
 
 const TravelInfo = () => {
   const [selectedArea, setSelectedArea] = useState("Seoul");

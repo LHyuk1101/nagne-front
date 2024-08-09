@@ -3,11 +3,9 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import axios from "axios";
+import { findAll } from "../../services/template/info";
 
-const fetchPlaces = async () => {
-  const response = await axios.get("http://localhost:8080/api/place/findall");
-  return response.data;
-};
+const fetchPlaces = findAll;
 
 const RecommendedSection = () => {
   const navigate = useNavigate();
@@ -41,7 +39,7 @@ const RecommendedSection = () => {
   const restaurants = places.filter((place) => place.contentTypeId === 82);
 
   const handleClick = (item) => {
-    navigate("/place-detail", { state: item });
+    navigate("/place", { state: item });
   };
 
   const handleMouseDown = (e, scrollRef) => {
