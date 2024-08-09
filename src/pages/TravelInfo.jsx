@@ -1,6 +1,6 @@
 import { Box, ThemeProvider, Typography } from "@mui/material";
 import { useState } from "react";
-import AreaScroll from "../components/Template/AreaScroll";
+import AreaScrollforTravelInfo from "../components/Template/AreaScrollforTravelInfo";
 import { theme } from "../styles/globalStyle";
 import RecommendedSection from "../components/Template/RecommendedSection";
 
@@ -10,7 +10,7 @@ const TravelInfo = () => {
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ marginTop: "3rem" }}>
-        <AreaScroll onAreaClick={setSelectedArea} />
+        <AreaScrollforTravelInfo onAreaClick={setSelectedArea} />
         <RecommendedSection />
       </Box>
     </ThemeProvider>

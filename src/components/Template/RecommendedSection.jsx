@@ -1,157 +1,48 @@
 import { Box, Typography } from "@mui/material";
-import { useRef, useEffect } from "react";
+import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
+import { useQuery } from "@tanstack/react-query";
+import axios from "axios";
+
+const fetchPlaces = async () => {
+  const response = await axios.get("http://localhost:8080/api/place/findall");
+  return response.data;
+};
 
 const RecommendedSection = () => {
   const navigate = useNavigate();
-  const travelDestinations = [
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "남산 공원1",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "N서울타워2",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "남산 공원3",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "N서울타워4",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "남산 공원5",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "N서울타워6",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "남산 공원7",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "N서울타워8",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "남산 공원9",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "N서울타워10",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-  ];
-
-  const restaurants = [
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집1",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집2",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집3",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집4",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집5",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집6",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집7",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집8",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집9",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-    {
-      imageUrl: "https://placehold.co/150",
-      title: "맛집10",
-      content: "개쩌는 장소",
-      address: "상당한 주소",
-      infocenter: "장난전화 해주세요",
-    },
-  ];
-
   const scrollRefDest = useRef(null);
   const scrollRefRest = useRef(null);
+
+  // useQuery 훅을 사용할 때 객체 형태로 전달
+  const {
+    data: places,
+    isLoading,
+    error,
+  } = useQuery({
+    queryKey: ["places"],
+    queryFn: fetchPlaces,
+  });
+
+  console.log(places);
+
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography>Error loading data</Typography>;
+  }
+
+  // 필터링: contentTypeId가 76인 항목을 여행지로, 82인 항목을 음식점으로 설정
+  const travelDestinations = places.filter(
+    (place) => place.contentTypeId === 76,
+  );
+  const restaurants = places.filter((place) => place.contentTypeId === 82);
+
+  const handleClick = (item) => {
+    navigate("/place-detail", { state: item });
+  };
 
   const handleMouseDown = (e, scrollRef) => {
     scrollRef.current.isDragging = true;
@@ -203,17 +94,6 @@ const RecommendedSection = () => {
     }
   };
 
-  useEffect(() => {
-    return () => {
-      document.removeEventListener("mouseup", handleMouseUp);
-      document.removeEventListener("mousemove", handleMouseMove);
-    };
-  }, []);
-
-  const handleClick = (item) => {
-    navigate("/place-detail", { state: item });
-  };
-
   return (
     <Box sx={{ padding: "2rem" }}>
       <Typography variant="h6" align="center" gutterBottom>
@@ -256,10 +136,11 @@ const RecommendedSection = () => {
               width="150"
               height="150"
             />
-            <Typography variant="body1">{destination.title}</Typography>
+            <Typography variant="body1">{destination.name}</Typography>
           </Box>
         ))}
       </Box>
+
       <Typography variant="h6" align="center" gutterBottom>
         Recommended restaurants
       </Typography>
@@ -296,11 +177,11 @@ const RecommendedSection = () => {
           >
             <img
               src={restaurant.imageUrl}
-              alt={restaurant.title}
+              alt={restaurant.name}
               width="150"
               height="150"
             />
-            <Typography variant="body1">{restaurant.title}</Typography>
+            <Typography variant="body1">{restaurant.name}</Typography>
           </Box>
         ))}
       </Box>

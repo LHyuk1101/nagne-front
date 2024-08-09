@@ -3,14 +3,15 @@ import { useLocation } from "react-router-dom";
 
 const PlaceDetail = () => {
   const location = useLocation();
-  const { imageUrl, title, content, address, infocenter } = location.state;
+  const { imageUrl, name, content, address, infocenter, overview } =
+    location.state;
 
   return (
     <Box sx={{ padding: "2rem" }}>
       <Box
         component="img"
         src={imageUrl}
-        alt={title}
+        alt={name}
         sx={{
           width: "100%",
           height: "300px",
@@ -19,16 +20,32 @@ const PlaceDetail = () => {
         }}
       />
       <Typography variant="h5" align="center" gutterBottom>
-        {title}
+        {name}
       </Typography>
       <Typography variant="body1" align="center" gutterBottom>
-        {content}
+        {overview}
       </Typography>
-      <Box sx={{ borderBottom: 1, borderColor: 'grey.300', my: 2 ,marginTop:'2rem', marginBottom:'2rem'}} />
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "grey.300",
+          my: 2,
+          marginTop: "2rem",
+          marginBottom: "2rem",
+        }}
+      />
       <Typography variant="body2" align="center" gutterBottom>
         주소: {address}
       </Typography>
-      <Box sx={{ borderBottom: 1, borderColor: 'grey.300', my: 2 ,marginTop:'2rem', marginBottom:'2rem'}} />
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "grey.300",
+          my: 2,
+          marginTop: "2rem",
+          marginBottom: "2rem",
+        }}
+      />
       <Typography variant="body2" align="center" gutterBottom>
         전화번호: {infocenter}
       </Typography>
