@@ -36,8 +36,8 @@ const LINKS = {
     link: "/template",
   },
   TEMPLATE_DETAIL: {
-    path: "/template/detail",
-    link: "/template/detail",
+    path: "/template/:templateId",
+    link: "/template/",
   },
   COMMUNITY: {
     path: "/community",
