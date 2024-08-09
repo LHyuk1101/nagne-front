@@ -6,8 +6,8 @@ import IconButton from "@mui/material/IconButton";
 import MenuIcon from "@mui/icons-material/Menu";
 import RightSideMenu from "../UI/RightSideMenu.jsx";
 import Box from "@mui/material/Box";
-import logo from "../../assets/images/nagne_logo.png";
-import titleLogo from "../../assets/images/nagne_title_logo.png";
+import logo from "../../assets/images/logo/nagne_logo.png";
+import titleLogo from "../../assets/images/logo/nagne_title_logo.png";
 import { Link } from "react-router-dom";
 
 const Header = () => {
