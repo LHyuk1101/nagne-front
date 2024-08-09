@@ -12,6 +12,12 @@
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
 }
+@media (prefers-color-scheme: dark) {
+  :root {
+    background-color: #ffffff; /* 라이트 모드 배경색 */
+    color: #000000; /* 라이트 모드 텍스트 색상 */
+  }
+}
 
 a {
   font-weight: 500;

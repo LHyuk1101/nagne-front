@@ -11,6 +11,7 @@ import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useState } from "react";
 import PlanHeader from "./PlanHeader.jsx";
 import GoogleMap from "../../components/map/GoogleMap.jsx";
+import PlaceModal from "../place/PlaceModal.jsx";
 
 const Container = styled(Box)(({ theme }) => ({
   maxWidth: "600px",
@@ -55,18 +56,18 @@ const ContentArea = styled(Box)({
   "-ms-overflow-style": "none",
   scrollbarWidth: "none",
 });
-
-const PlaceList = styled(Box)(({ theme }) => ({
+//place쪽
+export const PlaceList = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
 
-const PlaceHeader = styled(Box)(({ theme }) => ({
+export const PlaceHeader = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(2, 1.5),
 }));
 
-const PlaceNumber = styled(Typography)(({ theme }) => ({
+export const PlaceNumber = styled(Typography)(({ theme }) => ({
   width: 40,
   height: 40,
   display: "flex",
@@ -78,13 +79,13 @@ const PlaceNumber = styled(Typography)(({ theme }) => ({
   fontWeight: 700,
 }));
 
-const PlaceName = styled(Typography)(({ theme }) => ({
+export const PlaceName = styled(Typography)(({ theme }) => ({
   flex: 1,
   fontSize: 18,
   fontWeight: 500,
 }));
 
-const AddPlaceButton = styled(Button)(({ theme }) => ({
+export const AddPlaceButton = styled(Button)(({ theme }) => ({
   color: theme.palette.primary,
   fontWeight: 600,
   textTransform: "none",
@@ -121,43 +122,45 @@ const CreateScheduleButton = styled(Button)(({ theme }) => ({
   },
 }));
 // TODO 컴포넌트 분리할 Place 아이템
-const PlaceItem = styled(Box)(({ theme }) => ({
+export const PlaceItem = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
   padding: theme.spacing(2),
   borderBottom: "1px solid #e0e0e0",
 }));
 
-const PlaceItemNumber = styled(Typography)(({ theme, backgroundColor }) => ({
-  width: 30,
-  height: 30,
-  display: "flex",
-  justifyContent: "center",
-  alignItems: "center",
-  backgroundColor: backgroundColor,
-  color: "#ffffff",
-  borderRadius: "50%",
-  marginRight: theme.spacing(2),
-  fontSize: 16,
-  fontWeight: 600,
-}));
+export const PlaceItemNumber = styled(Typography)(
+  ({ theme, backgroundColor }) => ({
+    width: 30,
+    height: 30,
+    display: "flex",
+    justifyContent: "center",
+    alignItems: "center",
+    backgroundColor: backgroundColor,
+    color: "#ffffff",
+    borderRadius: "50%",
+    marginRight: theme.spacing(2),
+    fontSize: 16,
+    fontWeight: 600,
+  }),
+);
 
-const PlaceItemContent = styled(Box)({
+export const PlaceItemContent = styled(Box)({
   flex: 1,
 });
 
-const PlaceItemName = styled(Typography)(({ theme }) => ({
+export const PlaceItemName = styled(Typography)(({ theme }) => ({
   fontSize: 16,
   fontWeight: 500,
   marginBottom: theme.spacing(0.5),
 }));
 
-const PlaceItemAddress = styled(Typography)(({ theme }) => ({
+export const PlaceItemAddress = styled(Typography)(({ theme }) => ({
   fontSize: 14,
   color: "#666",
 }));
 
-const PlaceImgContent = styled(Box)(({ theme }) => ({
+export const PlaceImgContent = styled(Box)(({ theme }) => ({
   width: 60,
   height: 60,
   marginRight: theme.spacing(2),
@@ -165,12 +168,12 @@ const PlaceImgContent = styled(Box)(({ theme }) => ({
   overflow: "hidden",
 }));
 
-const PlaceImage = styled("img")({
+export const PlaceImage = styled("img")({
   width: "100%",
   height: "100%",
   objectFit: "cover",
 });
-const PlaceItemActions = styled(Box)({
+export const PlaceItemActions = styled(Box)({
   display: "flex",
   alignItems: "center",
 });
@@ -186,8 +189,20 @@ const backgroundColors = [
   "#AED581",
 ];
 
-const SeoulTripUI = () => {
+const PlanFirst = () => {
   const [tabValue, setTabValue] = useState(0);
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [selectedPlaces, setSelectedPlaces] = useState([]);
+
+  const toggleModal = () => {
+    console.log("toggleModal");
+    setIsModalOpen(!isModalOpen);
+  };
+
+  const handlePlacesSelected = (places) => {
+    setSelectedPlaces(places);
+    toggleModal();
+  };
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
@@ -245,7 +260,7 @@ const SeoulTripUI = () => {
       <PlaceHeader>
         <PlaceNumber>3</PlaceNumber>
         <PlaceName>Reset</PlaceName>
-        <AddPlaceButton>+ Add Place</AddPlaceButton>
+        <AddPlaceButton onClick={toggleModal}>+ Add Place</AddPlaceButton>
       </PlaceHeader>
       <ContentArea>
         <PlaceList>
@@ -283,8 +298,15 @@ const SeoulTripUI = () => {
           Create Schedule
         </CreateScheduleButton>
       </ButtonContainer>
+
+      <PlaceModal
+        open={isModalOpen}
+        onClose={toggleModal}
+        onPlacesSelected={handlePlacesSelected}
+        selectedPlaces={selectedPlaces}
+      />
     </Container>
   );
 };
 
-export default SeoulTripUI;
+export default PlanFirst;

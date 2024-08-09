@@ -10,8 +10,8 @@ import "react-datepicker/dist/react-datepicker.css";
 import { useState } from "react";
 import { addDays, addMonths } from "date-fns";
 import "../../styles/CreatePlan.css";
-import { Modal } from "../../components/UI/Modal.jsx";
-import { theme } from "../../styles/globalStyle.jsx";
+import { SelectDestinationModal } from "../../components/UI/SelectDestinationModal";
+import { theme } from "../../styles/globalStyle";
 
 const CreatePlan = () => {
   const [startDate, setStartDate] = useState(null);
@@ -68,7 +68,7 @@ const CreatePlan = () => {
         >
           NEXT
         </Button>
-        <Modal isOpen={isOpen} toggleOpen={toggleOpen} />
+        <SelectDestinationModal isOpen={isOpen} toggleOpen={toggleOpen} />
       </Container>
     </ThemeProvider>
   );
