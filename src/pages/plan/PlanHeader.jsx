@@ -8,18 +8,22 @@ import {
   DateText,
 } from "./PlanHeader.style.jsx";
 
-const PlanHeader = () => {
+const PlanHeader = ({ selectedSlide, startDate, endDate }) => {
   return (
     <Header>
       <DestinationColumn>
-        <Destination>SEOUL</Destination>
+        <Destination>
+          {selectedSlide ? selectedSlide.toUpperCase() : "UNKNOWN DESTINATION"}
+        </Destination>
       </DestinationColumn>
       <EmptyColumn />
       <DateColumn>
         <DateRange>
-          <DateText>2024.08.19(MON)</DateText>
+          <DateText>
+            {startDate ? startDate.toLocaleDateString() : "N/A"}
+          </DateText>
           <DateText style={{ margin: "4px 0" }}>TO</DateText>
-          <DateText>2024.08.22(THU)</DateText>
+          <DateText>{endDate ? endDate.toLocaleDateString() : "N/A"}</DateText>
         </DateRange>
       </DateColumn>
     </Header>

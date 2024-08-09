@@ -9,6 +9,7 @@ import {
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
 import { useState } from "react";
+import { useLocation } from "react-router-dom";
 import PlanHeader from "./PlanHeader.jsx";
 import GoogleMap from "../../components/map/GoogleMap.jsx";
 import PlaceModal from "../place/PlaceModal.jsx";
@@ -56,7 +57,7 @@ const ContentArea = styled(Box)({
   "-ms-overflow-style": "none",
   scrollbarWidth: "none",
 });
-//place쪽
+
 export const PlaceList = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
@@ -121,7 +122,7 @@ const CreateScheduleButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#1765CC",
   },
 }));
-// TODO 컴포넌트 분리할 Place 아이템
+
 export const PlaceItem = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -190,12 +191,18 @@ const backgroundColors = [
 ];
 
 const PlanFirst = () => {
+  const location = useLocation();
+  const { selectedSlide, startDate, endDate } = location.state || {};
+
+  console.log("startDate:", startDate);
+  console.log("endDate :", endDate);
+  console.log("장소 : ", selectedSlide);
+
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlaces, setSelectedPlaces] = useState([]);
 
   const toggleModal = () => {
-    console.log("toggleModal");
     setIsModalOpen(!isModalOpen);
   };
 
@@ -228,26 +235,15 @@ const PlanFirst = () => {
       name: "Myeongdong Shopping Street",
       address: "Myeongdong-gil, Jung-gu, Seoul",
     },
-    {
-      id: 4,
-      name: "Myeongdong Shopping Street",
-      address: "Myeongdong-gil, Jung-gu, Seoul",
-    },
-    {
-      id: 5,
-      name: "Myeongdong Shopping Street",
-      address: "Myeongdong-gil, Jung-gu, Seoul",
-    },
-    {
-      id: 6,
-      name: "Myeongdong Shopping Street",
-      address: "Myeongdong-gil, Jung-gu, Seoul",
-    },
   ];
 
   return (
     <Container>
-      <PlanHeader />
+      <PlanHeader
+        selectedSlide={selectedSlide}
+        startDate={startDate}
+        endDate={endDate}
+      />
       <Map>
         <GoogleMap />
       </Map>

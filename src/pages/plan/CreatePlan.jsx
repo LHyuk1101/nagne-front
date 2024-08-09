@@ -68,7 +68,12 @@ const CreatePlan = () => {
         >
           NEXT
         </Button>
-        <SelectDestinationModal isOpen={isOpen} toggleOpen={toggleOpen} />
+        <SelectDestinationModal
+          isOpen={isOpen}
+          toggleOpen={toggleOpen}
+          startDate={startDate}
+          endDate={endDate}
+        />
       </Container>
     </ThemeProvider>
   );
