@@ -8,30 +8,11 @@ import {
   IconButton,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
-import { useState } from "react";
-import PlanHeader from "./PlanHeader.jsx";
-import GoogleMap from "../../components/map/GoogleMap.jsx";
+import { useEffect, useState } from "react";
+import { Link, NavLink, useNavigate } from "react-router-dom";
 import PlaceModal from "../place/PlaceModal.jsx";
-
-const Container = styled(Box)(({ theme }) => ({
-  maxWidth: "600px",
-  width: "100%",
-  margin: "0 auto",
-  boxSizing: "border-box",
-  backgroundColor: "#ffffff",
-  borderRadius: theme.shape.borderRadius,
-  overflow: "hidden",
-  display: "flex",
-  flexDirection: "column",
-  height: "100vh",
-  position: "relative",
-  paddingBottom: "60px",
-}));
-
-const Map = styled(Box)(({ theme }) => ({
-  width: "100%",
-  height: 300,
-}));
+import LINKS from "../../routes/Links.jsx";
+import { useStartPlan } from "../../store/PlanContext.jsx";
 
 const StyledTabs = styled(Tabs)({
   borderBottom: "1px solid #e0e0e0",
@@ -56,7 +37,7 @@ const ContentArea = styled(Box)({
   "-ms-overflow-style": "none",
   scrollbarWidth: "none",
 });
-//place쪽
+
 export const PlaceList = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
 }));
@@ -121,7 +102,7 @@ const CreateScheduleButton = styled(Button)(({ theme }) => ({
     backgroundColor: "#1765CC",
   },
 }));
-// TODO 컴포넌트 분리할 Place 아이템
+
 export const PlaceItem = styled(Box)(({ theme }) => ({
   display: "flex",
   alignItems: "center",
@@ -173,6 +154,7 @@ export const PlaceImage = styled("img")({
   height: "100%",
   objectFit: "cover",
 });
+
 export const PlaceItemActions = styled(Box)({
   display: "flex",
   alignItems: "center",
@@ -190,12 +172,35 @@ const backgroundColors = [
 ];
 
 const PlanFirst = () => {
+  const { startDate, endDate, placeName } = useStartPlan();
+  const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const [selectedPlaces, setSelectedPlaces] = useState([]);
 
+  useEffect(() => {
+    initRender();
+  }, []);
+
+  const initRender = () => {
+    redirectStartDate(placeName, startDate, endDate);
+  };
+
+  const redirectStartDate = (placeName, planStartDate, planEndDate) => {
+    if (
+      placeName === undefined ||
+      planStartDate === undefined ||
+      planEndDate === undefined
+    ) {
+      navigate({
+        pathname: LINKS.CREATE.path,
+      });
+    }
+  };
+
+  const renderRefreshNotification = () => {};
+
   const toggleModal = () => {
-    console.log("toggleModal");
     setIsModalOpen(!isModalOpen);
   };
 
@@ -212,6 +217,10 @@ const PlanFirst = () => {
     e.preventDefault();
   };
 
+  const handleRedirectButton = (e) => {
+    e.preventDefault();
+    navigate(LINKS.PLAN.path);
+  };
   const placeItems = [
     {
       id: 1,
@@ -228,33 +237,36 @@ const PlanFirst = () => {
       name: "Myeongdong Shopping Street",
       address: "Myeongdong-gil, Jung-gu, Seoul",
     },
-    {
-      id: 4,
-      name: "Myeongdong Shopping Street",
-      address: "Myeongdong-gil, Jung-gu, Seoul",
-    },
-    {
-      id: 5,
-      name: "Myeongdong Shopping Street",
-      address: "Myeongdong-gil, Jung-gu, Seoul",
-    },
-    {
-      id: 6,
-      name: "Myeongdong Shopping Street",
-      address: "Myeongdong-gil, Jung-gu, Seoul",
-    },
   ];
 
+  const responseDataEx = {
+    startDay: "",
+    endDay: "",
+    place: [
+      {
+        name: "",
+        contentTypeId: "",
+        lat: "",
+        lng: "",
+        overview: "",
+      },
+    ],
+    맛집: [
+      {
+        name: "",
+        contentTypeId: "",
+        lat: "",
+        lng: "",
+        overview: "",
+      },
+    ],
+  };
+
   return (
-    <Container>
-      <PlanHeader />
-      <Map>
-        <GoogleMap />
-      </Map>
+    <>
       <StyledTabs value={tabValue} onChange={handleTabChange}>
         <StyledTab label="Places" />
         <StyledTab label="Accommodation" />
-        <StyledTab label="Restaurants" />
       </StyledTabs>
 
       <PlaceHeader>
@@ -294,7 +306,10 @@ const PlanFirst = () => {
       </ContentArea>
 
       <ButtonContainer>
-        <CreateScheduleButton variant="contained">
+        <CreateScheduleButton
+          onClick={handleRedirectButton}
+          variant="contained"
+        >
           Create Schedule
         </CreateScheduleButton>
       </ButtonContainer>
@@ -305,7 +320,7 @@ const PlanFirst = () => {
         onPlacesSelected={handlePlacesSelected}
         selectedPlaces={selectedPlaces}
       />
-    </Container>
+    </>
   );
 };
 

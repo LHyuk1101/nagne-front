@@ -1,3 +1,4 @@
+import { useState } from "react";
 import { Swiper, SwiperSlide } from "swiper/react";
 import { EffectCoverflow, Pagination } from "swiper/modules";
 
@@ -25,76 +26,87 @@ import image16 from "../../assets/images/jejudo.jpg";
 
 import { Button, Typography } from "@mui/material";
 import LINKS from "../../routes/Links";
-import { Link } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
+import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
+import { useStartPlan } from "../../store/PlanContext.jsx";
 
 const slides = [
   {
-    title: "SEOUL",
+    title: "seoul",
     image: image1,
   },
   {
-    title: "INCHEON",
+    title: "incheon",
     image: image2,
   },
   {
-    title: "DAEJEON",
+    title: "daejeon",
     image: image3,
   },
   {
-    title: "DAEGU",
+    title: "daegu",
     image: image4,
   },
   {
-    title: "GWANGJU",
+    title: "gwangju",
     image: image5,
   },
   {
-    title: "BUSAN",
+    title: "busan",
     image: image6,
   },
   {
-    title: "ULSAN",
+    title: "ulsan",
     image: image7,
   },
   {
-    title: "GYEONGGIDO",
+    title: "gyeonggido",
     image: image8,
   },
   {
-    title: "GANGWONDO",
+    title: "gangwondo",
     image: image9,
   },
   {
-    title: "CHUNGCHEONGBUKDO",
+    title: "chungcheongbukdo",
     image: image10,
   },
   {
-    title: "CHUNGCHEONGNAMDO",
+    title: "chungcheongnamdo",
     image: image11,
   },
   {
-    title: "GYEONGSANGBUKDO",
+    title: "gyeongsangbukdo",
     image: image12,
   },
   {
-    title: "GYEONGSANGNAMDO",
+    title: "gyeongsangnamdo",
     image: image13,
   },
   {
-    title: "JEONLABUKDO",
+    title: "jeonlabukdo",
     image: image14,
   },
   {
-    title: "JEONLANAMDO",
+    title: "jeonlanamdo",
     image: image15,
   },
   {
-    title: "JEJUDO",
+    title: "jejudo",
     image: image16,
   },
 ];
 
-export const Carousel = () => {
+export const Carousel = ({ startDate, endDate }) => {
+  const [selectedSlide, setSelectedSlide] = useState(PLAN_HEADER_TITLE);
+  const { setStartDate, setEndDate, setPlaceName } = useStartPlan();
+  const navigate = useNavigate();
+  const handleRedirectPlan = () => {
+    setStartDate(startDate);
+    setEndDate(endDate);
+    setPlaceName(selectedSlide);
+    navigate(`${LINKS.PLAN_FIRST.link}/${selectedSlide}`);
+  };
   return (
     <>
       <Typography
@@ -129,6 +141,9 @@ export const Carousel = () => {
             slideShadows: true,
           }}
           modules={[Pagination, EffectCoverflow]}
+          onSlideChange={(swiper) =>
+            setSelectedSlide(slides[swiper.realIndex].title)
+          }
         >
           {slides.map((slide) => (
             <SwiperSlide
@@ -151,11 +166,15 @@ export const Carousel = () => {
           ))}
         </Swiper>
       </section>
-      <Link to={LINKS.PLAN_FIRST.link + "/seoul"}>
+      <Link
+        to={`${LINKS.PLAN_FIRST.link}/${selectedSlide}`}
+        state={{ startDate, endDate, selectedPlaceName: selectedSlide }}
+      >
         <Button
           variant="contained"
           color="primary"
           style={{ marginTop: "1rem" }}
+          onClick={handleRedirectPlan}
         >
           CREATE PLAN!
         </Button>
