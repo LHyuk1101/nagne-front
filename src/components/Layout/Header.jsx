@@ -12,7 +12,6 @@ import { Link } from "react-router-dom";
 
 const Header = () => {
   const [open, setOpen] = useState(false);
-  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
   const toggleDrawer = (open) => (event) => {
     if (
@@ -22,11 +21,6 @@ const Header = () => {
       return;
     }
     setOpen(open);
-  };
-
-  // 로그인 시 setIsLoggedIn을 핸들링 할 함수.
-  const manageLoggedInUser = () => {
-    return null;
   };
 
   return (
@@ -92,11 +86,7 @@ const Header = () => {
           </IconButton>
         </Toolbar>
       </AppBar>
-      <RightSideMenu
-        isLoggedIn={isLoggedIn}
-        open={open}
-        onClose={toggleDrawer(false)}
-      />
+      <RightSideMenu open={open} onClose={toggleDrawer(false)} />
     </>
   );
 };
