@@ -1,4 +1,4 @@
-import { axiosInstance, setAccessTokenToHttpClient} from "../common/axios";
+import { axiosInstance, setAccessTokenToHttpClient } from "../common/axios";
 
 export const login = async (credentials) => {
   const response = await axiosInstance.post("/auth/login", credentials);

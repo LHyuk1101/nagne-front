@@ -1,4 +1,4 @@
-import { useCallback, useRef } from 'react';
+import { useCallback, useRef } from "react";
 
 /**
  * 버튼 클릭 이벤트에 대해 디바운스 처리를 수행하는 커스텀 훅입니다.
@@ -15,15 +15,15 @@ import { useCallback, useRef } from 'react';
  * return <button onClick={handleClick}>Click me</button>;
  */
 export const useDebounceClick = (callback, delay) => {
-    const timeoutRef = useRef(null);
+  const timeoutRef = useRef(null);
 
-    return useCallback(() => {
-        if (timeoutRef.current) {
-            clearTimeout(timeoutRef.current);
-        }
+  return useCallback(() => {
+    if (timeoutRef.current) {
+      clearTimeout(timeoutRef.current);
+    }
 
-        timeoutRef.current = setTimeout(() => {
-            callback();
-        }, delay);
-    }, [callback, delay]);
+    timeoutRef.current = setTimeout(() => {
+      callback();
+    }, delay);
+  }, [callback, delay]);
 };
