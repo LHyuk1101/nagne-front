@@ -2,6 +2,7 @@ import { useState } from "react";
 import {
   Modal,
   Box,
+  Typography,
   TextField,
   Button,
   Chip,
@@ -114,10 +115,8 @@ const PlaceModal = ({ open, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("추천 장소");
   const [selectedPlaces, setSelectedPlaces] = useState([]);
-  // const [places, setPlaces] = useState([]);
 
-  const categories = ["Popular Attractions", "Attractions", "Restaurant"];
-
+  const categories = ["추천 장소", "명소", "맛집", "숙소"];
   const places = [
     {
       id: 1,
