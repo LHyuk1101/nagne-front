@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useMemo, useState } from "react";
 import Drawer from "@mui/material/Drawer";
 import List from "@mui/material/List";
 import ListItem from "@mui/material/ListItem";
@@ -28,8 +28,11 @@ const user = userStore?.state?.user;
  * @property {boolean|null} isLogin - login 상태인지 확인. true = 로그인중, false = 로그인 이전, null = 기본으로 보여줘야할 데이터
  */
 
-/** @type {NaviItem[]} */
-const NaviItemsTop = [
+/**
+ * @param {Object} user
+ * @returns {NaviItem[]}
+ */
+const NaviItemsTop = (user) => [
   {
     text: "Login",
     route: LINKS.LOGIN.path,
@@ -100,12 +103,16 @@ const NaviItemsBottom = [
  * @param {Object} props - Component props
  * @param {boolean} props.open - Whether the drawer is open
  * @param {Function} props.onClose - Function to close the drawer
- * @param {boolean} props.isLoggedIn - Whether the user is logged in
  * @returns {JSX.Element} RightSideMenu component
  */
-const RightSideMenu = ({ open, onClose, isLoggedIn }) => {
-  isLoggedIn = !!user.userId;
+const RightSideMenu = ({ open, onClose }) => {
+  const [isLoggedIn, setIsLoggedIn] = useState(false);
 
+  useEffect(() => {
+    setIsLoggedIn(!!user.userId);
+  }, [isLoggedIn]);
+
+  const naviItemsTop = useMemo(() => NaviItemsTop(user), [user]);
   const renderNavItems = (items) => {
     return items.map((item) => (
       <ListItem key={item.text} disablePadding>
@@ -126,7 +133,7 @@ const RightSideMenu = ({ open, onClose, isLoggedIn }) => {
     >
       <List>
         {renderNavItems(
-          NaviItemsTop.filter((item) => item.isLogin === isLoggedIn),
+          naviItemsTop.filter((item) => item.isLogin === isLoggedIn),
         )}
       </List>
       <Divider />
