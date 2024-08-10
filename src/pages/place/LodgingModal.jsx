@@ -12,7 +12,7 @@ import {
   IconButton,
   styled,
 } from "@mui/material";
-import { Search, ArrowBack, Add, Check, Place } from "@mui/icons-material";
+import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
 import SelectedPlacesThumbnails from "./SelectedPlacesThumbnails.jsx";
 
 const ModalContainer = styled(Box)(({ theme }) => ({
@@ -114,10 +114,8 @@ const PlaceModal = ({ open, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("추천 장소");
   const [selectedPlaces, setSelectedPlaces] = useState([]);
-  // const [places, setPlaces] = useState([]);
 
-  const categories = ["Popular Attractions", "Attractions", "Restaurant"];
-
+  const categories = ["추천 장소", "명소", "맛집", "숙소"];
   const places = [
     {
       id: 1,
