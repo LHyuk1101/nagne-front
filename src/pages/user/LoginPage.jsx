@@ -46,9 +46,10 @@ const LoginPage = () => {
   useEffect(() => {
     const handleAuthComplete = (event) => {
       if (event.origin === `${baseURL}` && event.data) {
-        const { accessToken, userId, name, email, role } = event.data;
+        const { accessToken, userId, nickname, email, role, userProfileImg } =
+          event.data;
         localStorage.setItem("accessToken", accessToken);
-        setUser({ userId, name, email, role });
+        setUser({ userId, nickname, email, role, userProfileImg });
 
         window.location.href = "/";
       }
@@ -76,7 +77,7 @@ const LoginPage = () => {
           onClick={handleSocialMediaAccountLogin("Facebook")}
           style={{
             cursor: "pointer",
-            height: "256px",
+            height: "100px",
             marginRight: "10px",
           }}
         />
@@ -86,7 +87,7 @@ const LoginPage = () => {
           onClick={handleSocialMediaAccountLogin("Google")}
           style={{
             cursor: "pointer",
-            height: "256px",
+            height: "100px",
             marginRight: "10px",
           }}
         />

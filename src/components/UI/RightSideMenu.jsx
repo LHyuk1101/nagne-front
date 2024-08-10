@@ -6,17 +6,20 @@ import ListItemButton from "@mui/material/ListItemButton";
 import ListItemIcon from "@mui/material/ListItemIcon";
 import ListItemText from "@mui/material/ListItemText";
 import Box from "@mui/material/Box";
-import { Divider } from "@mui/material";
+import { Divider, Avatar } from "@mui/material";
 import { Link } from "react-router-dom";
-import ExploreIcon from "@mui/icons-material/Explore.js";
-import TemplateIcon from "@mui/icons-material/Dashboard.js";
-import ForumIcon from "@mui/icons-material/Forum.js";
-import SupportIcon from "@mui/icons-material/Support.js";
+import ExploreIcon from "@mui/icons-material/Explore";
+import TemplateIcon from "@mui/icons-material/Dashboard";
+import SupportIcon from "@mui/icons-material/Support";
 import LINKS from "../../routes/Links.jsx";
 
 import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
+import EventNoteIcon from "@mui/icons-material/EventNote";
+
+const userStore = JSON.parse(localStorage.getItem("userStore"));
+const user = userStore?.state?.user;
 
 /**
  * @typedef {Object} NaviItem
@@ -33,19 +36,33 @@ const NaviItemsTop = [
     isLogin: false,
     icon: <LoginIcon />,
   },
+
   {
-    text: "Logout",
-    route: LINKS.LOGOUT.path,
+    icon: <Avatar src={user.userProfileImg} alt={user.nickname} />,
+    text: user.nickname,
     isLogin: true,
-    icon: <LogoutIcon />,
+    route: "/profile",
   },
   {
-    text: "MyPage",
-    route: LINKS.MYPAGE.path,
+    icon: <EventNoteIcon />,
+    text: "My Plan",
     isLogin: true,
+    route: "/my-plan",
+  },
+  {
     icon: <PersonIcon />,
+    text: "Profile",
+    isLogin: true,
+    route: "/profile",
+  },
+  {
+    icon: <LogoutIcon />,
+    text: "Logout",
+    isLogin: true,
+    route: LINKS.LOGOUT.path,
   },
 ];
+
 /**
  * @typedef {Object} NaviItem
  * @property {string} text - 화면에서 보이는 메뉴 Text
@@ -87,6 +104,8 @@ const NaviItemsBottom = [
  * @returns {JSX.Element} RightSideMenu component
  */
 const RightSideMenu = ({ open, onClose, isLoggedIn }) => {
+  isLoggedIn = !!user.userId;
+
   const renderNavItems = (items) => {
     return items.map((item) => (
       <ListItem key={item.text} disablePadding>

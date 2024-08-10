@@ -7,20 +7,20 @@ const useUserStore = create(
     (set) => ({
       user: {
         userId: "",
-        name: "",
+        nickname: "",
         email: "",
         role: "",
-        profileImg: "",
+        userProfileImg: "",
       },
       setUser: (user) => set({ user }),
       clearUser: () =>
         set({
           user: {
             userId: "",
-            name: "",
+            nickname: "",
             email: "",
             role: "",
-            profileImg: "",
+            userProfileImg: "",
           },
         }),
     }),
