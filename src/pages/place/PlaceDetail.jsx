@@ -3,7 +3,7 @@ import { useLocation } from "react-router-dom";
 
 const PlaceDetail = () => {
   const location = useLocation();
-  const { imageUrl, name, content, address, infocenter, overview } =
+  const { imageUrl, title, content, address, infocenter, overview } =
     location.state;
 
   return (
@@ -11,7 +11,7 @@ const PlaceDetail = () => {
       <Box
         component="img"
         src={imageUrl}
-        alt={name}
+        alt={title}
         sx={{
           width: "100%",
           height: "300px",
@@ -20,7 +20,7 @@ const PlaceDetail = () => {
         }}
       />
       <Typography variant="h5" align="center" gutterBottom>
-        {name}
+        {title}
       </Typography>
       <Typography variant="body1" align="center" gutterBottom>
         {overview}

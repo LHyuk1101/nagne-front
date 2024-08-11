@@ -134,7 +134,7 @@ const RecommendedSection = () => {
               width="150"
               height="150"
             />
-            <Typography variant="body1">{destination.name}</Typography>
+            <Typography variant="body1">{destination.title}</Typography>
           </Box>
         ))}
       </Box>
@@ -175,11 +175,11 @@ const RecommendedSection = () => {
           >
             <img
               src={restaurant.imageUrl}
-              alt={restaurant.name}
+              alt={restaurant.title}
               width="150"
               height="150"
             />
-            <Typography variant="body1">{restaurant.name}</Typography>
+            <Typography variant="body1">{restaurant.title}</Typography>
           </Box>
         ))}
       </Box>
