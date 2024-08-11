@@ -5,13 +5,13 @@ import RecommendedSection from "../../components/Template/RecommendedSection";
 import AreaScrollforTravelInfo from "../../components/Template/AreaScrollforTravelInfo";
 
 const TravelInfo = () => {
-  const [selectedArea, setSelectedArea] = useState("Seoul");
+  const [selectedArea, setSelectedArea] = useState("SEOUL");
 
   return (
     <ThemeProvider theme={theme}>
       <Box sx={{ marginTop: "3rem" }}>
         <AreaScrollforTravelInfo onAreaClick={setSelectedArea} />
-        <RecommendedSection />
+        <RecommendedSection selectedArea={selectedArea} />
       </Box>
     </ThemeProvider>
   );

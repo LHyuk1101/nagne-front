@@ -2,24 +2,20 @@ import { Box, Typography } from "@mui/material";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import axios from "axios";
-import { findAll } from "../../services/template/info";
+import { fetchPlacesByRegion } from "../../services/template/info";
 
-const fetchPlaces = findAll;
-
-const RecommendedSection = () => {
+const RecommendedSection = ({ selectedArea }) => {
   const navigate = useNavigate();
   const scrollRefDest = useRef(null);
   const scrollRefRest = useRef(null);
 
-  // useQuery 훅을 사용할 때 객체 형태로 전달
   const {
     data: places,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["places"],
-    queryFn: fetchPlaces,
+    queryKey: ["places", selectedArea],
+    queryFn: () => fetchPlacesByRegion(selectedArea),
   });
 
   console.log(places);
@@ -29,14 +25,14 @@ const RecommendedSection = () => {
   }
 
   if (error) {
+    console.error("Error:", error);
     return <Typography>Error loading data</Typography>;
   }
 
-  // 필터링: contentTypeId가 76인 항목을 여행지로, 82인 항목을 음식점으로 설정
   const travelDestinations = places.filter(
     (place) => place.contentTypeId === 76,
   );
-  const restaurants = places.filter((place) => place.contentTypeId === 82);
+  const restaurants = places.filter((place) => place.contentTypeId === 80);
 
   const handleClick = (item) => {
     navigate("/place", { state: item });
@@ -129,12 +125,23 @@ const RecommendedSection = () => {
             onClick={() => handleClick(destination)}
           >
             <img
-              src={destination.imageUrl}
+              src={destination.thumbnailUrl}
               alt={destination.title}
               width="150"
               height="150"
             />
-            <Typography variant="body1">{destination.title}</Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                wordWrap: "break-word",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+                maxWidth: "150px",
+              }}
+            >
+              {destination.title}
+            </Typography>
           </Box>
         ))}
       </Box>
@@ -174,12 +181,23 @@ const RecommendedSection = () => {
             onClick={() => handleClick(restaurant)}
           >
             <img
-              src={restaurant.imageUrl}
+              src={restaurant.thumbnailUrl}
               alt={restaurant.title}
               width="150"
               height="150"
             />
-            <Typography variant="body1">{restaurant.title}</Typography>
+            <Typography
+              variant="body1"
+              sx={{
+                wordWrap: "break-word",
+                overflow: "hidden",
+                textOverflow: "ellipsis",
+                whiteSpace: "normal",
+                maxWidth: "150px",
+              }}
+            >
+              {restaurant.title}
+            </Typography>
           </Box>
         ))}
       </Box>
