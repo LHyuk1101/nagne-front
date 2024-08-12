@@ -33,7 +33,3 @@ const usePlanStore = create((set) => ({
 }));
 
 export default usePlanStore;
-
-// export const useStartPlan = () => {
-//   return useContext(PlanContext);
-// };

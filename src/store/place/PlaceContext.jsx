@@ -2,8 +2,8 @@ import { createContext, useState, useContext } from "react";
 
 /**
  * @typedef {Object} Area
- * @property {number} areaCode - The code of the area
- * @property {string} name - The name of the area
+ * @property {number} areaCode
+ * @property {string} name
  */
 
 /**
@@ -25,10 +25,11 @@ import { createContext, useState, useContext } from "react";
 
 /**
  * @typedef {Object} SelectedPlacesContextType
- * @property {Place[]} selectedPlaces - Array of selected places
- * @property {function(Place): void} addPlace - Function to add a place
- * @property {function(number): void} removePlace - Function to remove a place by id
- * @property {function(): void} clearPlaces - Function to clear all selected places
+ * @property {Place[]} selectedPlaces
+ * @property {Place[]} selectedLodgings
+ * @property {function(Place): void} addPlace
+ * @property {function(number): void} removePlace
+ * @property {function(): void} clearPlaces
  */
 
 /** @type {React.Context<SelectedPlacesContextType>} */
@@ -40,18 +41,38 @@ const SelectedPlacesContext = createContext();
  */
 export const SelectedPlacesProvider = ({ children }) => {
   const [selectedPlaces, setSelectedPlaces] = useState([]);
-
+  const [selectedLodgings, setSelectedLodgings] = useState([]);
   const addPlace = (place) => {
     setSelectedPlaces((prev) => [...prev, place]);
+  };
+
+  const addLodging = (lodging) => {
+    setSelectedLodgings((prev) => [...prev, lodging]);
   };
 
   const removePlace = (placeId) => {
     setSelectedPlaces((prev) => prev.filter((p) => p.id !== placeId));
   };
 
+  const removeLodging = (lodgingId) => {
+    setSelectedLodgings((prev) => prev.filter((l) => l.id !== lodgingId));
+  };
+
+  const clearLodgings = () => {
+    setSelectedLodgings([]);
+  };
+
   return (
     <SelectedPlacesContext.Provider
-      value={{ selectedPlaces, addPlace, removePlace }}
+      value={{
+        selectedPlaces,
+        selectedLodgings,
+        addPlace,
+        addLodging,
+        removePlace,
+        removeLodging,
+        clearLodgings,
+      }}
     >
       {children}
     </SelectedPlacesContext.Provider>

@@ -27,7 +27,7 @@ import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 
 const PlaceModal = ({ open, onClose }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("추천 장소");
+  const [selectedCategory, setSelectedCategory] = useState("attraction");
   const { selectedPlaces, addPlace, removePlace } = useSelectedPlaces();
 
   const { data, isLoading, error } = useQuery({
@@ -37,10 +37,7 @@ const PlaceModal = ({ open, onClose }) => {
   });
   const categories = ["attraction", "restaurant"];
 
-  console.log("render PlaceModal Components");
-  useEffect(() => {
-    console.log("renderTree UseEffect Called");
-  }, []);
+  useEffect(() => {}, []);
 
   const randerContent = () => {
     if (isLoading) {
@@ -94,6 +91,7 @@ const PlaceModal = ({ open, onClose }) => {
       );
     }
   };
+
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
   };
