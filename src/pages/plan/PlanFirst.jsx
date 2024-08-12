@@ -173,11 +173,16 @@ const backgroundColors = [
 ];
 
 const PlanFirst = () => {
-  const { startDate, endDate, placeName } = usePlanStore();
+  const { startDate, endDate, placeName, lat, lng } = usePlanStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { selectedPlaces, removePlace } = useSelectedPlaces();
+
+  console.log(placeName);
+  console.log(lat);
+  console.log(lng);
+
   // useEffect(() => {
   //   initRender();
   // }, []);
