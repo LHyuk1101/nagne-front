@@ -71,10 +71,10 @@ function TravelInfoMore() {
       const places = data;
       switch (tab) {
         case 0:
-          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 숙박
+          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 숙박
           break;
         case 1:
-          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 음식점
+          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 음식점
           break;
         case 2:
           setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
@@ -88,10 +88,10 @@ function TravelInfoMore() {
       const places = data.items;
       switch (tab) {
         case 0:
-          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 숙박
+          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 숙박
           break;
         case 1:
-          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 음식점
+          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 음식점
           break;
         case 2:
           setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
