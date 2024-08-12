@@ -28,7 +28,7 @@ import { Button, Typography } from "@mui/material";
 import LINKS from "../../routes/Links";
 import { Link, useNavigate } from "react-router-dom";
 import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
-import { useStartPlan } from "../../store/PlanContext.jsx";
+import usePlanStore from "../../store/PlanContext.js";
 
 const slides = [
   {
@@ -99,7 +99,7 @@ const slides = [
 
 export const Carousel = ({ startDate, endDate }) => {
   const [selectedSlide, setSelectedSlide] = useState(PLAN_HEADER_TITLE);
-  const { setStartDate, setEndDate, setPlaceName } = useStartPlan();
+  const { setStartDate, setEndDate, setPlaceName } = usePlanStore();
   const navigate = useNavigate();
   const handleRedirectPlan = () => {
     setStartDate(startDate);

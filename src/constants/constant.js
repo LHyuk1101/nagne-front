@@ -16,3 +16,13 @@ export const SEOUL_CODE = 1;
  * Plan Header가 없다면.
  */
 export const PLAN_HEADER_TITLE = "UNKNOWN DESTINATION";
+
+/**
+ * Request관련 상수
+ */
+export const RESPONSE_STATUS_SUCCESS = "SUCCESS";
+export const RESPONSE_STATUS_ERROR = "ERROR";
+
+/**
+ *
+ */
