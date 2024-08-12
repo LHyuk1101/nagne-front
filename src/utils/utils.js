@@ -1,5 +1,5 @@
 const ex = () => {
-    return null;
-}
+  return null;
+};
 
-export default {ex};
+export default { ex };

@@ -1,0 +1,9 @@
+version: '3'
+
+services:
+  nagne-frontend:
+    build: .
+    image: nagne-frontend:latest
+    container_name: nagne-frontend
+    ports:
+      - "5173:80"
