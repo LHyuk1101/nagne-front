@@ -36,7 +36,7 @@
   background: #fff;
   border-radius: 3rem;
   font-weight: 500;
-  font-size: clamp(10px, 2vw, 25px);
+  font-size: clamp(10px, 2.5vw, 20px);
   margin: 0 auto;
   padding: 0 2%;
   line-height: 2;
