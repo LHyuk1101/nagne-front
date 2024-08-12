@@ -8,7 +8,7 @@ import {
 } from "@mui/material";
 import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
 import SelectedPlacesThumbnails from "./SelectedPlacesThumbnails.jsx";
-import defaultImg from "../../assets/images/place/defaultimg.jpg";
+import defaultImg from "../../assets/images/place/default_img.png";
 import {
   ModalContainer,
   Header,
