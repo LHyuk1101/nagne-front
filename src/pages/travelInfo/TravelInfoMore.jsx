@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPlacesByRegion } from "../../services/template/infoMore";
 
 const truncateText = (text, maxLength) => {
+  if (!text) return ""; // text가 undefined 또는 null인 경우 빈 문자열 반환
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 };
@@ -66,27 +67,38 @@ function TravelInfoMore() {
   const [templateData, setTemplateData] = useState([]);
 
   useEffect(() => {
-    if (data && Array.isArray(data.items)) {
-      const places = data.items; // items 배열에 접근
-      switch (tab) {
-        case 0:
-          setTemplateData(places.filter((place) => place.contentTypeId === 80));
-          break;
-        case 1:
-          setTemplateData(places.filter((place) => place.contentTypeId === 82));
-          break;
-        case 2:
-          setTemplateData(places.filter((place) => place.contentTypeId === 76));
-          break;
-        default:
-          setTemplateData([]);
-          break;
-      }
+    if (Array.isArray(data)) {
+      const places = data;
+      filterDataByTab(tab, places);
+    } else if (data && data.result === "SUCCESS" && Array.isArray(data.items)) {
+      const places = data.items;
+      filterDataByTab(tab, places);
+    } else {
+      console.error("Unexpected data format:", data);
+      setTemplateData([]);
     }
   }, [tab, data]);
 
+  const filterDataByTab = (selectedTab, places) => {
+    switch (selectedTab) {
+      case 0:
+        setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 숙박
+        break;
+      case 1:
+        setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 음식점
+        break;
+      case 2:
+        setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
+        break;
+      default:
+        setTemplateData([]);
+        break;
+    }
+  };
+
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
+    setTemplateData([]); // 탭 변경 시 데이터 초기화
   };
 
   const handleSearchChange = (event) => {
@@ -95,8 +107,8 @@ function TravelInfoMore() {
 
   const filteredData = templateData.filter(
     (item) =>
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      item.overview.toLowerCase().includes(search.toLowerCase()),
+      item.title?.toLowerCase().includes(search.toLowerCase()) ||
+      item.overview?.toLowerCase().includes(search.toLowerCase()),
   );
 
   if (isLoading) {
@@ -144,7 +156,7 @@ function TravelInfoMore() {
             <Grid item xs={6} sm={4} md={3} key={item.id}>
               <TemplateCard>
                 <StyledCardMedia
-                  image={item.thumbnailUrl || "/default-image-path.jpg"} // 기본 이미지 설정
+                  image={item.thumbnailUrl || "/default-image-path.jpg"}
                   title={item.title}
                 />
                 <StyledCardContent>

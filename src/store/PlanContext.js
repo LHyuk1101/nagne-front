@@ -21,9 +21,9 @@ const usePlanStore = create((set) => ({
   startDate: null,
   endDate: null,
   placeName: "",
-  selectedPlaces: [],
   lat: "",
   lng: "",
+  selectedPlaces: [],
   setSelectedPlaces: (selectedItems) => set({ selectedPlaces: selectedItems }),
   setStartDate: (date) => set({ startDate: date }),
   setEndDate: (date) => set({ endDate: date }),
@@ -33,7 +33,3 @@ const usePlanStore = create((set) => ({
 }));
 
 export default usePlanStore;
-
-// export const useStartPlan = () => {
-//   return useContext(PlanContext);
-// };
