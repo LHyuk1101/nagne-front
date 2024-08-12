@@ -66,27 +66,49 @@ function TravelInfoMore() {
   const [templateData, setTemplateData] = useState([]);
 
   useEffect(() => {
-    if (data && Array.isArray(data.items)) {
-      const places = data.items; // items 배열에 접근
+    if (Array.isArray(data)) {
+      // data가 배열인 경우
+      const places = data;
       switch (tab) {
         case 0:
-          setTemplateData(places.filter((place) => place.contentTypeId === 80));
+          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 숙박
           break;
         case 1:
-          setTemplateData(places.filter((place) => place.contentTypeId === 82));
+          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 음식점
           break;
         case 2:
-          setTemplateData(places.filter((place) => place.contentTypeId === 76));
+          setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
           break;
         default:
           setTemplateData([]);
           break;
       }
+    } else if (data && data.result === "SUCCESS" && Array.isArray(data.items)) {
+      // data가 객체인 경우
+      const places = data.items;
+      switch (tab) {
+        case 0:
+          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 숙박
+          break;
+        case 1:
+          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 음식점
+          break;
+        case 2:
+          setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
+          break;
+        default:
+          setTemplateData([]);
+          break;
+      }
+    } else {
+      console.error("Unexpected data format:", data);
+      setTemplateData([]); // data가 예상치 못한 형식인 경우 빈 배열로 설정
     }
   }, [tab, data]);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
+    setTemplateData([]); // 탭 변경 시 데이터 초기화
   };
 
   const handleSearchChange = (event) => {
