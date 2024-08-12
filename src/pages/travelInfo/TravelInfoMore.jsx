@@ -17,6 +17,7 @@ import { useQuery } from "@tanstack/react-query";
 import { fetchPlacesByRegion } from "../../services/template/infoMore";
 
 const truncateText = (text, maxLength) => {
+  if (!text) return ""; // text가 undefined 또는 null인 경우 빈 문자열 반환
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 };
@@ -67,44 +68,33 @@ function TravelInfoMore() {
 
   useEffect(() => {
     if (Array.isArray(data)) {
-      // data가 배열인 경우
       const places = data;
-      switch (tab) {
-        case 0:
-          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 숙박
-          break;
-        case 1:
-          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 음식점
-          break;
-        case 2:
-          setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
-          break;
-        default:
-          setTemplateData([]);
-          break;
-      }
+      filterDataByTab(tab, places);
     } else if (data && data.result === "SUCCESS" && Array.isArray(data.items)) {
-      // data가 객체인 경우
       const places = data.items;
-      switch (tab) {
-        case 0:
-          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 숙박
-          break;
-        case 1:
-          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 음식점
-          break;
-        case 2:
-          setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
-          break;
-        default:
-          setTemplateData([]);
-          break;
-      }
+      filterDataByTab(tab, places);
     } else {
       console.error("Unexpected data format:", data);
-      setTemplateData([]); // data가 예상치 못한 형식인 경우 빈 배열로 설정
+      setTemplateData([]);
     }
   }, [tab, data]);
+
+  const filterDataByTab = (selectedTab, places) => {
+    switch (selectedTab) {
+      case 0:
+        setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 숙박
+        break;
+      case 1:
+        setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 음식점
+        break;
+      case 2:
+        setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
+        break;
+      default:
+        setTemplateData([]);
+        break;
+    }
+  };
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
@@ -117,8 +107,8 @@ function TravelInfoMore() {
 
   const filteredData = templateData.filter(
     (item) =>
-      item.title.toLowerCase().includes(search.toLowerCase()) ||
-      item.overview.toLowerCase().includes(search.toLowerCase()),
+      item.title?.toLowerCase().includes(search.toLowerCase()) ||
+      item.overview?.toLowerCase().includes(search.toLowerCase()),
   );
 
   if (isLoading) {
@@ -166,7 +156,7 @@ function TravelInfoMore() {
             <Grid item xs={6} sm={4} md={3} key={item.id}>
               <TemplateCard>
                 <StyledCardMedia
-                  image={item.thumbnailUrl || "/default-image-path.jpg"} // 기본 이미지 설정
+                  image={item.thumbnailUrl || "/default-image-path.jpg"}
                   title={item.title}
                 />
                 <StyledCardContent>
