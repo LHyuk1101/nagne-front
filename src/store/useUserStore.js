@@ -1,26 +1,26 @@
-import commonStore from './commonStore';
-import { create } from 'zustand';
-import { persist } from 'zustand/middleware';
+import commonStore from "./commonStore";
+import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 const useUserStore = create(
   persist(
     (set) => ({
       user: {
         userId: "",
-        name: "",
+        nickname: "",
         email: "",
         role: "",
-        profileImg: "",
+        userProfileImg: "",
       },
       setUser: (user) => set({ user }),
       clearUser: () =>
         set({
           user: {
             userId: "",
-            name: "",
+            nickname: "",
             email: "",
             role: "",
-            profileImg: "",
+            userProfileImg: "",
           },
         }),
     }),

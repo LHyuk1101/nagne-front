@@ -68,8 +68,10 @@ const PoiMarkers = ({ pois }) => {
   );
 };
 
+const MAP_API_KEY = import.meta.env.VITE_API_KEY;
+
 const GoogleMap = () => (
-  <APIProvider apiKey="">
+  <APIProvider apiKey={MAP_API_KEY}>
     <Map
       style={{ width: "100%", height: "100%" }}
       defaultCenter={{ lat: 22.54992, lng: 0 }}
