@@ -9,30 +9,29 @@ const RecommendedSection = ({ selectedArea }) => {
   const scrollRefDest = useRef(null);
   const scrollRefRest = useRef(null);
 
-  const {
-    data: places,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["places", selectedArea],
     queryFn: () => fetchPlacesByRegion(selectedArea),
   });
 
-  console.log(places);
+  console.log("가져온 데이터 : ", data);
 
   if (isLoading) {
     return <Typography>Loading...</Typography>;
   }
 
-  if (error) {
+  if (error || !data || !Array.isArray(data.items)) {
     console.error("Error:", error);
     return <Typography>Error loading data</Typography>;
   }
 
+  // items 배열에 접근하여 처리
+  const places = data.items;
+
   const travelDestinations = places.filter(
     (place) => place.contentTypeId === 76,
   );
-  const restaurants = places.filter((place) => place.contentTypeId === 80);
+  const restaurants = places.filter((place) => place.contentTypeId === 82);
 
   const handleClick = (item) => {
     navigate("/place", { state: item });
