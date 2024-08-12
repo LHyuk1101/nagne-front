@@ -1,4 +1,4 @@
-import { Box, Typography } from "@mui/material";
+import { Box, Typography, Button } from "@mui/material";
 import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -17,8 +17,6 @@ const RecommendedSection = ({ selectedArea }) => {
     queryKey: ["places", selectedArea],
     queryFn: () => fetchPlacesByRegion(selectedArea),
   });
-
-  console.log(places);
 
   if (isLoading) {
     return <Typography>Loading...</Typography>;
@@ -39,6 +37,7 @@ const RecommendedSection = ({ selectedArea }) => {
   };
 
   const handleMouseDown = (e, scrollRef) => {
+    if (!scrollRef.current) return;
     scrollRef.current.isDragging = true;
     scrollRef.current.startX = e.pageX - scrollRef.current.offsetLeft;
     scrollRef.current.scrollLeft = scrollRef.current.scrollLeft;
@@ -50,6 +49,7 @@ const RecommendedSection = ({ selectedArea }) => {
   };
 
   const handleMouseLeave = (scrollRef) => {
+    if (!scrollRef.current) return;
     scrollRef.current.isDragging = false;
     cancelAnimationFrame(scrollRef.current.animationFrameId);
     document.removeEventListener("mouseup", () => handleMouseUp(scrollRef));
@@ -59,6 +59,7 @@ const RecommendedSection = ({ selectedArea }) => {
   };
 
   const handleMouseUp = (scrollRef) => {
+    if (!scrollRef.current) return;
     scrollRef.current.isDragging = false;
     cancelAnimationFrame(scrollRef.current.animationFrameId);
     document.removeEventListener("mouseup", () => handleMouseUp(scrollRef));
@@ -69,7 +70,7 @@ const RecommendedSection = ({ selectedArea }) => {
   };
 
   const handleMouseMove = (e, scrollRef) => {
-    if (!scrollRef.current.isDragging) return;
+    if (!scrollRef.current || !scrollRef.current.isDragging) return;
     e.preventDefault();
     const x = e.pageX - scrollRef.current.offsetLeft;
     const walk = (x - scrollRef.current.startX) * 2;
@@ -79,6 +80,7 @@ const RecommendedSection = ({ selectedArea }) => {
   };
 
   const applyMomentum = (scrollRef) => {
+    if (!scrollRef.current) return;
     if (Math.abs(scrollRef.current.velocity) > 1) {
       scrollRef.current.scrollLeft -= scrollRef.current.velocity;
       scrollRef.current.velocity *= 0.95;
@@ -88,11 +90,35 @@ const RecommendedSection = ({ selectedArea }) => {
     }
   };
 
+  const handleMoreClick = (category) => {
+    let tabIndex = 0;
+    if (category === "restaurants") {
+      tabIndex = 1;
+    } else if (category === "travel") {
+      tabIndex = 2;
+    }
+
+    navigate("/travel/info", { state: { selectedArea, tabIndex } });
+  };
+
   return (
     <Box sx={{ padding: "2rem" }}>
-      <Typography variant="h6" align="center" gutterBottom>
-        Recommended travel destination
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginBottom: "1.5rem", // 텍스트와 사진 사이의 간격 조정
+        }}
+      >
+        <Typography variant="h6" align="center" gutterBottom>
+          Recommended travel destination
+        </Typography>
+        <Button variant="text" onClick={() => handleMoreClick("travel")}>
+          More
+        </Button>
+      </Box>
+
       <Box
         ref={scrollRefDest}
         onMouseDown={(e) => handleMouseDown(e, scrollRefDest)}
@@ -104,6 +130,8 @@ const RecommendedSection = ({ selectedArea }) => {
           whiteSpace: "nowrap",
           cursor: "grab",
           userSelect: "none",
+          scrollBehavior: "smooth", // 부드러운 스크롤
+          scrollSnapType: "x mandatory", // 스크롤 스냅 설정
           "&:active": {
             cursor: "grabbing",
           },
@@ -111,7 +139,7 @@ const RecommendedSection = ({ selectedArea }) => {
             display: "none",
           },
           scrollbarWidth: "none",
-          gap: "1rem",
+          gap: "1rem", // 카드 간의 간격
         }}
       >
         {travelDestinations.map((destination, index) => (
@@ -119,16 +147,22 @@ const RecommendedSection = ({ selectedArea }) => {
             key={index}
             sx={{
               textAlign: "center",
-              minWidth: "150px",
+              minWidth: "150px", // 카드의 최소 너비 설정
+              flexShrink: 0, // 카드가 줄어들지 않도록 설정
+              scrollSnapAlign: "center", // 스냅 맞춤 설정
               marginRight: index !== travelDestinations.length - 1 ? "1rem" : 0,
             }}
             onClick={() => handleClick(destination)}
           >
             <img
-              src={destination.thumbnailUrl}
+              src={destination.thumbnailUrl || destination.imgUrl}
               alt={destination.title}
-              width="150"
-              height="150"
+              style={{
+                width: "150px",
+                height: "150px",
+                objectFit: "cover", // 이미지 크기를 고정하고 비율을 유지하면서 잘라내기
+                display: "block",
+              }}
             />
             <Typography
               variant="body1"
@@ -146,9 +180,23 @@ const RecommendedSection = ({ selectedArea }) => {
         ))}
       </Box>
 
-      <Typography variant="h6" align="center" gutterBottom>
-        Recommended restaurants
-      </Typography>
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "center",
+          alignItems: "center",
+          marginTop: "2rem",
+          marginBottom: "1.5rem", // 텍스트와 사진 사이의 간격 조정
+        }}
+      >
+        <Typography variant="h6" align="center" gutterBottom>
+          Recommended restaurants
+        </Typography>
+        <Button variant="text" onClick={() => handleMoreClick("restaurants")}>
+          More
+        </Button>
+      </Box>
+
       <Box
         ref={scrollRefRest}
         onMouseDown={(e) => handleMouseDown(e, scrollRefRest)}
@@ -160,6 +208,8 @@ const RecommendedSection = ({ selectedArea }) => {
           whiteSpace: "nowrap",
           cursor: "grab",
           userSelect: "none",
+          scrollBehavior: "smooth", // 부드러운 스크롤
+          scrollSnapType: "x mandatory", // 스크롤 스냅 설정
           "&:active": {
             cursor: "grabbing",
           },
@@ -167,7 +217,7 @@ const RecommendedSection = ({ selectedArea }) => {
             display: "none",
           },
           scrollbarWidth: "none",
-          gap: "1rem",
+          gap: "1rem", // 카드 간의 간격
         }}
       >
         {restaurants.map((restaurant, index) => (
@@ -175,16 +225,22 @@ const RecommendedSection = ({ selectedArea }) => {
             key={index}
             sx={{
               textAlign: "center",
-              minWidth: "150px",
+              minWidth: "150px", // 카드의 최소 너비 설정
+              flexShrink: 0, // 카드가 줄어들지 않도록 설정
+              scrollSnapAlign: "center", // 스냅 맞춤 설정
               marginRight: index !== restaurants.length - 1 ? "1rem" : 0,
             }}
             onClick={() => handleClick(restaurant)}
           >
             <img
-              src={restaurant.thumbnailUrl}
+              src={restaurant.thumbnailUrl || restaurant.imgUrl}
               alt={restaurant.title}
-              width="150"
-              height="150"
+              style={{
+                width: "150px",
+                height: "150px",
+                objectFit: "cover", // 이미지 크기를 고정하고 비율을 유지하면서 잘라내기
+                display: "block",
+              }}
             />
             <Typography
               variant="body1"
