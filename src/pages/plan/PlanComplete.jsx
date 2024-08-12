@@ -16,11 +16,13 @@ import ExpandMoreIcon from "@mui/icons-material/ExpandMore.js";
 import React, { useEffect } from "react";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar.js";
 import LINKS from "../../routes/Links.jsx";
-import { useStartPlan } from "../../store/PlanContext.jsx";
+import usePlanStore from "../../store/PlanContext.js";
 
 const PlanComplete = () => {
   const navigate = useNavigate();
-  const { startDate, endDate, placeName } = useStartPlan();
+  const { startDate, endDate, placeName, selectedPlaces } = usePlanStore();
+  console.log("=======================================");
+  console.dir(selectedPlaces);
   useEffect(() => {
     initRender();
   }, []);

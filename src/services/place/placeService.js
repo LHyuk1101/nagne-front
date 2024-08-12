@@ -1,3 +1,0 @@
-const getMapper = () => {};
-
-export { getMapper };
