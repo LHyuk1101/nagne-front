@@ -34,6 +34,7 @@ const PlanFirst = () => {
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { selectedPlaces, removePlace } = useSelectedPlaces();
+
   // useEffect(() => {
   //   initRender();
   // }, []);

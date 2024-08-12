@@ -6,82 +6,84 @@ import {
   Pin,
   useAdvancedMarkerRef,
 } from "@vis.gl/react-google-maps";
-import { useCallback, useState } from "react";
+import { useCallback, useMemo, useState } from "react";
+import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
+import usePlanStore from "../../store/PlanContext.js";
 
-const locations = [
-  // {key: 'operaHouse', location: {lat: -33.8567844, lng: 151.213108}},
-  // {key: 'tarongaZoo', location: {lat: -33.8472767, lng: 151.2188164}},
-  // {key: 'manlyBeach', location: {lat: -33.8209738, lng: 151.2563253}},
-  // {key: 'hyderPark', location: {lat: -33.8690081, lng: 151.2052393}},
-  // {key: 'theRocks', location: {lat: -33.8587568, lng: 151.2058246}},
-  // {key: 'circularQuay', location: {lat: -33.858761, lng: 151.2055688}},
-  // {key: 'harbourBridge', location: {lat: -33.852228, lng: 151.2038374}},
-  // {key: 'kingsCross', location: {lat: -33.8737375, lng: 151.222569}},
-  // {key: 'botanicGardens', location: {lat: -33.864167, lng: 151.216387}},
-  // {key: 'museumOfSydney', location: {lat: -33.8636005, lng: 151.2092542}},
-  // {key: 'maritimeMuseum', location: {lat: -33.869395, lng: 151.198648}},
-  // {key: 'kingStreetWharf', location: {lat: -33.8665445, lng: 151.1989808}},
-  // {key: 'aquarium', location: {lat: -33.869627, lng: 151.202146}},
-  // {key: 'darlingHarbour', location: {lat: -33.87488, lng: 151.1987113}},
-  { key: "barangaroo", location: { lat: -33.8605523, lng: 151.1972205 } },
-];
-
-const PoiMarkers = ({ pois }) => {
+const PoiMarkers = ({ pois, selectedPlaces }) => {
   const [markerRef, marker] = useAdvancedMarkerRef();
-
   const [infoWindowShown, setInfoWindowShown] = useState(false);
+  const [selectedPoi, setSelectedPoi] = useState(null);
 
-  const handleMarkerClick = useCallback(
-    () => setInfoWindowShown((isShown) => !isShown),
-    [],
-  );
+  const handleMarkerClick = useCallback((poi) => {
+    setSelectedPoi(poi);
+    setInfoWindowShown(true);
+  }, []);
 
-  const handleClose = useCallback(() => setInfoWindowShown(false), []);
+  const handleClose = useCallback(() => {
+    setInfoWindowShown(false);
+    setSelectedPoi(null);
+  }, []);
 
   return (
     <>
       {pois.map((poi, index) => (
-        <>
-          <AdvancedMarker
-            ref={markerRef}
-            onClick={handleMarkerClick}
-            key={poi.key}
-            position={poi.location}
-          >
-            <Pin
-              background={"#FBBC04"}
-              borderColor={"#000"}
-              glyphColor={"#000"}
-              scale={1.25}
-              glyph={(index + 1).toString()}
-            />
-          </AdvancedMarker>
-          {infoWindowShown && (
-            <InfoWindow anchor={marker} onClose={handleClose}>
-              <h2>InfoWindow content!</h2>
-              <p>Some arbitrary html to be rendered into the InfoWindow.</p>
-            </InfoWindow>
-          )}
-        </>
+        <AdvancedMarker
+          key={poi.id}
+          ref={markerRef}
+          onClick={() => handleMarkerClick(poi)}
+          position={{ lat: poi.lat, lng: poi.lng }}
+        >
+          <Pin
+            background={"#FBBC04"}
+            borderColor={"#FFF"}
+            glyphColor={"#FFF"}
+            scale={1}
+            glyph={(index + 1).toString()}
+          />
+        </AdvancedMarker>
       ))}
+      {infoWindowShown && selectedPoi && (
+        <InfoWindow
+          anchor={marker}
+          onClose={handleClose}
+          position={{ lat: selectedPoi.lat, lng: selectedPoi.lng }}
+        >
+          <div>
+            <h2>{selectedPoi.title}</h2>
+            <p>{selectedPoi.address}</p>
+          </div>
+        </InfoWindow>
+      )}
     </>
   );
 };
 
-const MAP_API_KEY = import.meta.env.VITE_API_KEY;
+const GoogleMap = () => {
+  const { lat, lng } = usePlanStore();
+  const { selectedPlaces, selectedLodgings } = useSelectedPlaces();
+  if (lat === "" || lng === "") {
+    return null;
+  }
 
-const GoogleMap = () => (
-  <APIProvider apiKey={MAP_API_KEY}>
-    <Map
-      style={{ width: "100%", height: "100%" }}
-      defaultCenter={{ lat: 22.54992, lng: 0 }}
-      defaultZoom={3}
-      gestureHandling={"greedy"}
-      disableDefaultUI={true}
-      mapId={"DEMO_MAP_ID"}
-    />
-    <PoiMarkers pois={locations}></PoiMarkers>
-  </APIProvider>
-);
+  const memoizedPoiMarkers = useMemo(() => {
+    const allPois = [...selectedPlaces, ...selectedLodgings];
+    return <PoiMarkers pois={allPois} selectedPlaces={selectedPlaces} />;
+  }, [selectedPlaces, selectedLodgings]);
+
+  return (
+    <APIProvider apiKey={import.meta.env.VITE_API_KEY}>
+      <Map
+        style={{ width: "100%", height: "100%" }}
+        defaultCenter={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
+        defaultZoom={11.5}
+        gestureHandling={"greedy"}
+        disableDefaultUI={true}
+        mapId={"DEMO_MAP_ID"}
+      />
+      {memoizedPoiMarkers}
+    </APIProvider>
+  );
+};
 
 export default GoogleMap;
