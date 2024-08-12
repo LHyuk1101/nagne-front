@@ -24,5 +24,15 @@ export const RESPONSE_STATUS_SUCCESS = "SUCCESS";
 export const RESPONSE_STATUS_ERROR = "ERROR";
 
 /**
- *
+ * 아이콘 컬러
  */
+export const IconColor = [
+  "#FF6B6B",
+  "#4ECDC4",
+  "#45B7D1",
+  "#FFA07A",
+  "#98D8C8",
+  "#7986CB",
+  "#F06292",
+  "#AED581",
+];

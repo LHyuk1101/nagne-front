@@ -20,7 +20,9 @@ import usePlanStore from "../../store/PlanContext.js";
 
 const PlanComplete = () => {
   const navigate = useNavigate();
-  const { startDate, endDate, placeName } = usePlanStore();
+  const { startDate, endDate, placeName, selectedPlaces } = usePlanStore();
+  console.log("=======================================");
+  console.dir(selectedPlaces);
   useEffect(() => {
     initRender();
   }, []);

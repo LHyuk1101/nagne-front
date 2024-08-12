@@ -17,6 +17,8 @@ const usePlanStore = create((set) => ({
   startDate: null,
   endDate: null,
   placeName: "",
+  selectedPlaces: [],
+  setSelectedPlaces: (selectedItems) => set({ selectedPlaces: selectedItems }),
   setStartDate: (date) => set({ startDate: date }),
   setEndDate: (date) => set({ endDate: date }),
   setPlaceName: (name) => set({ placeName: name }),
