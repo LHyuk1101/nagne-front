@@ -57,11 +57,7 @@ function TravelInfoMore() {
   const [tab, setTab] = useState(tabIndex);
   const [search, setSearch] = useState("");
 
-  const {
-    data: places,
-    isLoading,
-    error,
-  } = useQuery({
+  const { data, isLoading, error } = useQuery({
     queryKey: ["places", selectedArea],
     queryFn: () => fetchPlacesByRegion(selectedArea),
     enabled: !!selectedArea,
@@ -70,23 +66,24 @@ function TravelInfoMore() {
   const [templateData, setTemplateData] = useState([]);
 
   useEffect(() => {
-    if (places) {
+    if (data && Array.isArray(data.items)) {
+      const places = data.items; // items 배열에 접근
       switch (tab) {
         case 0:
-          setTemplateData(places.filter((place) => place.contentTypeId === 82)); // 숙박
+          setTemplateData(places.filter((place) => place.contentTypeId === 80));
           break;
         case 1:
-          setTemplateData(places.filter((place) => place.contentTypeId === 80)); // 음식점
+          setTemplateData(places.filter((place) => place.contentTypeId === 82));
           break;
         case 2:
-          setTemplateData(places.filter((place) => place.contentTypeId === 76)); // 관광지
+          setTemplateData(places.filter((place) => place.contentTypeId === 76));
           break;
         default:
           setTemplateData([]);
           break;
       }
     }
-  }, [tab, places]);
+  }, [tab, data]);
 
   const handleTabChange = (event, newValue) => {
     setTab(newValue);
