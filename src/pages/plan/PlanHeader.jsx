@@ -9,11 +9,11 @@ import {
 } from "./PlanHeader.style.jsx";
 import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
 import LINKS from "../../routes/Links.jsx";
-import { useStartPlan } from "../../store/PlanContext.jsx";
+import usePlanStore from "../../store/PlanContext.js";
 import { useNavigate } from "react-router-dom";
 
 const PlanHeader = () => {
-  const { startDate, endDate, placeName } = useStartPlan();
+  const { startDate, endDate, placeName } = usePlanStore();
   const navigate = useNavigate();
 
   if (

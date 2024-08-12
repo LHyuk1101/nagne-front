@@ -10,7 +10,9 @@ export default defineConfig(({ mode }) => {
       setupFiles: ["./vitest.setup.js"],
     },
     define: {
-      "import.meta.env.VITE_API_KEY": JSON.stringify(env.VITE_API_KEY),
+      "import.meta.env.VITE_API_BASE_URL": JSON.stringify(
+        env.VITE_API_BASE_URL,
+      ),
     },
   };
 });

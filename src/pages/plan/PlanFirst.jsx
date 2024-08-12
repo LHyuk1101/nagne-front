@@ -8,11 +8,12 @@ import {
   IconButton,
 } from "@mui/material";
 import { Delete as DeleteIcon } from "@mui/icons-material";
-import { useEffect, useState } from "react";
-import { Link, NavLink, useNavigate } from "react-router-dom";
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import PlaceModal from "../place/PlaceModal.jsx";
 import LINKS from "../../routes/Links.jsx";
-import { useStartPlan } from "../../store/PlanContext.jsx";
+import usePlanStore from "../../store/PlanContext.js";
+import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 
 const StyledTabs = styled(Tabs)({
   borderBottom: "1px solid #e0e0e0",
@@ -172,41 +173,35 @@ const backgroundColors = [
 ];
 
 const PlanFirst = () => {
-  const { startDate, endDate, placeName } = useStartPlan();
+  const { startDate, endDate, placeName } = usePlanStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
-  const [selectedPlaces, setSelectedPlaces] = useState([]);
-
-  useEffect(() => {
-    initRender();
-  }, []);
-
-  const initRender = () => {
-    redirectStartDate(placeName, startDate, endDate);
-  };
-
-  const redirectStartDate = (placeName, planStartDate, planEndDate) => {
-    if (
-      placeName === undefined ||
-      planStartDate === undefined ||
-      planEndDate === undefined
-    ) {
-      navigate({
-        pathname: LINKS.CREATE.path,
-      });
-    }
-  };
+  const { selectedPlaces, removePlace } = useSelectedPlaces();
+  // useEffect(() => {
+  //   initRender();
+  // }, []);
+  //
+  // const initRender = () => {
+  //   redirectStartDate(placeName, startDate, endDate);
+  // };
+  //
+  // const redirectStartDate = (placeName, planStartDate, planEndDate) => {
+  //   if (
+  //     placeName === undefined ||
+  //     planStartDate === undefined ||
+  //     planEndDate === undefined
+  //   ) {
+  //     navigate({
+  //       pathname: LINKS.CREATE.path,
+  //     });
+  //   }
+  // };
 
   const renderRefreshNotification = () => {};
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
-  };
-
-  const handlePlacesSelected = (places) => {
-    setSelectedPlaces(places);
-    toggleModal();
   };
 
   const handleTabChange = (event, newValue) => {
@@ -221,23 +216,6 @@ const PlanFirst = () => {
     e.preventDefault();
     navigate(LINKS.PLAN.path);
   };
-  const placeItems = [
-    {
-      id: 1,
-      name: "Gyeongbokgung Palace",
-      address: "161 Sajik-ro, Jongno-gu, Seoul",
-    },
-    {
-      id: 2,
-      name: "Namsan Seoul Tower",
-      address: "105 Namsangongwon-gil, Yongsan-gu, Seoul",
-    },
-    {
-      id: 3,
-      name: "Myeongdong Shopping Street",
-      address: "Myeongdong-gil, Jung-gu, Seoul",
-    },
-  ];
 
   const responseDataEx = {
     startDay: "",
@@ -276,7 +254,7 @@ const PlanFirst = () => {
       </PlaceHeader>
       <ContentArea>
         <PlaceList>
-          {placeItems.map((item, index) => (
+          {selectedPlaces.map((item, index) => (
             <PlaceItem key={item.id}>
               <PlaceItemNumber
                 backgroundColor={
@@ -287,16 +265,20 @@ const PlanFirst = () => {
               </PlaceItemNumber>
               <PlaceImgContent>
                 <PlaceImage
-                  src="http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG"
-                  alt={item.name.substring(10)}
+                  src={item.placeUrlImages[0] || "기본 이미지 URL"}
+                  alt={item.title}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = "기본 이미지 URL"; // 여기에 기본 이미지 URL을 넣으세요
+                  }}
                 />
               </PlaceImgContent>
               <PlaceItemContent>
-                <PlaceItemName>{item.name}</PlaceItemName>
+                <PlaceItemName>{item.title}</PlaceItemName>
                 <PlaceItemAddress>{item.address}</PlaceItemAddress>
               </PlaceItemContent>
               <PlaceItemActions>
-                <IconButton size="small" onClick={handleDeleteItems}>
+                <IconButton size="small" onClick={() => removePlace(item.id)}>
                   <DeleteIcon />
                 </IconButton>
               </PlaceItemActions>
@@ -314,12 +296,7 @@ const PlanFirst = () => {
         </CreateScheduleButton>
       </ButtonContainer>
 
-      <PlaceModal
-        open={isModalOpen}
-        onClose={toggleModal}
-        onPlacesSelected={handlePlacesSelected}
-        selectedPlaces={selectedPlaces}
-      />
+      <PlaceModal open={isModalOpen} onClose={toggleModal} />
     </>
   );
 };
