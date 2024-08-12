@@ -23,6 +23,8 @@ const usePlanStore = create((set) => ({
   placeName: "",
   lat: "",
   lng: "",
+  selectedPlaces: [],
+  setSelectedPlaces: (selectedItems) => set({ selectedPlaces: selectedItems }),
   setStartDate: (date) => set({ startDate: date }),
   setEndDate: (date) => set({ endDate: date }),
   setPlaceName: (name) => set({ placeName: name }),
