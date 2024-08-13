@@ -27,6 +27,10 @@ import { getPlaceByArea } from "../../services/place/place.js";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import { useInView } from "react-intersection-observer";
+import usePlanStore from "../../store/PlanContext.js";
+import { calculateDaysBetween } from "../../utils/dateUtils.js";
+import WarningDialog from "../../components/UI/WarningDialog.jsx";
+import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
 
 const PlaceModal = ({ open, onClose, areaCode }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -35,7 +39,10 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
     code: 76,
   });
   const { selectedPlaces, addPlace, removePlace } = useSelectedPlaces();
+  const { startDate, endDate } = usePlanStore();
   const { ref, inView } = useInView();
+  const { isOpen, message, openWarningDialog, closeWarningDialog } =
+    useWarningDialog();
 
   const {
     data,
@@ -140,53 +147,75 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
   };
-
+  const handleValidPlaces = () => {
+    const day = calculateDaysBetween(startDate, endDate) + 1;
+    if (selectedPlaces.length < day) {
+      openWarningDialog(`A minimum of ${day} places are required.`);
+      return;
+    }
+    onClose();
+  };
   const handlePlaceSelect = (place) => {
     if (selectedPlaces.find((p) => p.id === place.id)) {
       removePlace(place.id);
     } else {
+      if (selectedPlaces.length >= 10) {
+        openWarningDialog("You can select a maximum of 10 places.");
+        return;
+      }
       addPlace(place);
     }
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <ModalContainer>
-        <Header>
-          <IconButton onClick={onClose} color="inherit">
-            <ArrowBack />
-          </IconButton>
-          <SearchBar
-            placeholder="장소명을 입력해주세요"
-            variant="outlined"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: <Search color="action" />,
-            }}
-          />
-        </Header>
-
-        <CategoryFilter>
-          {categories.map((category) => (
-            <StyledChip
-              key={category.name}
-              label={category.name}
-              onClick={() => handleCategorySelect(category)}
-              selected={selectedCategory.name === category.name}
+    <>
+      <Modal open={open} onClose={onClose}>
+        <ModalContainer>
+          <Header>
+            <IconButton onClick={onClose} color="inherit">
+              <ArrowBack />
+            </IconButton>
+            <SearchBar
+              placeholder="장소명을 입력해주세요"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: <Search color="action" />,
+              }}
             />
-          ))}
-        </CategoryFilter>
-        {renderContent()}
-        <SelectedPlacesThumbnails />
+          </Header>
 
-        <ButtonContainer>
-          <StyledButton variant="contained" color="primary" onClick={onClose}>
-            Done
-          </StyledButton>
-        </ButtonContainer>
-      </ModalContainer>
-    </Modal>
+          <CategoryFilter>
+            {categories.map((category) => (
+              <StyledChip
+                key={category.name}
+                label={category.name}
+                onClick={() => handleCategorySelect(category)}
+                selected={selectedCategory.name === category.name}
+              />
+            ))}
+          </CategoryFilter>
+          {renderContent()}
+          <SelectedPlacesThumbnails />
+
+          <ButtonContainer>
+            <StyledButton
+              variant="contained"
+              color="primary"
+              onClick={handleValidPlaces}
+            >
+              Done
+            </StyledButton>
+          </ButtonContainer>
+        </ModalContainer>
+      </Modal>
+      <WarningDialog
+        isOpen={isOpen}
+        message={message}
+        onClose={closeWarningDialog}
+      />
+    </>
   );
 };
 

@@ -22,16 +22,32 @@ import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import PlaceModal from "./PlaceModal.jsx";
 import usePlanStore from "../../store/PlanContext.js";
 import { useState } from "react";
+import WarningDialog from "../../components/UI/WarningDialog.jsx";
+import { calculateDaysBetween } from "../../utils/dateUtils.js";
+import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
 
 const PlaceTab = () => {
   const { selectedPlaces, removePlace } = useSelectedPlaces();
   const { areaCode } = usePlanStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isOpen, message, openWarningDialog, closeWarningDialog } =
+    useWarningDialog();
+  const { startDate, endDate } = usePlanStore();
 
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const handleValidRemoveItems = (id) => {
+    const day = calculateDaysBetween(startDate, endDate) + 1;
+    console.log(day);
+    if (selectedPlaces.length <= day) {
+      openWarningDialog(`A minimum of ${day} places are required.`);
+      toggleModal();
+      return;
+    }
+    removePlace(id);
+  };
   return (
     <>
       <PlaceHeader>
@@ -63,7 +79,10 @@ const PlaceTab = () => {
                 <PlaceItemAddress>{item.address}</PlaceItemAddress>
               </PlaceItemContent>
               <PlaceItemActions>
-                <IconButton size="small" onClick={() => removePlace(item.id)}>
+                <IconButton
+                  size="small"
+                  onClick={() => handleValidRemoveItems(item.id)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </PlaceItemActions>
@@ -75,6 +94,11 @@ const PlaceTab = () => {
         open={isModalOpen}
         onClose={toggleModal}
         areaCode={areaCode}
+      />
+      <WarningDialog
+        isOpen={isOpen}
+        message={message}
+        onClose={closeWarningDialog}
       />
     </>
   );
