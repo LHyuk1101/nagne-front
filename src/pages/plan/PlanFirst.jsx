@@ -27,6 +27,7 @@ import {
 } from "./PlanFirst.style.jsx";
 import { IconColor } from "../../constants/constant.js";
 import IconButton from "@mui/material/IconButton";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlanFirst = () => {
   const { startDate, endDate, placeName, setSelectedPlaces } = usePlanStore();
@@ -121,11 +122,11 @@ const PlanFirst = () => {
               </PlaceItemNumber>
               <PlaceImgContent>
                 <PlaceImage
-                  src={item.placeUrlImages[0] || "기본 이미지 URL"}
+                  src={item.placeUrlImages[0] || defaultImg}
                   alt={item.title}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "기본 이미지 URL"; // 여기에 기본 이미지 URL을 넣으세요
+                    e.target.src = defaultImg;
                   }}
                 />
               </PlaceImgContent>

@@ -1,6 +1,7 @@
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const SelectedPlaces = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -67,11 +68,11 @@ const SelectedPlacesThumbnails = () => {
             {selectedPlaces.map((place) => (
               <ThumbnailWrapper key={place.id}>
                 <Thumbnail
-                  src={place.placeUrlImages[0] || "기본 이미지 URL"}
+                  src={place.placeUrlImages[0] || defaultImg}
                   alt={place.title}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "기본 이미지 URL";
+                    e.target.src = defaultImg;
                   }}
                 />
                 <ThumbnailContent>{place.title}</ThumbnailContent>

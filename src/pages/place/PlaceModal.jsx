@@ -31,21 +31,21 @@ const PlaceModal = ({ open, onClose }) => {
   const { selectedPlaces, addPlace, removePlace } = useSelectedPlaces();
 
   const { data, isLoading, error } = useQuery({
-    queryKey: ["placeList", {}],
-    queryFn: () => getPlaceByArea(),
+    queryKey: ["placeList", selectedCategory],
+    queryFn: () => getPlaceByArea(selectedCategory),
     enabled: open,
+    staleTime: 5 * 60 * 1000,
   });
+
   const categories = ["attraction", "restaurant"];
 
-  useEffect(() => {}, []);
-
-  const randerContent = () => {
+  const renderContent = () => {
     if (isLoading) {
-      return <div> Loading Bar...</div>;
+      return <div>Loading...</div>;
     }
 
     if (error) {
-      return <div>this is Error</div>;
+      return <div>Error: {error.message}</div>;
     }
 
     if (data) {
@@ -58,11 +58,11 @@ const PlaceModal = ({ open, onClose }) => {
                 onClick={() => handlePlaceSelect(place)}
               >
                 <PlaceImage
-                  src={place.placeUrlImages[0]}
+                  src={place.placeUrlImages[0] || defaultImg}
                   alt={place.title}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = { defaultImg };
+                    e.target.src = defaultImg;
                   }}
                 />
                 <ListItemText
@@ -86,10 +86,12 @@ const PlaceModal = ({ open, onClose }) => {
               </PlaceItem>
             ))}
           </PlaceList>
-          <Box> 더 보기</Box>
+          <Box>더 보기</Box>
         </>
       );
     }
+
+    return null;
   };
 
   const handleCategorySelect = (category) => {
@@ -132,7 +134,7 @@ const PlaceModal = ({ open, onClose }) => {
             />
           ))}
         </CategoryFilter>
-        {randerContent()}
+        {renderContent()}
         <SelectedPlacesThumbnails />
 
         <ButtonContainer>
