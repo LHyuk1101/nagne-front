@@ -25,7 +25,6 @@ const RecommendedSection = ({ selectedArea }) => {
 
   // items 배열에 접근하여 처리
   const places = data.items;
-  console.log(places);
 
   const travelDestinations = places.filter(
     (place) => place.contentTypeId === 76,
