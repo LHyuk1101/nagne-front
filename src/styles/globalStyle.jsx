@@ -1,4 +1,4 @@
-import { createTheme, GlobalStyles } from "@mui/material";
+import { createTheme } from "@mui/material/styles";
 
 export const theme = createTheme({
   typography: {
@@ -55,30 +55,3 @@ export const theme = createTheme({
     },
   },
 });
-export const CustomGlobalStyles = () => {
-  return (
-    <GlobalStyles
-      styles={{
-        ":root": {
-          fontFamily: "Inter, system-ui, Avenir, Helvetica, Arial, sans-serif",
-          lineHeight: 1.5,
-          fontWeight: 400,
-          colorScheme: "light",
-          color: "rgba(0, 0, 0, 0.87)",
-          backgroundColor: "#ffffff",
-          fontSynthesis: "none",
-          textRendering: "optimizeLegibility",
-          WebkitFontSmoothing: "antialiased",
-          MozOsxFontSmoothing: "grayscale",
-        },
-        body: {
-          margin: 0,
-          display: "flex",
-          placeItems: "center",
-          minWidth: "320px",
-          minHeight: "100vh",
-        },
-      }}
-    />
-  );
-};
