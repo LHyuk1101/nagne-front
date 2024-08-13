@@ -49,12 +49,12 @@
 .modal {
   z-index: 2;
   width: 100%;
-  max-width: 550px;
+  max-width: 600px;
   top: 50%;
   left: 50%;
   background: #ffffff;
   border-radius: 12px;
-  padding: 0 40px 30px;
+  padding: 0 10px 30px;
   translate: -50% -50%;
   box-shadow: 0 10px 30px rgb(0 0 0 / 24%);
   box-sizing: border-box;

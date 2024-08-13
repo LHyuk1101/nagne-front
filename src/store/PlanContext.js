@@ -21,6 +21,7 @@ const usePlanStore = create((set) => ({
   startDate: null,
   endDate: null,
   placeName: "",
+  areaCode: 0,
   lat: "",
   lng: "",
   selectedPlaces: [],
@@ -30,6 +31,7 @@ const usePlanStore = create((set) => ({
   setPlaceName: (name) => set({ placeName: name }),
   setLat: (lat) => set({ lat: lat }),
   setLng: (lng) => set({ lng: lng }),
+  setAreaCode: (code) => set({ areaCode: code }),
 }));
 
 export default usePlanStore;

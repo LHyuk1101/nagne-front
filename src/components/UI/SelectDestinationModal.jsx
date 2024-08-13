@@ -17,7 +17,7 @@ export const SelectDestinationModal = ({
         <IconButton
           className="close-button"
           onClick={toggleOpen}
-          style={{ marginTop: "0.5rem", marginLeft: "97%" }}
+          style={{ marginTop: "0.5rem", marginLeft: "93%" }}
         >
           <CloseIcon />
         </IconButton>
