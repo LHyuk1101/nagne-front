@@ -3,7 +3,6 @@ import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
 import { useMutation } from "@tanstack/react-query";
-import axios from "axios";
 import LoadingDialog from "../../components/UI/LoadingBar";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import {
@@ -14,6 +13,7 @@ import {
 } from "./PlanFirst.style.jsx";
 import PlaceTab from "../place/PlaceTab.jsx";
 import AccommodationTab from "../place/AccommodationTab.jsx";
+import { createPlan } from "../../services/plan/completePlan";
 
 const PlanFirst = () => {
   const { startDate, endDate, placeName, setSelectedPlaces } = usePlanStore();
@@ -42,7 +42,15 @@ const PlanFirst = () => {
   // };
 
   const createPlanMutation = useMutation({
-    mutationFn: (planData) => axios.post("/api/llm//create-plan", planData),
+    mutationFn: createPlan,
+    onSuccess: (data) => {
+      setSelectedPlaces([...selectedPlaces, ...selectedLodgings]);
+      navigate(LINKS.PLAN.path, { state: { planData: data } });
+    },
+    onError: (error) => {
+      console.error("error", error);
+      alert("Failed to make plan.");
+    },
   });
 
   const renderRefreshNotification = () => {};
@@ -64,19 +72,10 @@ const PlanFirst = () => {
       })),
       startDay: startDate,
       endDay: endDate,
-      // areaCode: areaCode,
+      areaCode: areaCode,
     };
 
-    createPlanMutation.mutate(planData, {
-      onSuccess: (data) => {
-        setSelectedPlaces([...selectedPlaces, ...selectedLodgings]);
-        navigate(LINKS.PLAN.path, { state: { planData: data.data } });
-      },
-      onError: (error) => {
-        console.error("error", error);
-        alert("Failed to make plan. please try again");
-      },
-    });
+    createPlanMutation.mutate(planData);
   };
 
   return (
