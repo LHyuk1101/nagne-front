@@ -51,7 +51,6 @@ const TravelPlan = {
           type: "80",
           description: "왕이 살았었음?",
           tags: ["History", "Architecture", "Culture"],
-          image: gbkImage,
         },
         {
           name: "Gwangjang Market",
@@ -60,7 +59,6 @@ const TravelPlan = {
           description:
             "Experience traditional Korean street food and local cuisine.",
           tags: ["Food", "Market", "Local Experience"],
-          image: gwangjangsijangImage,
         },
         {
           name: "Namsan Seoul Tower",
@@ -68,7 +66,6 @@ const TravelPlan = {
           type: "80",
           description: "Enjoy panoramic views of Seoul from the iconic tower.",
           tags: ["Views", "Landmark", "Photography"],
-          image: namsanImage,
         },
         {
           name: "Souel Hotel",
@@ -76,7 +73,6 @@ const TravelPlan = {
           type: "81",
           description: "호텔에 대한 간단한 설명",
           tags: ["Accommodation", "기타 특징"],
-          image: HotelImage,
         },
       ],
     },
@@ -90,7 +86,6 @@ const TravelPlan = {
           description:
             "Wander through a traditional Korean village in the heart of Seoul.",
           tags: ["Culture", "History", "Architecture"],
-          image: bukchonImage,
         },
         {
           name: "Insadong",
@@ -98,7 +93,6 @@ const TravelPlan = {
           type: "80",
           description: "Shop for traditional Korean crafts and artwork.",
           tags: ["Shopping", "Culture", "Art"],
-          image: insaImage,
         },
         {
           name: "Han River Cruise",
@@ -106,7 +100,6 @@ const TravelPlan = {
           type: "80",
           description: "Relax on a scenic cruise along the Han River.",
           tags: ["River", "Relaxation", "Scenery"],
-          image: gangImage,
         },
         {
           name: "Souel Hotel",
@@ -114,7 +107,6 @@ const TravelPlan = {
           type: "81",
           description: "호텔에 대한 간단한 설명",
           tags: ["Accommodation", "기타 특징"],
-          image: HotelImage,
         },
       ],
     },
