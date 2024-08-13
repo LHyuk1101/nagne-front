@@ -19,12 +19,11 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HotelIcon from "@mui/icons-material/Hotel";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import { mockPlanData } from "./mockData";
+import { mockPlanData } from "./mockData"; // mock data를 사용한 예시입니다. 실제 데이터로 교체 가능
 
+// 콘텐츠 타입에 따라 아이콘을 선택하는 함수
 const getIconByContentType = (contentTypeId) => {
-  switch (
-    contentTypeId //mui아이콘들
-  ) {
+  switch (contentTypeId) {
     case "80":
       return <HotelIcon />;
     case "82":
@@ -41,10 +40,12 @@ const PlanComplete = () => {
   const [isAllExpanded, setIsAllExpanded] = useState(false);
   const containerRef = useRef(null);
 
+  // 각 패널의 확장 상태를 관리하는 함수
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded((prev) => ({ ...prev, [panel]: isExpanded }));
   };
 
+  // 모든 패널을 확장 또는 축소하는 함수
   const handleToggleAll = () => {
     const newExpandedState = !isAllExpanded;
     setIsAllExpanded(newExpandedState);
@@ -55,10 +56,12 @@ const PlanComplete = () => {
     setExpanded(newExpanded);
   };
 
+  // 플랜을 저장하는 함수 (예시)
   const handleSavePlan = () => {
     console.log("Save plan clicked");
   };
 
+  // 패널이 확장될 때 스크롤을 자동으로 아래로 이동시키는 효과
   useEffect(() => {
     const container = containerRef.current;
     if (container) {
@@ -98,9 +101,29 @@ const PlanComplete = () => {
       >
         <FormControlLabel
           control={
-            <Switch checked={isAllExpanded} onChange={handleToggleAll} />
+            <Switch
+              checked={isAllExpanded}
+              onChange={handleToggleAll}
+              sx={{
+                "& .MuiSwitch-switchBase": {
+                  color: "#ff5722", // 스위치색상 (오렌지)
+                },
+                "& .MuiSwitch-switchBase.Mui-checked": {
+                  color: "#4caf50", // 체크된색상(녹색)
+                },
+                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                  backgroundColor: "#4caf50", // 체크된 상태의 트랙 배경색
+                },
+                "& .MuiSwitch-track": {
+                  backgroundColor: "#ffccbc", // 기본 트랙 배경색 (밝은 오렌지)
+                },
+              }}
+            />
           }
           label="Check all"
+          sx={{
+            color: "#000", // 라벨 텍스트 색상 변경 (검정색)
+          }}
         />
       </Box>
 
@@ -119,7 +142,7 @@ const PlanComplete = () => {
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             sx={{
-              backgroundColor: "primary.light",
+              backgroundColor: "#98D8C8", // 아코디언 배경색 (커스텀 가능)
               color: "primary.contrastText",
               borderRadius: expanded[`day${dayPlan.day}`] ? "16px 16px 0 0" : 2,
             }}
