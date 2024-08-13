@@ -27,11 +27,9 @@ import {
 } from "./PlanFirst.style.jsx";
 import { IconColor } from "../../constants/constant.js";
 import IconButton from "@mui/material/IconButton";
-import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlanFirst = () => {
-  const { startDate, endDate, placeName, areaCode, setSelectedPlaces } =
-    usePlanStore();
+  const { startDate, endDate, setSelectedPlaces } = usePlanStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -108,7 +106,7 @@ const PlanFirst = () => {
       </StyledTabs>
 
       <PlaceHeader>
-        <PlaceNumber>{selectedPlaces.length}</PlaceNumber>
+        <PlaceNumber>3</PlaceNumber>
         <PlaceName>Reset</PlaceName>
         <AddPlaceButton onClick={toggleModal}>+ Add Place</AddPlaceButton>
       </PlaceHeader>
@@ -123,11 +121,11 @@ const PlanFirst = () => {
               </PlaceItemNumber>
               <PlaceImgContent>
                 <PlaceImage
-                  src={item.imgUrl || defaultImg}
+                  src={item.placeUrlImages[0] || "기본 이미지 URL"}
                   alt={item.title}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = defaultImg;
+                    e.target.src = "기본 이미지 URL"; // 여기에 기본 이미지 URL을 넣으세요
                   }}
                 />
               </PlaceImgContent>
@@ -154,11 +152,7 @@ const PlanFirst = () => {
         </CreateScheduleButton>
       </ButtonContainer>
 
-      <PlaceModal
-        open={isModalOpen}
-        onClose={toggleModal}
-        areaCode={areaCode}
-      />
+      <PlaceModal open={isModalOpen} onClose={toggleModal} />
     </>
   );
 };

@@ -106,10 +106,10 @@ const PlanComplete = () => {
               onChange={handleToggleAll}
               sx={{
                 "& .MuiSwitch-switchBase": {
-                  color: "#ff5722", // 스위치의 기본 색상 (오렌지)
+                  color: "#ff5722", // 스위치색상 (오렌지)
                 },
                 "& .MuiSwitch-switchBase.Mui-checked": {
-                  color: "#4caf50", // 체크된 스위치의 색상 (녹색)
+                  color: "#4caf50", // 체크된색상(녹색)
                 },
                 "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
                   backgroundColor: "#4caf50", // 체크된 상태의 트랙 배경색
@@ -142,7 +142,7 @@ const PlanComplete = () => {
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             sx={{
-              backgroundColor: "#98D8C8", // 아코디언의 배경색 (커스텀 가능)
+              backgroundColor: "#98D8C8", // 아코디언 배경색 (커스텀 가능)
               color: "primary.contrastText",
               borderRadius: expanded[`day${dayPlan.day}`] ? "16px 16px 0 0" : 2,
             }}
