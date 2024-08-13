@@ -1,7 +1,9 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
+import { useMutation } from "@tanstack/react-query";
+import LoadingDialog from "../../components/UI/LoadingBar";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import {
   StyledTab,
@@ -12,35 +14,25 @@ import {
 import PlaceTab from "../place/PlaceTab.jsx";
 import AccommodationTab from "../place/AccommodationTab.jsx";
 import usePreventRefresh from "../../hooks/usePreventRefresh.jsx";
+import { createPlan } from "../../services/plan/plan.js";
 
 const PlanFirst = () => {
-  const { startDate, endDate, placeName, setSelectedPlaces } = usePlanStore();
+  const { startDate, endDate, areaCode, setSelectedPlaces } = usePlanStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
-  const { selectedPlaces } = useSelectedPlaces();
+  const { selectedPlaces, selectedLodgings } = useSelectedPlaces();
   usePreventRefresh();
 
-  // useEffect(() => {
-  //   initRender();
-  // }, []);
-  //
-  // const initRender = () => {
-  //   redirectStartDate(placeName, startDate, endDate);
-  // };
-  //
-  // const redirectStartDate = (placeName, planStartDate, planEndDate) => {
-  //   if (
-  //     placeName === undefined ||
-  //     planStartDate === undefined ||
-  //     planEndDate === undefined
-  //   ) {
-  //     navigate({
-  //       pathname: LINKS.CREATE.path,
-  //     });
-  //   }
-  // };
-
-  const renderRefreshNotification = () => {};
+  const createPlanMutation = useMutation({
+    mutationFn: createPlan,
+    onSuccess: (data) => {
+      setSelectedPlaces([...selectedPlaces, ...selectedLodgings]);
+      navigate(LINKS.PLAN.path, { state: { planData: data } });
+    },
+    onError: (error) => {
+      alert("Failed to make plan.");
+    },
+  });
 
   const handleTabChange = (event, newValue) => {
     console.log(newValue);
@@ -49,8 +41,19 @@ const PlanFirst = () => {
 
   const handleRedirectButton = (e) => {
     e.preventDefault();
-    setSelectedPlaces(selectedPlaces);
-    navigate(LINKS.PLAN.path);
+
+    const planData = {
+      places: [...selectedPlaces, ...selectedLodgings].map((place) => ({
+        id: place.id,
+        name: place.title,
+        contentType: place.contentTypeId,
+        overview: place.overview,
+      })),
+      startDay: startDate,
+      endDay: endDate,
+      areaCode: areaCode,
+    };
+    createPlanMutation.mutate(planData);
   };
 
   return (
@@ -62,6 +65,13 @@ const PlanFirst = () => {
 
       {tabValue === 0 && <PlaceTab />}
       {tabValue === 1 && <AccommodationTab />}
+
+      {createPlanMutation.isPending && (
+        <LoadingDialog
+          open={true}
+          message="We are creating your perfect travel plan..."
+        />
+      )}
 
       <ButtonContainer>
         <CreateScheduleButton
