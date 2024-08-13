@@ -1,7 +1,7 @@
 import axiosInstance from "../common/axios.js";
 import { RESPONSE_STATUS_ERROR } from "../../constants/constant.js";
 
-const getPlaceByArea = async (regions, areaCode, page, size) => {
+const getPlaceByArea = async (areaCode, regions, page) => {
   const response = await axiosInstance.get(
     "/api/place?regions=76&page=1&size=1000&areaCode=1",
   );

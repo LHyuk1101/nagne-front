@@ -30,7 +30,8 @@ import IconButton from "@mui/material/IconButton";
 import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlanFirst = () => {
-  const { startDate, endDate, placeName, setSelectedPlaces } = usePlanStore();
+  const { startDate, endDate, placeName, areaCode, setSelectedPlaces } =
+    usePlanStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const [isModalOpen, setIsModalOpen] = useState(false);
@@ -107,7 +108,7 @@ const PlanFirst = () => {
       </StyledTabs>
 
       <PlaceHeader>
-        <PlaceNumber>3</PlaceNumber>
+        <PlaceNumber>{selectedPlaces.length}</PlaceNumber>
         <PlaceName>Reset</PlaceName>
         <AddPlaceButton onClick={toggleModal}>+ Add Place</AddPlaceButton>
       </PlaceHeader>
@@ -122,7 +123,7 @@ const PlanFirst = () => {
               </PlaceItemNumber>
               <PlaceImgContent>
                 <PlaceImage
-                  src={item.placeUrlImages[0] || defaultImg}
+                  src={item.imgUrl || defaultImg}
                   alt={item.title}
                   onError={(e) => {
                     e.target.onerror = null;
@@ -153,7 +154,11 @@ const PlanFirst = () => {
         </CreateScheduleButton>
       </ButtonContainer>
 
-      <PlaceModal open={isModalOpen} onClose={toggleModal} />
+      <PlaceModal
+        open={isModalOpen}
+        onClose={toggleModal}
+        areaCode={areaCode}
+      />
     </>
   );
 };
