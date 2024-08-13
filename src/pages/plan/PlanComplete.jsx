@@ -1,4 +1,5 @@
 import React, { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Accordion,
   AccordionSummary,
@@ -21,25 +22,22 @@ import RestaurantIcon from "@mui/icons-material/Restaurant";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { mockPlanData } from "./mockData";
 
-const getIconByContentType = (contentTypeId) => {
-  switch (
-    contentTypeId //mui아이콘들
-  ) {
-    case "80":
-      return <HotelIcon />;
-    case "82":
-      return <RestaurantIcon />;
-    case "76":
-      return <LocationOnIcon />;
-    default:
-      return <LocationOnIcon />;
-  }
-};
-
 const PlanComplete = () => {
+  const location = useLocation();
+  const [planData, setPlanData] = useState(null);
   const [expanded, setExpanded] = useState({});
   const [isAllExpanded, setIsAllExpanded] = useState(false);
   const containerRef = useRef(null);
+
+  useEffect(() => {
+    const storedPlanData = localStorage.getItem("planData");
+    if (location.state && location.state.planData) {
+      setPlanData(location.state.planData);
+      localStorage.setItem("planData", JSON.stringify(location.state.planData));
+    } else if (storedPlanData) {
+      setPlanData(JSON.parse(storedPlanData));
+    }
+  }, [location.state]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded((prev) => ({ ...prev, [panel]: isExpanded }));
@@ -49,22 +47,32 @@ const PlanComplete = () => {
     const newExpandedState = !isAllExpanded;
     setIsAllExpanded(newExpandedState);
     const newExpanded = {};
-    mockPlanData.dayPlans.forEach((day) => {
-      newExpanded[`day${day.day}`] = newExpandedState;
+    planData.dayPlans.forEach((day) => {
+      newExpanded["day${day.day}"] = newExpandedState;
     });
     setExpanded(newExpanded);
   };
 
   const handleSavePlan = () => {
-    console.log("Save plan clicked");
+    console.log("Save plan");
   };
 
-  useEffect(() => {
-    const container = containerRef.current;
-    if (container) {
-      container.scrollTop = container.scrollHeight;
+  const getIconByContentType = (contentTypeId) => {
+    switch (contentTypeId) {
+      case "80":
+        return <HotelIcon />;
+      case "82":
+        return <RestaurantIcon />;
+      case "76":
+        return <LocationOnIcon />;
+      default:
+        return <LocationOnIcon />;
     }
-  }, [expanded]);
+  };
+
+  if (!planData) {
+    return <Typography>Loading plan data...</Typography>;
+  }
 
   return (
     <Box
@@ -74,10 +82,10 @@ const PlanComplete = () => {
         margin: "auto",
         p: 2,
         pb: 10,
-        height: "calc(100vh - 56px)", // 헤더 높이를 뺀 전체 높이
-        overflowY: "auto", // 스크롤 가능하게 설정
-        "&::-webkit-scrollbar": { display: "none" }, // 스크롤바 숨기기
-        scrollbarWidth: "none", // Firefox용 스크롤바 숨기기
+        height: "calc(100vh - 56px)",
+        overflowY: "auto",
+        "&::-webkit-scrollbar": { display: "none" },
+        scrollbarWidth: "none",
       }}
     >
       <Typography
@@ -85,7 +93,7 @@ const PlanComplete = () => {
         align="center"
         sx={{ mb: 3, fontWeight: "bold" }}
       >
-        {mockPlanData.subject}
+        {planData.subject}
       </Typography>
 
       <Box
@@ -98,13 +106,33 @@ const PlanComplete = () => {
       >
         <FormControlLabel
           control={
-            <Switch checked={isAllExpanded} onChange={handleToggleAll} />
+            <Switch
+              checked={isAllExpanded}
+              onChange={handleToggleAll}
+              sx={{
+                "& .MuiSwitch-switchBase": {
+                  color: "#ff5722",
+                },
+                "& .MuiSwitch-switchBase.Mui-checked": {
+                  color: "#4caf50",
+                },
+                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                  backgroundColor: "#4caf50",
+                },
+                "& .MuiSwitch-track": {
+                  backgroundColor: "#ffccbc",
+                },
+              }}
+            />
           }
           label="Check all"
+          sx={{
+            color: "#000",
+          }}
         />
       </Box>
 
-      {mockPlanData.dayPlans.map((dayPlan) => (
+      {planData.dayPlans.map((dayPlan) => (
         <Accordion
           key={dayPlan.day}
           expanded={expanded[`day${dayPlan.day}`] || false}
@@ -119,7 +147,7 @@ const PlanComplete = () => {
           <AccordionSummary
             expandIcon={<ExpandMoreIcon />}
             sx={{
-              backgroundColor: "primary.light",
+              backgroundColor: "#98D8C8",
               color: "primary.contrastText",
               borderRadius: expanded[`day${dayPlan.day}`] ? "16px 16px 0 0" : 2,
             }}
@@ -130,7 +158,7 @@ const PlanComplete = () => {
           </AccordionSummary>
           <AccordionDetails sx={{ p: 0 }}>
             <List>
-              {dayPlan.places.map((place, placeIndex, places) => (
+              {dayPlan.places.map((place, placeIndex) => (
                 <React.Fragment key={place.placeId}>
                   <ListItem alignItems="flex-start" sx={{ py: 2 }}>
                     <ListItemAvatar>
@@ -146,7 +174,7 @@ const PlanComplete = () => {
                           variant="subtitle1"
                           sx={{ fontWeight: "medium" }}
                         >
-                          {place.title}
+                          {plan.title}
                         </Typography>
                       }
                       secondary={
@@ -156,20 +184,20 @@ const PlanComplete = () => {
                             color="text.primary"
                             sx={{ mb: 1 }}
                           >
-                            {place.placeSummary}
+                            {template.placeSummary}
                           </Typography>
                           <Typography variant="body2" color="text.secondary">
-                            {place.reasoning}
+                            {template.reasoning}
                           </Typography>
                         </React.Fragment>
                       }
                       sx={{ ml: 2 }}
                     />
                     <Avatar sx={{ bgcolor: "secondary.light", ml: 1 }}>
-                      {getIconByContentType(place.contentTypeId)}
+                      {getIconByContentType(place.contentType)}
                     </Avatar>
                   </ListItem>
-                  {placeIndex < places.length - 1 && (
+                  {placeIndex < dayPlan.places.length - 1 && (
                     <Box
                       sx={{
                         display: "flex",
@@ -214,7 +242,7 @@ const PlanComplete = () => {
                         color="text.secondary"
                         sx={{ ml: 2, position: "absolute", left: "70px" }}
                       >
-                        {`${places[placeIndex + 1].moveTime}minutes`}
+                        {`${dayPlan.places[placeIndex + 1].moveTime} minutes`}
                       </Typography>
                     </Box>
                   )}
