@@ -29,18 +29,25 @@ import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 
 const PlaceModal = ({ open, onClose, areaCode }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState("attraction");
+  const [selectedCategory, setSelectedCategory] = useState({
+    name: "attraction",
+    code: 76,
+  });
   const { selectedPlaces, addPlace, removePlace } = useSelectedPlaces();
 
   const { data, isLoading, error, fetchNextPage, hasNextPage } = useQuery({
-    queryKey: ["placeList", selectedCategory],
-    queryFn: ({ pageParam = 1 }) => getPlaceByArea(areaCode, selectedCategory),
+    queryKey: ["placeList", selectedCategory.code],
+    queryFn: ({ pageParam = 1 }) =>
+      getPlaceByArea(areaCode, selectedCategory.code),
     enabled: open,
     staleTime: 5 * 60 * 1000,
     getNextPageParam: (lastPage, pages) => lastPage.nextPage,
   });
 
-  const categories = ["attraction", "restaurant"];
+  const categories = [
+    { name: "attraction", code: 76 },
+    { name: "restaurant", code: 82 },
+  ];
 
   const renderContent = () => {
     if (isLoading) {
@@ -48,7 +55,7 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
     }
 
     if (error) {
-      return <div>Error: {error.message}</div>;
+      return <div>No data found for {selectedCategory.name}.</div>;
     }
 
     if (data) {
@@ -139,10 +146,10 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
         <CategoryFilter>
           {categories.map((category) => (
             <StyledChip
-              key={category}
-              label={category}
+              key={category.name}
+              label={category.name}
               onClick={() => handleCategorySelect(category)}
-              selected={selectedCategory === category}
+              selected={selectedCategory.name === category.name}
             />
           ))}
         </CategoryFilter>
