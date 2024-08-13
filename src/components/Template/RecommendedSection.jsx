@@ -25,6 +25,7 @@ const RecommendedSection = ({ selectedArea }) => {
 
   // items 배열에 접근하여 처리
   const places = data.items;
+  console.log(places);
 
   const travelDestinations = places.filter(
     (place) => place.contentTypeId === 76,
@@ -32,7 +33,7 @@ const RecommendedSection = ({ selectedArea }) => {
   const restaurants = places.filter((place) => place.contentTypeId === 82);
 
   const handleClick = (item) => {
-    navigate("/place", { state: item });
+    navigate(`/place/${item.id}`, { state: item });
   };
 
   const handleMouseDown = (e, scrollRef) => {

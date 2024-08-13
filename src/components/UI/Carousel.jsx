@@ -7,127 +7,12 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import image1 from "../../assets/images/place/seoul.jpg";
-import image2 from "../../assets/images/place/incheon.jpg";
-import image3 from "../../assets/images/place/daejeon.webp";
-import image4 from "../../assets/images/place/daegu.webp";
-import image5 from "../../assets/images/place/gwangju.jpg";
-import image6 from "../../assets/images/place/busan.jpg";
-import image7 from "../../assets/images/place/ulsan.jpg";
-import image8 from "../../assets/images/place/gyeonggido.jpg";
-import image9 from "../../assets/images/place/gangwondo.jpg";
-import image10 from "../../assets/images/place/chungcheongbukdo.jpg";
-import image11 from "../../assets/images/place/chungcheongnamdo.jpg";
-import image12 from "../../assets/images/place/gyeongsangbukdo.jpg";
-import image13 from "../../assets/images/place/gyeongsangnamdo.jpg";
-import image14 from "../../assets/images/place/jeonlabukdo.jpg";
-import image15 from "../../assets/images/place/jeonlanamdo.jpg";
-import image16 from "../../assets/images/place/jejudo.jpg";
-
 import { Button, Typography } from "@mui/material";
 import LINKS from "../../routes/Links";
 import { Link, useNavigate } from "react-router-dom";
 import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
 import usePlanStore from "../../store/PlanContext.js";
 
-// const slides = [
-//   {
-//     title: "seoul",
-//     image: image1,
-//     lat: "37.5665",
-//     lng: "126.9780",
-//   },
-//   {
-//     title: "incheon",
-//     image: image2,
-//     lat: "37.4563",
-//     lng: "126.7052",
-//   },
-//   {
-//     title: "daejeon",
-//     image: image3,
-//     lat: "36.3504",
-//     lng: "127.3845",
-//   },
-//   {
-//     title: "daegu",
-//     image: image4,
-//     lat: "35.8722",
-//     lng: "128.6018",
-//   },
-//   {
-//     title: "gwangju",
-//     image: image5,
-//     lat: "35.1595",
-//     lng: "126.8526",
-//   },
-//   {
-//     title: "busan",
-//     image: image6,
-//     lat: "35.1796",
-//     lng: "129.0756",
-//   },
-//   {
-//     title: "ulsan",
-//     image: image7,
-//     lat: "35.5384",
-//     lng: "129.3114",
-//   },
-//   {
-//     title: "gyeonggido",
-//     image: image8,
-//     lat: "37.4138",
-//     lng: "127.5183",
-//   },
-//   {
-//     title: "gangwondo",
-//     image: image9,
-//     lat: "37.8228",
-//     lng: "128.1555",
-//   },
-//   {
-//     title: "chungcheongbukdo",
-//     image: image10,
-//     lat: "36.6357",
-//     lng: "127.4917",
-//   },
-//   {
-//     title: "chungcheongnamdo",
-//     image: image11,
-//     lat: "36.5184",
-//     lng: "126.8000",
-//   },
-//   {
-//     title: "gyeongsangbukdo",
-//     image: image12,
-//     lat: "36.4919",
-//     lng: "128.8889",
-//   },
-//   {
-//     title: "gyeongsangnamdo",
-//     image: image13,
-//     lat: "35.4606",
-//     lng: "128.2132",
-//   },
-//   {
-//     title: "jeonlabukdo",
-//     image: image14,
-//     lat: "35.7175",
-//     lng: "127.1530",
-//   },
-//   {
-//     title: "jeonlanamdo",
-//     image: image15,
-//     lat: "34.8161",
-//     lng: "126.4629",
-//   },
-//   {
-//     title: "jejudo",
-//     image: image16,
-//     lat: "33.4996",
-//     lng: "126.5312",
-//   },
-// ];
 import { AREA_COMMONS } from "../../constants/constant.js";
 
 export const Carousel = ({ startDate, endDate }) => {
