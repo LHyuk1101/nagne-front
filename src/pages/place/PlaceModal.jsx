@@ -1,4 +1,4 @@
-import { useEffect, useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   ListItemText,
@@ -24,8 +24,9 @@ import {
   LoadMoreContainer,
 } from "./PlaceModal.style.jsx";
 import { getPlaceByArea } from "../../services/place/place.js";
-import { useQuery } from "@tanstack/react-query";
+import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
+import { useInView } from "react-intersection-observer";
 
 const PlaceModal = ({ open, onClose, areaCode }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -34,15 +35,28 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
     code: 76,
   });
   const { selectedPlaces, addPlace, removePlace } = useSelectedPlaces();
+  const { ref, inView } = useInView();
 
-  const { data, isLoading, error, fetchNextPage, hasNextPage } = useQuery({
-    queryKey: ["placeList", selectedCategory.code],
+  const {
+    data,
+    isLoading,
+    error,
+    fetchNextPage,
+    hasNextPage,
+    isFetchingNextPage,
+  } = useInfiniteQuery({
+    queryKey: ["placeList", selectedCategory.code, areaCode],
     queryFn: ({ pageParam = 1 }) =>
-      getPlaceByArea(areaCode, selectedCategory.code),
+      getPlaceByArea(areaCode, selectedCategory.code, pageParam),
+    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
     enabled: open,
-    staleTime: 5 * 60 * 1000,
-    getNextPageParam: (lastPage, pages) => lastPage.nextPage,
   });
+
+  useEffect(() => {
+    if (inView && hasNextPage) {
+      fetchNextPage();
+    }
+  }, [inView, fetchNextPage, hasNextPage]);
 
   const categories = [
     { name: "attraction", code: 76 },
@@ -62,48 +76,58 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
       return (
         <>
           <PlaceList>
-            {data.items.map((place) => (
-              <PlaceItem
-                key={place.id}
-                onClick={() => handlePlaceSelect(place)}
-              >
-                <PlaceImage
-                  src={place.imgUrl || defaultImg}
-                  alt={place.title}
-                  onError={(e) => {
-                    e.target.onerror = null;
-                    e.target.src = defaultImg;
-                  }}
-                />
-                <ListItemText
-                  primary={place.title}
-                  secondary={place.address}
-                  primaryTypographyProps={{ variant: "subtitle1" }}
-                  secondaryTypographyProps={{ variant: "body2" }}
-                />
-                <ListItemSecondaryAction>
-                  <IconButton
-                    edge="end"
+            {data.pages.map((page, pageIndex) => (
+              <React.Fragment key={pageIndex}>
+                {page.items.map((place) => (
+                  <PlaceItem
+                    key={place.id}
                     onClick={() => handlePlaceSelect(place)}
                   >
-                    {selectedPlaces.find((p) => p.id === place.id) ? (
-                      <Check />
-                    ) : (
-                      <Add color="primary" />
-                    )}
-                  </IconButton>
-                </ListItemSecondaryAction>
-              </PlaceItem>
+                    <PlaceImage
+                      src={place.imgUrl || defaultImg}
+                      alt={place.title}
+                      onError={(e) => {
+                        e.target.onerror = null;
+                        e.target.src = defaultImg;
+                      }}
+                    />
+                    <ListItemText
+                      primary={place.title}
+                      secondary={place.address}
+                      primaryTypographyProps={{ variant: "subtitle1" }}
+                      secondaryTypographyProps={{ variant: "body2" }}
+                    />
+                    <ListItemSecondaryAction>
+                      <IconButton
+                        edge="end"
+                        onClick={() => handlePlaceSelect(place)}
+                      >
+                        {selectedPlaces.find((p) => p.id === place.id) ? (
+                          <Check />
+                        ) : (
+                          <Add color="primary" />
+                        )}
+                      </IconButton>
+                    </ListItemSecondaryAction>
+                  </PlaceItem>
+                ))}
+              </React.Fragment>
             ))}
-            <LoadMoreContainer>
-              <Button
-                variant="contained"
-                color="primary"
-                onClick={() => fetchNextPage()}
-                disabled={isLoading}
-              >
-                더 보기
-              </Button>
+            <LoadMoreContainer ref={ref}>
+              {isFetchingNextPage ? (
+                <div>Loading more...</div>
+              ) : hasNextPage ? (
+                <Button
+                  variant="contained"
+                  color="primary"
+                  onClick={() => fetchNextPage()}
+                  disabled={isFetchingNextPage}
+                >
+                  More
+                </Button>
+              ) : (
+                <div>No more places to load</div>
+              )}
             </LoadMoreContainer>
           </PlaceList>
         </>
