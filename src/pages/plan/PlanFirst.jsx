@@ -2,6 +2,9 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
+import { useMutation } from "@tanstack/react-query";
+import axios from "axios";
+import LoadingDialog from "../../components/UI/LoadingBar";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import {
   StyledTab,
@@ -16,7 +19,7 @@ const PlanFirst = () => {
   const { startDate, endDate, placeName, setSelectedPlaces } = usePlanStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
-  const { selectedPlaces } = useSelectedPlaces();
+  const { selectedPlaces, selectedLodgings } = useSelectedPlaces();
 
   // useEffect(() => {
   //   initRender();
@@ -38,6 +41,10 @@ const PlanFirst = () => {
   //   }
   // };
 
+  const createPlanMutation = useMutation({
+    mutationFn: (planData) => axios.post("/api/llm//create-plan", planData),
+  });
+
   const renderRefreshNotification = () => {};
 
   const handleTabChange = (event, newValue) => {
@@ -47,8 +54,29 @@ const PlanFirst = () => {
 
   const handleRedirectButton = (e) => {
     e.preventDefault();
-    setSelectedPlaces(selectedPlaces);
-    navigate(LINKS.PLAN.path);
+
+    const planData = {
+      places: [...selectedPlaces, ...selectedLodgings].map((place) => ({
+        id: place.id,
+        name: place.title,
+        contentType: place.contentTypeId,
+        overview: place.overview,
+      })),
+      startDay: startDate,
+      endDay: endDate,
+      // areaCode: areaCode,
+    };
+
+    createPlanMutation.mutate(planData, {
+      onSuccess: (data) => {
+        setSelectedPlaces([...selectedPlaces, ...selectedLodgings]);
+        navigate(LINKS.PLAN.path, { state: { planData: data.data } });
+      },
+      onError: (error) => {
+        console.error("error", error);
+        alert("Failed to make plan. please try again");
+      },
+    });
   };
 
   return (
@@ -60,6 +88,13 @@ const PlanFirst = () => {
 
       {tabValue === 0 && <PlaceTab />}
       {tabValue === 1 && <AccommodationTab />}
+
+      {createPlanMutation.isPending && (
+        <LoadingDialog
+          open={true}
+          message="We are creating your perfect travel plan..."
+        />
+      )}
 
       <ButtonContainer>
         <CreateScheduleButton
