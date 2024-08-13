@@ -162,6 +162,7 @@ export const Carousel = ({ startDate, endDate }) => {
           fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
         }}
         marginTop={"1rem"}
+        marginBottom={"2rem"}
       >
         Please select a travel destination!
       </Typography>
@@ -190,11 +191,11 @@ export const Carousel = ({ startDate, endDate }) => {
               key={slide.title}
               style={{
                 backgroundImage: `url(${slide.image})`,
-                backgroundSize: "235px 400px", // 이미지 크기 설정
+                backgroundSize: "290px 500px", // 이미지 크기 설정
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
-                width: "235px", // 슬라이드의 너비 설정
-                height: "400px", // 슬라이드의 높이 설정
+                width: "290px", // 슬라이드의 너비 설정
+                height: "500px", // 슬라이드의 높이 설정
               }}
             >
               <div>
@@ -219,7 +220,13 @@ export const Carousel = ({ startDate, endDate }) => {
         <Button
           variant="contained"
           color="primary"
-          style={{ marginTop: "1rem" }}
+          style={{
+            marginTop: "0.1rem",
+            marginBottom: "0.5rem",
+            width: "150px",
+            height: "45px",
+            fontSize: "18px",
+          }}
           onClick={handleRedirectPlan}
         >
           CREATE PLAN!
