@@ -10,14 +10,6 @@ import {
 import { styled } from "@mui/material/styles";
 import DayTimeline from "../../components/CustomTemplate/DayTimeLine";
 import RecommendationSummary from "../../components/CustomTemplate/RecommendationSummary";
-import gbkImage from "../../assets/images/gbk.png";
-import bukchonImage from "../../assets/images/bukchon.png";
-import gangImage from "../../assets/images/gang.png";
-import gwangjangsijangImage from "../../assets/images/gwangjangsijang.png";
-import HotelImage from "../../assets/images/Hotel.png";
-import insaImage from "../../assets/images/insa.png";
-import namsanImage from "../../assets/images/namsan.png";
-import prettyImage from "../../assets/images/pretty.png";
 
 const StyledCard = styled(Card)(({ theme }) => ({
   marginBottom: theme.spacing(4),

@@ -15,7 +15,8 @@ export const mockPlanData = {
           reasoning:
             "여행의 시작을 아모레 성수에서 화장품 체험으로 하여, 한국의 뷰티 문화를 느끼고 기분 좋게 시작할 수 있습니다.",
           contentTypeId: "80",
-          placeImg: "https://example.com/images/amore_seongsu.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
         {
           order: 2,
@@ -27,7 +28,8 @@ export const mockPlanData = {
           reasoning:
             "아모레 성수에서 가까운 이곳에서 자연을 느끼며 편안한 산책을 즐길 수 있어, 여행의 첫날을 여유롭게 마무리할 수 있습니다.",
           contentTypeId: "76",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
       ],
     },
@@ -44,7 +46,8 @@ export const mockPlanData = {
           reasoning:
             "하이킹을 통해 서울의 아름다운 경치를 감상하며, 자연 속에서 활력을 얻을 수 있는 좋은 기회입니다.",
           contentTypeId: "82",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
         {
           order: 2,
@@ -56,7 +59,8 @@ export const mockPlanData = {
           reasoning:
             "하이킹 후 역사적인 장소를 방문하여, 서울의 과거와 현재를 동시에 느낄 수 있는 경험을 제공합니다.",
           contentTypeId: "76",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
       ],
     },
@@ -73,7 +77,8 @@ export const mockPlanData = {
           reasoning:
             "서울의 경제 성장과 현대 문화를 느낄 수 있는 장소로, 다양한 전시와 함께 멋진 경치를 즐길 수 있습니다.",
           contentTypeId: "76",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
         {
           order: 2,
@@ -85,7 +90,8 @@ export const mockPlanData = {
           reasoning:
             "63스퀘어 방문 후, 한국의 전통을 느끼며 재미있는 기념품을 만들 수 있는 기회를 제공합니다.",
           contentTypeId: "76",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
       ],
     },
@@ -102,7 +108,8 @@ export const mockPlanData = {
           reasoning:
             "여행 중간에 다시 아모레 성수를 방문하여, 이전에 놓친 제품을 체험하고 구매할 수 있는 기회를 제공합니다.",
           contentTypeId: "80",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
         {
           order: 2,
@@ -113,7 +120,8 @@ export const mockPlanData = {
           reasoning:
             "아모레 성수에서의 쇼핑 후, 자연 속에서 휴식을 취하며 여행의 피로를 풀 수 있는 좋은 장소입니다.",
           contentTypeId: "76",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
       ],
     },
@@ -130,7 +138,8 @@ export const mockPlanData = {
           reasoning:
             "자연 속에서의 하이킹은 여행의 피로를 풀고 새로운 에너지를 얻을 수 있는 좋은 방법입니다.",
           contentTypeId: "82",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
         {
           order: 2,
@@ -142,7 +151,8 @@ export const mockPlanData = {
           reasoning:
             "하이킹 후 역사적인 장소를 방문하여, 서울의 과거와 현재를 동시에 느낄 수 있는 경험을 제공합니다.",
           contentTypeId: "76",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
       ],
     },
@@ -159,7 +169,8 @@ export const mockPlanData = {
           reasoning:
             "여행의 마지막 날, 서울의 경제 성장과 현대 문화를 느낄 수 있는 장소로, 다양한 전시와 함께 멋진 경치를 즐길 수 있습니다.",
           contentTypeId: "76",
-          placeImg: "https://example.com/images/achasan_park.jpg",
+          placeImg:
+            "http://tong.visitkorea.or.kr/cms/resource/86/2526386_image2_1.jpg",
         },
         {
           order: 2,
