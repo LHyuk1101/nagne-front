@@ -7,15 +7,12 @@ import {
   Button,
 } from "@mui/material";
 import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
-import SelectedPlacesThumbnails from "./SelectedPlacesThumbnails.jsx";
 import defaultImg from "../../assets/images/place/default_img.png";
 import {
   ModalContainer,
   Header,
   SearchBar,
   PlaceImage,
-  CategoryFilter,
-  StyledChip,
   PlaceList,
   PlaceItem,
   ButtonContainer,
@@ -26,20 +23,13 @@ import { getPlaceByArea } from "../../services/place/place.js";
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import { useInView } from "react-intersection-observer";
-
-const categories = [
-  { name: "attraction", code: 76 },
-  { name: "restaurant", code: 82 },
-];
+import SelectedPlacesThumbnails from "./SelectedPlacesThumbnails.jsx";
 
 const AccommodationModal = ({ open, onClose, areaCode }) => {
   const [searchTerm, setSearchTerm] = useState("");
-  const [selectedCategory, setSelectedCategory] = useState({
-    name: "attraction",
-    code: 76,
-  });
-  const { selectedPlaces, addPlace, removePlace } = useSelectedPlaces();
+  const { selectedLodgings, addLodging, removeLodging } = useSelectedPlaces();
   const { ref, inView } = useInView();
+  const isAccommodation = false;
 
   const {
     data,
@@ -49,9 +39,8 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["placeList", selectedCategory.code, areaCode],
-    queryFn: ({ pageParam = 1 }) =>
-      getPlaceByArea(areaCode, selectedCategory.code, pageParam),
+    queryKey: ["placeList", areaCode],
+    queryFn: ({ pageParam = 1 }) => getPlaceByArea(areaCode, 80, pageParam),
     getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
     enabled: open,
   });
@@ -68,7 +57,7 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
     }
 
     if (error) {
-      return <div>No data found for {selectedCategory.name}.</div>;
+      return <div>No data found for Accommodation.</div>;
     }
 
     if (data) {
@@ -101,7 +90,7 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
                         edge="end"
                         onClick={() => handlePlaceSelect(place)}
                       >
-                        {selectedPlaces.find((p) => p.id === place.id) ? (
+                        {selectedLodgings.find((p) => p.id === place.id) ? (
                           <Check />
                         ) : (
                           <Add color="primary" />
@@ -136,15 +125,11 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
     return null;
   };
 
-  const handleCategorySelect = (category) => {
-    setSelectedCategory(category);
-  };
-
   const handlePlaceSelect = (place) => {
-    if (selectedPlaces.find((p) => p.id === place.id)) {
-      removePlace(place.id);
+    if (selectedLodgings.find((p) => p.id === place.id)) {
+      removeLodging(place.id);
     } else {
-      addPlace(place);
+      addLodging(place);
     }
   };
 
@@ -166,18 +151,8 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
           />
         </Header>
 
-        <CategoryFilter>
-          {categories.map((category) => (
-            <StyledChip
-              key={category.name}
-              label={category.name}
-              onClick={() => handleCategorySelect(category)}
-              selected={selectedCategory.name === category.name}
-            />
-          ))}
-        </CategoryFilter>
         {renderContent()}
-        <SelectedPlacesThumbnails />
+        <SelectedPlacesThumbnails isAccommodation={!isAccommodation} />
 
         <ButtonContainer>
           <StyledButton variant="contained" color="primary" onClick={onClose}>

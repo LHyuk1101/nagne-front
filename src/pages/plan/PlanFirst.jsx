@@ -10,6 +10,7 @@ import {
   CreateScheduleButton,
 } from "./PlanFirst.style.jsx";
 import PlaceTab from "../place/PlaceTab.jsx";
+import AccommodationTab from "../place/AccommodationTab.jsx";
 
 const PlanFirst = () => {
   const { startDate, endDate, placeName, setSelectedPlaces } = usePlanStore();
@@ -58,6 +59,7 @@ const PlanFirst = () => {
       </StyledTabs>
 
       {tabValue === 0 && <PlaceTab />}
+      {tabValue === 1 && <AccommodationTab />}
 
       <ButtonContainer>
         <CreateScheduleButton
