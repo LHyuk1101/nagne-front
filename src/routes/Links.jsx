@@ -52,7 +52,7 @@ const LINKS = {
     link: "/plan",
   },
   PLACE: {
-    path: "/place",
+    path: "/place/:placeId",
     link: "/place",
   },
 };
