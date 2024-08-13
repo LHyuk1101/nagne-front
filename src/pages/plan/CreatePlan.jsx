@@ -39,12 +39,12 @@ const CreatePlan = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container
-        style={{ maxWidth: "600px", textAlign: "center", marginTop: "3rem" }}
+        style={{ maxWidth: "600px", textAlign: "center", marginTop: "4em" }}
       >
         <Typography variant="h4" gutterBottom>
           Please select a travel date
         </Typography>
-        <Box display="flex" justifyContent="center" mt={2}>
+        <Box display="flex" justifyContent="center" mt={9}>
           <DatePicker
             selected={startDate}
             onChange={onChange}
@@ -62,7 +62,12 @@ const CreatePlan = () => {
         <Button
           variant="contained"
           color="primary"
-          style={{ marginTop: "3rem" }}
+          style={{
+            marginTop: "3rem",
+            width: "100px",
+            height: "40px",
+            fontSize: "18px",
+          }}
           disabled={isNextButtonDisabled}
           onClick={toggleOpen}
         >

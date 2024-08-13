@@ -2,6 +2,7 @@ import { Outlet } from "react-router-dom";
 import { Box, styled } from "@mui/material";
 import GoogleMap from "../../components/map/GoogleMap.jsx";
 import PlanHeader from "./PlanHeader.jsx";
+import { SelectedPlacesProvider } from "../../store/place/PlaceContext.jsx";
 
 const Map = styled(Box)(({ theme }) => ({
   width: "100%",
@@ -27,11 +28,13 @@ const Container = styled(Box)(({ theme }) => ({
 const Plan = () => {
   return (
     <Container>
-      <PlanHeader />
-      <Map>
-        <GoogleMap />
-      </Map>
-      <Outlet />
+      <SelectedPlacesProvider>
+        <PlanHeader />
+        <Map>
+          <GoogleMap />
+        </Map>
+        <Outlet />
+      </SelectedPlacesProvider>
     </Container>
   );
 };

@@ -1,5 +1,7 @@
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
+import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const SelectedPlaces = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -51,8 +53,10 @@ const ThumbnailContent = styled(Box)(({ theme }) => ({
   fontSize: 12,
 }));
 
-const SelectedPlacesThumbnails = ({ selectedPlaces, onRemove }) => {
+const SelectedPlacesThumbnails = () => {
+  const { selectedPlaces, removePlace } = useSelectedPlaces();
   const selectedItemSize = selectedPlaces.length;
+
   return (
     <>
       {selectedItemSize > 0 && (
@@ -64,18 +68,15 @@ const SelectedPlacesThumbnails = ({ selectedPlaces, onRemove }) => {
             {selectedPlaces.map((place) => (
               <ThumbnailWrapper key={place.id}>
                 <Thumbnail
-                  src={place.image}
-                  alt={place.name}
+                  src={place.imgUrl || defaultImg}
+                  alt={place.title}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src =
-                      "http://tong.visitkorea.or.kr/cms/resource/23/2378023_image2_1.JPG";
+                    e.target.src = defaultImg;
                   }}
                 />
-                <ThumbnailContent>
-                  {place.name.substring(0, 10) + "..."}
-                </ThumbnailContent>
-                <CloseButton size="small" onClick={() => onRemove(place.id)}>
+                <ThumbnailContent>{place.title}</ThumbnailContent>
+                <CloseButton size="small" onClick={() => removePlace(place.id)}>
                   <Close fontSize="small" />
                 </CloseButton>
               </ThumbnailWrapper>

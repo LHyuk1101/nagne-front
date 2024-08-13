@@ -4,7 +4,7 @@ import AreaScroll from "../../components/Template/AreaScroll";
 import TemplateCardComponent from "../../components/Template/TemplateCard";
 
 const TemplateMain = () => {
-  const [selectedArea, setSelectedArea] = useState("Seoul");
+  const [selectedArea, setSelectedArea] = useState("areaCode");
   const [templateData, setTemplateData] = useState([]);
 
   const theme = useTheme();
@@ -17,11 +17,13 @@ const TemplateMain = () => {
   const fetchTemplates = async (area) => {
     try {
       const response = await fetch(`/api/templates?area=${area}`);
-      if (!response.ok) {
-        throw new Error(`Error: ${response.statusText}`);
-      }
       const data = await response.json();
-      setTemplateData(data);
+      const mappedData = data.map(template => ({
+        title: template.subject,
+        description: template.overview,
+        image: template.thumbnailUrl,
+      }));
+      setTemplateData(mappedData);
     } catch (error) {
       console.error("Error fetching template data:", error);
     }
@@ -59,15 +61,9 @@ const TemplateMain = () => {
         Featured Templates
       </Typography>
       <Box>
-        {templateData.length > 0 ? (
-          templateData.map((template, index) => (
-            <TemplateCardComponent key={index} template={template} />
-          ))
-        ) : (
-          <Typography variant="body1" align="center">
-            No templates available for the selected area.
-          </Typography>
-        )}
+        {templateData.map((template, index) => (
+          <TemplateCardComponent key={index} template={template} />
+        ))}
       </Box>
     </Box>
   );

@@ -7,104 +7,36 @@ import "swiper/css";
 import "swiper/css/navigation";
 import "swiper/css/pagination";
 
-import image1 from "../../assets/images/seoul.jpg";
-import image2 from "../../assets/images/incheon.jpg";
-import image3 from "../../assets/images/daejeon.webp";
-import image4 from "../../assets/images/daegu.webp";
-import image5 from "../../assets/images/gwangju.jpg";
-import image6 from "../../assets/images/busan.jpg";
-import image7 from "../../assets/images/ulsan.jpg";
-import image8 from "../../assets/images/gyeonggido.jpg";
-import image9 from "../../assets/images/gangwondo.jpg";
-import image10 from "../../assets/images/chungcheongbukdo.jpg";
-import image11 from "../../assets/images/chungcheongnamdo.jpg";
-import image12 from "../../assets/images/gyeongsangbukdo.jpg";
-import image13 from "../../assets/images/gyeongsangnamdo.jpg";
-import image14 from "../../assets/images/jeonlabukdo.jpg";
-import image15 from "../../assets/images/jeonlanamdo.jpg";
-import image16 from "../../assets/images/jejudo.jpg";
-
 import { Button, Typography } from "@mui/material";
 import LINKS from "../../routes/Links";
 import { Link, useNavigate } from "react-router-dom";
 import { PLAN_HEADER_TITLE } from "../../constants/constant.js";
-import { useStartPlan } from "../../store/PlanContext.jsx";
+import usePlanStore from "../../store/PlanContext.js";
 
-const slides = [
-  {
-    title: "seoul",
-    image: image1,
-  },
-  {
-    title: "incheon",
-    image: image2,
-  },
-  {
-    title: "daejeon",
-    image: image3,
-  },
-  {
-    title: "daegu",
-    image: image4,
-  },
-  {
-    title: "gwangju",
-    image: image5,
-  },
-  {
-    title: "busan",
-    image: image6,
-  },
-  {
-    title: "ulsan",
-    image: image7,
-  },
-  {
-    title: "gyeonggido",
-    image: image8,
-  },
-  {
-    title: "gangwondo",
-    image: image9,
-  },
-  {
-    title: "chungcheongbukdo",
-    image: image10,
-  },
-  {
-    title: "chungcheongnamdo",
-    image: image11,
-  },
-  {
-    title: "gyeongsangbukdo",
-    image: image12,
-  },
-  {
-    title: "gyeongsangnamdo",
-    image: image13,
-  },
-  {
-    title: "jeonlabukdo",
-    image: image14,
-  },
-  {
-    title: "jeonlanamdo",
-    image: image15,
-  },
-  {
-    title: "jejudo",
-    image: image16,
-  },
-];
+import { AREA_COMMONS } from "../../constants/constant.js";
 
 export const Carousel = ({ startDate, endDate }) => {
   const [selectedSlide, setSelectedSlide] = useState(PLAN_HEADER_TITLE);
-  const { setStartDate, setEndDate, setPlaceName } = useStartPlan();
+  const {
+    setStartDate,
+    setEndDate,
+    setPlaceName,
+    setLat,
+    setLng,
+    setAreaCode,
+  } = usePlanStore();
   const navigate = useNavigate();
+
   const handleRedirectPlan = () => {
+    const selectedPlace = AREA_COMMONS.find(
+      (area) => area.title === selectedSlide,
+    );
     setStartDate(startDate);
     setEndDate(endDate);
     setPlaceName(selectedSlide);
+    setLat(selectedPlace.lat);
+    setLng(selectedPlace.lng);
+    setAreaCode(selectedPlace.areaCode);
     navigate(`${LINKS.PLAN_FIRST.link}/${selectedSlide}`);
   };
   return (
@@ -122,6 +54,7 @@ export const Carousel = ({ startDate, endDate }) => {
           fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
         }}
         marginTop={"1rem"}
+        marginBottom={"2rem"}
       >
         Please select a travel destination!
       </Typography>
@@ -142,19 +75,19 @@ export const Carousel = ({ startDate, endDate }) => {
           }}
           modules={[Pagination, EffectCoverflow]}
           onSlideChange={(swiper) =>
-            setSelectedSlide(slides[swiper.realIndex].title)
+            setSelectedSlide(AREA_COMMONS[swiper.realIndex].title)
           }
         >
-          {slides.map((slide) => (
+          {AREA_COMMONS.map((slide) => (
             <SwiperSlide
               key={slide.title}
               style={{
                 backgroundImage: `url(${slide.image})`,
-                backgroundSize: "235px 400px", // 이미지 크기 설정
+                backgroundSize: "290px 500px", // 이미지 크기 설정
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
-                width: "235px", // 슬라이드의 너비 설정
-                height: "400px", // 슬라이드의 높이 설정
+                width: "290px", // 슬라이드의 너비 설정
+                height: "500px", // 슬라이드의 높이 설정
               }}
             >
               <div>
@@ -168,12 +101,24 @@ export const Carousel = ({ startDate, endDate }) => {
       </section>
       <Link
         to={`${LINKS.PLAN_FIRST.link}/${selectedSlide}`}
-        state={{ startDate, endDate, selectedPlaceName: selectedSlide }}
+        state={{
+          startDate,
+          endDate,
+          selectedPlaceName: selectedSlide,
+          lat: AREA_COMMONS.find((slide) => slide.title === selectedSlide)?.lat,
+          lng: AREA_COMMONS.find((slide) => slide.title === selectedSlide)?.lng,
+        }}
       >
         <Button
           variant="contained"
           color="primary"
-          style={{ marginTop: "1rem" }}
+          style={{
+            marginTop: "0.1rem",
+            marginBottom: "0.5rem",
+            width: "150px",
+            height: "45px",
+            fontSize: "18px",
+          }}
           onClick={handleRedirectPlan}
         >
           CREATE PLAN!
