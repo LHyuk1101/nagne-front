@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
@@ -11,12 +11,14 @@ import {
 } from "./PlanFirst.style.jsx";
 import PlaceTab from "../place/PlaceTab.jsx";
 import AccommodationTab from "../place/AccommodationTab.jsx";
+import usePreventRefresh from "../../hooks/usePreventRefresh.jsx";
 
 const PlanFirst = () => {
   const { startDate, endDate, placeName, setSelectedPlaces } = usePlanStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const { selectedPlaces } = useSelectedPlaces();
+  usePreventRefresh();
 
   // useEffect(() => {
   //   initRender();
