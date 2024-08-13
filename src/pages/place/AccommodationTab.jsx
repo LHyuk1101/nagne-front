@@ -22,15 +22,27 @@ import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import usePlanStore from "../../store/PlanContext.js";
 import { useState } from "react";
 import AccommodationModal from "./AccommodationModal.jsx";
+import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
+import WarningDialog from "../../components/UI/WarningDialog.jsx";
 
 const AccommodationTab = () => {
   const { selectedLodgings, removeLodging } = useSelectedPlaces();
   const { areaCode } = usePlanStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
+  const { isOpen, message, openWarningDialog, closeWarningDialog } =
+    useWarningDialog();
+
   const toggleModal = () => {
     setIsModalOpen(!isModalOpen);
   };
 
+  const handleValidRemoveLodging = (id) => {
+    if (selectedLodgings.length > 0) {
+      openWarningDialog("You cannot select more than one accommodation.");
+      return;
+    }
+    removeLodging(id);
+  };
   return (
     <>
       <PlaceHeader>
@@ -64,7 +76,10 @@ const AccommodationTab = () => {
                 <PlaceItemAddress>{item.address}</PlaceItemAddress>
               </PlaceItemContent>
               <PlaceItemActions>
-                <IconButton size="small" onClick={() => removeLodging(item.id)}>
+                <IconButton
+                  size="small"
+                  onClick={() => handleValidRemoveLodging(item.id)}
+                >
                   <DeleteIcon />
                 </IconButton>
               </PlaceItemActions>
@@ -76,6 +91,11 @@ const AccommodationTab = () => {
         open={isModalOpen}
         onClose={toggleModal}
         areaCode={areaCode}
+      />
+      <WarningDialog
+        isOpen={isOpen}
+        message={message}
+        onClose={closeWarningDialog}
       />
     </>
   );

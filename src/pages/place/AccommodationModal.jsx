@@ -5,6 +5,11 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Button,
+  Dialog,
+  DialogTitle,
+  DialogContent,
+  DialogContentText,
+  DialogActions,
 } from "@mui/material";
 import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
 import defaultImg from "../../assets/images/place/default_img.png";
@@ -24,11 +29,15 @@ import { useInfiniteQuery } from "@tanstack/react-query";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import { useInView } from "react-intersection-observer";
 import SelectedPlacesThumbnails from "./SelectedPlacesThumbnails.jsx";
+import WarningDialog from "../../components/UI/WarningDialog.jsx";
+import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
 
 const AccommodationModal = ({ open, onClose, areaCode }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const { selectedLodgings, addLodging, removeLodging } = useSelectedPlaces();
   const { ref, inView } = useInView();
+  const { isOpen, message, openWarningDialog, closeWarningDialog } =
+    useWarningDialog();
   const isAccommodation = false;
 
   const {
@@ -126,6 +135,11 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
   };
 
   const handlePlaceSelect = (place) => {
+    if (selectedLodgings.length > 0) {
+      openWarningDialog("You cannot select more than one accommodation.");
+      return;
+    }
+
     if (selectedLodgings.find((p) => p.id === place.id)) {
       removeLodging(place.id);
     } else {
@@ -134,33 +148,41 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
   };
 
   return (
-    <Modal open={open} onClose={onClose}>
-      <ModalContainer>
-        <Header>
-          <IconButton onClick={onClose} color="inherit">
-            <ArrowBack />
-          </IconButton>
-          <SearchBar
-            placeholder="장소명을 입력해주세요"
-            variant="outlined"
-            value={searchTerm}
-            onChange={(e) => setSearchTerm(e.target.value)}
-            InputProps={{
-              startAdornment: <Search color="action" />,
-            }}
-          />
-        </Header>
+    <>
+      <Modal open={open} onClose={onClose}>
+        <ModalContainer>
+          <Header>
+            <IconButton onClick={onClose} color="inherit">
+              <ArrowBack />
+            </IconButton>
+            <SearchBar
+              placeholder="Enter place name"
+              variant="outlined"
+              value={searchTerm}
+              onChange={(e) => setSearchTerm(e.target.value)}
+              InputProps={{
+                startAdornment: <Search color="action" />,
+              }}
+            />
+          </Header>
 
-        {renderContent()}
-        <SelectedPlacesThumbnails isAccommodation={!isAccommodation} />
+          {renderContent()}
+          <SelectedPlacesThumbnails isAccommodation={!isAccommodation} />
 
-        <ButtonContainer>
-          <StyledButton variant="contained" color="primary" onClick={onClose}>
-            Done
-          </StyledButton>
-        </ButtonContainer>
-      </ModalContainer>
-    </Modal>
+          <ButtonContainer>
+            <StyledButton variant="contained" color="primary" onClick={onClose}>
+              Done
+            </StyledButton>
+          </ButtonContainer>
+        </ModalContainer>
+      </Modal>
+
+      <WarningDialog
+        isOpen={isOpen}
+        message={message}
+        onClose={closeWarningDialog}
+      />
+    </>
   );
 };
 
