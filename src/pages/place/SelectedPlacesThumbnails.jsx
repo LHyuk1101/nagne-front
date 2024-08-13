@@ -68,7 +68,7 @@ const SelectedPlacesThumbnails = () => {
             {selectedPlaces.map((place) => (
               <ThumbnailWrapper key={place.id}>
                 <Thumbnail
-                  src={place.placeUrlImages[0] || defaultImg}
+                  src={place.imgUrl || defaultImg}
                   alt={place.title}
                   onError={(e) => {
                     e.target.onerror = null;

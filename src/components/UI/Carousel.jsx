@@ -132,8 +132,14 @@ import { AREA_COMMONS } from "../../constants/constant.js";
 
 export const Carousel = ({ startDate, endDate }) => {
   const [selectedSlide, setSelectedSlide] = useState(PLAN_HEADER_TITLE);
-  const { setStartDate, setEndDate, setPlaceName, setLat, setLng } =
-    usePlanStore();
+  const {
+    setStartDate,
+    setEndDate,
+    setPlaceName,
+    setLat,
+    setLng,
+    setAreaCode,
+  } = usePlanStore();
   const navigate = useNavigate();
 
   const handleRedirectPlan = () => {
@@ -145,6 +151,7 @@ export const Carousel = ({ startDate, endDate }) => {
     setPlaceName(selectedSlide);
     setLat(selectedPlace.lat);
     setLng(selectedPlace.lng);
+    setAreaCode(selectedPlace.areaCode);
     navigate(`${LINKS.PLAN_FIRST.link}/${selectedSlide}`);
   };
   return (

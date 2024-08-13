@@ -5,6 +5,7 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Box,
+  Button,
 } from "@mui/material";
 import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
 import SelectedPlacesThumbnails from "./SelectedPlacesThumbnails.jsx";
@@ -20,21 +21,23 @@ import {
   PlaceItem,
   ButtonContainer,
   StyledButton,
+  LoadMoreContainer,
 } from "./PlaceModal.style.jsx";
 import { getPlaceByArea } from "../../services/place/place.js";
 import { useQuery } from "@tanstack/react-query";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 
-const PlaceModal = ({ open, onClose }) => {
+const PlaceModal = ({ open, onClose, areaCode }) => {
   const [searchTerm, setSearchTerm] = useState("");
   const [selectedCategory, setSelectedCategory] = useState("attraction");
   const { selectedPlaces, addPlace, removePlace } = useSelectedPlaces();
 
-  const { data, isLoading, error } = useQuery({
+  const { data, isLoading, error, fetchNextPage, hasNextPage } = useQuery({
     queryKey: ["placeList", selectedCategory],
-    queryFn: () => getPlaceByArea(selectedCategory),
+    queryFn: ({ pageParam = 1 }) => getPlaceByArea(areaCode, selectedCategory),
     enabled: open,
     staleTime: 5 * 60 * 1000,
+    getNextPageParam: (lastPage, pages) => lastPage.nextPage,
   });
 
   const categories = ["attraction", "restaurant"];
@@ -58,7 +61,7 @@ const PlaceModal = ({ open, onClose }) => {
                 onClick={() => handlePlaceSelect(place)}
               >
                 <PlaceImage
-                  src={place.placeUrlImages[0] || defaultImg}
+                  src={place.imgUrl || defaultImg}
                   alt={place.title}
                   onError={(e) => {
                     e.target.onerror = null;
@@ -85,8 +88,17 @@ const PlaceModal = ({ open, onClose }) => {
                 </ListItemSecondaryAction>
               </PlaceItem>
             ))}
+            <LoadMoreContainer>
+              <Button
+                variant="contained"
+                color="primary"
+                onClick={() => fetchNextPage()}
+                disabled={isLoading}
+              >
+                더 보기
+              </Button>
+            </LoadMoreContainer>
           </PlaceList>
-          <Box>더 보기</Box>
         </>
       );
     }
