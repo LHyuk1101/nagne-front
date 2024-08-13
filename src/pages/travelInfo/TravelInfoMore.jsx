@@ -107,7 +107,7 @@ function TravelInfoMore() {
   };
 
   const handleCardClick = (item) => {
-    navigate("/place", { state: item });
+    navigate(`/place/${item.id}`, { state: item });
   };
 
   const filteredData = templateData.filter(
