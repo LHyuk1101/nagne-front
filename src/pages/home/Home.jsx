@@ -234,46 +234,45 @@ const Home = () => {
               </Link>
             </Box>
 
-            <Typography
+            <Box
               variant="body2"
               align="center"
-              sx={{ fontWeight: 300, marginTop: "1rem" }}
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 1,
+                flexWrap: "wrap",
+                fontWeight: 300,
+                marginTop: "1rem",
+                fontSize: "15px",
+              }}
             >
-              <Box
-                sx={{
-                  display: "flex",
-                  justifyContent: "center",
-                  gap: 1,
-                  flexWrap: "wrap",
-                }}
+              <Typography sx={{ color: "white" }}>
+                Source of images used :
+              </Typography>
+              <Link
+                to={"https://www.google.co.kr/maps/?hl=en&entry=ttu"}
+                style={{ textDecoration: "none", color: "inherit" }}
               >
-                <Typography sx={{ color: "white" }}>
-                  Source of images used :
-                </Typography>
-                <Link
-                  to={"https://www.google.co.kr/maps/?hl=en&entry=ttu"}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Google Maps
-                </Link>
-                <Typography variant="body2">/</Typography>
-                <Link
-                  to={
-                    "https://www.booking.com/index.ko.html?label=gen173nr-1BCAEoggI46AdICVgEaH2IAQGYARe4AQfIAQzYAQHoAQGIAgGoAgO4Atmi7rUGwAIB0gIkZDJhZDkyZDMtYjQ1ZS00MTY4LTkwYTktZTU5YWNiZTFkZjli2AIF4AIB&sid=9aba5835fa945fb0fe14f7fa08ed0b7f&keep_landing=1&sb_price_type=total&"
-                  }
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Booking.com
-                </Link>
-                <Typography variant="body2">/</Typography>
-                <Link
-                  to={"https://knto.or.kr/eng/index"}
-                  style={{ textDecoration: "none", color: "inherit" }}
-                >
-                  Korea Tourism Organization
-                </Link>
-              </Box>
-            </Typography>
+                Google Maps
+              </Link>
+              <Typography variant="body2">/</Typography>
+              <Link
+                to={
+                  "https://www.booking.com/index.ko.html?label=gen173nr-1BCAEoggI46AdICVgEaH2IAQGYARe4AQfIAQzYAQHoAQGIAgGoAgO4Atmi7rUGwAIB0gIkZDJhZDkyZDMtYjQ1ZS00MTY4LTkwYTktZTU5YWNiZTFkZjli2AIF4AIB&sid=9aba5835fa945fb0fe14f7fa08ed0b7f&keep_landing=1&sb_price_type=total&"
+                }
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                Booking.com
+              </Link>
+              <Typography variant="body2">/</Typography>
+              <Link
+                to={"https://knto.or.kr/eng/index"}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                Korea Tourism Organization
+              </Link>
+            </Box>
             <Typography
               variant="body2"
               align="center"
