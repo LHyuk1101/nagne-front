@@ -28,7 +28,7 @@ const PoiMarker = ({ poi, index, isOpen, onMarkerClick, color }) => {
           background={color}
           borderColor={"#FFF"}
           glyphColor={"#FFF"}
-          scale={1}
+          scale={1.25}
           glyph={(index + 1).toString()}
         />
       </AdvancedMarker>
