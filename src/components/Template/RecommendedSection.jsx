@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlacesByRegion } from "../../services/template/info";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const RecommendedSection = ({ selectedArea }) => {
   const navigate = useNavigate();
@@ -154,7 +155,7 @@ const RecommendedSection = ({ selectedArea }) => {
             onClick={() => handleClick(destination)}
           >
             <img
-              src={destination.thumbnailUrl || destination.imgUrl}
+              src={destination.thumbnailUrl || destination.imgUrl || defaultImg}
               alt={destination.title}
               style={{
                 width: "150px",

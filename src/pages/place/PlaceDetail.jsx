@@ -3,6 +3,7 @@ import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState } from "react";
 import { useLocation } from "react-router-dom";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlaceDetail = () => {
   const location = useLocation();
@@ -32,16 +33,16 @@ const PlaceDetail = () => {
     >
       <Box
         component="img"
-        src={imgUrl}
+        src={imgUrl || defaultImg}
         alt={title}
         sx={{
           width: "100%",
-          maxWidth: "600px", // 반응형을 위한 최대 너비 설정
+          maxWidth: "600px",
           height: "auto",
           borderRadius: "8px",
         }}
       />
-      {/* 좋아요 버튼과 좋아요 개수 */}
+      {/* 좋아요 버튼 */}
       <Box
         sx={{
           display: "flex",
@@ -49,7 +50,7 @@ const PlaceDetail = () => {
           justifyContent: "flex-start", // 좌측 정렬
           mt: 0.5,
           width: "100%",
-          maxWidth: "600px", // 반응형을 위한 최대 너비 설정
+          maxWidth: "600px",
         }}
       >
         <IconButton
