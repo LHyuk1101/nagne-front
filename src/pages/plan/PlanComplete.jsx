@@ -21,7 +21,7 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HotelIcon from "@mui/icons-material/Hotel";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import { createPlan } from "../../services/plan/completePlan.js";
+import { createPlan } from "../../services/plan/plan.js";
 import LoadingDialog from "../../components/UI/LoadingBar";
 import usePlanStore from "../../store/PlanContext.js";
 
