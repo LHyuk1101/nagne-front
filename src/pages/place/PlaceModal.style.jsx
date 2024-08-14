@@ -102,3 +102,10 @@ export const StyledButton = styled(Button)(({ theme }) => ({
   borderRadius: "20px",
   padding: theme.spacing(1.5),
 }));
+
+export const LoadMoreContainer = styled(Box)({
+  display: "flex",
+  justifyContent: "center",
+  marginTop: "20px",
+  marginBottom: "20px",
+});

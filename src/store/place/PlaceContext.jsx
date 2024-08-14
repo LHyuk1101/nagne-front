@@ -58,6 +58,10 @@ export const SelectedPlacesProvider = ({ children }) => {
     setSelectedLodgings((prev) => prev.filter((l) => l.id !== lodgingId));
   };
 
+  const clearPlaces = () => {
+    setSelectedPlaces([]);
+  };
+
   const clearLodgings = () => {
     setSelectedLodgings([]);
   };
@@ -71,6 +75,7 @@ export const SelectedPlacesProvider = ({ children }) => {
         addLodging,
         removePlace,
         removeLodging,
+        clearPlaces,
         clearLodgings,
       }}
     >

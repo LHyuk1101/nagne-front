@@ -1,167 +1,251 @@
-import { useNavigate } from "react-router-dom";
+import React, { useState, useRef, useEffect } from "react";
+import { useLocation } from "react-router-dom";
 import {
   Accordion,
-  AccordionDetails,
   AccordionSummary,
-  Avatar,
+  AccordionDetails,
+  Typography,
   Box,
-  Button,
-  Divider,
+  Avatar,
   List,
   ListItem,
+  ListItemAvatar,
   ListItemText,
-  Typography,
+  Button,
+  Switch,
+  FormControlLabel,
 } from "@mui/material";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore.js";
-import React, { useEffect } from "react";
-import DirectionsCarIcon from "@mui/icons-material/DirectionsCar.js";
-import LINKS from "../../routes/Links.jsx";
-import usePlanStore from "../../store/PlanContext.js";
+import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
+import LocationOnIcon from "@mui/icons-material/LocationOn";
+import HotelIcon from "@mui/icons-material/Hotel";
+import RestaurantIcon from "@mui/icons-material/Restaurant";
+import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
+import { mockPlanData } from "./mockData";
 
 const PlanComplete = () => {
-  const navigate = useNavigate();
-  const { startDate, endDate, placeName, selectedPlaces } = usePlanStore();
-  console.log("=======================================");
-  console.dir(selectedPlaces);
-  useEffect(() => {
-    initRender();
-  }, []);
+  const location = useLocation();
+  const [planData, setPlanData] = useState(null);
+  const [expanded, setExpanded] = useState({});
+  const [isAllExpanded, setIsAllExpanded] = useState(false);
+  const containerRef = useRef(null);
 
-  const initRender = () => {
-    redirectStartDate(placeName, startDate, endDate);
+  useEffect(() => {
+    const storedPlanData = localStorage.getItem("planData");
+    if (location.state && location.state.planData) {
+      setPlanData(location.state.planData);
+      localStorage.setItem("planData", JSON.stringify(location.state.planData));
+    } else if (storedPlanData) {
+      setPlanData(JSON.parse(storedPlanData));
+    }
+  }, [location.state]);
+
+  const handleChange = (panel) => (event, isExpanded) => {
+    setExpanded((prev) => ({ ...prev, [panel]: isExpanded }));
   };
 
-  const redirectStartDate = (placeName, planStartDate, planEndDate) => {
-    if (
-      placeName === undefined ||
-      planStartDate === undefined ||
-      planEndDate === undefined
-    ) {
-      navigate({
-        pathname: LINKS.CREATE.path,
-      });
+  const handleToggleAll = () => {
+    const newExpandedState = !isAllExpanded;
+    setIsAllExpanded(newExpandedState);
+    const newExpanded = {};
+    planData.dayPlans.forEach((day) => {
+      newExpanded["day${day.day}"] = newExpandedState;
+    });
+    setExpanded(newExpanded);
+  };
+
+  const handleSavePlan = () => {
+    console.log("Save plan");
+  };
+
+  const getIconByContentType = (contentTypeId) => {
+    switch (contentTypeId) {
+      case "80":
+        return <HotelIcon />;
+      case "82":
+        return <RestaurantIcon />;
+      case "76":
+        return <LocationOnIcon />;
+      default:
+        return <LocationOnIcon />;
     }
   };
 
-  const travelData = {
-    area: "SEOUL",
-    center: { lat: 37.5665, lng: 126.978 },
-    itinerary: [
-      {
-        day: 1,
-        date: new Date("2024-08-02"),
-        places: [
-          {
-            time: "20:50-22:00",
-            type: "Location",
-            name: "성산 일출봉",
-            image:
-              "https://cdn.pixabay.com/photo/2019/10/30/07/43/jeju-4588910_960_720.jpg",
-          },
-          {
-            time: "23:35-23:35",
-            type: "Accommodation",
-            name: "스위트호텔 제주",
-            image:
-              "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg",
-          },
-        ],
-        travel: { duration: "95분" },
-      },
-      {
-        day: 2,
-        date: new Date("2024-08-03"),
-        places: [
-          {
-            time: "12:39-12:39",
-            type: "Accommodation",
-            name: "스위트호텔 제주",
-            image:
-              "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg",
-          },
-        ],
-        travel: { duration: "76분" },
-      },
-      {
-        day: 3,
-        date: new Date("2024-08-04"),
-        places: [
-          {
-            time: "20:50-22:00",
-            type: "Location",
-            name: "성산 일출봉",
-            image:
-              "https://cdn.pixabay.com/photo/2019/10/30/07/43/jeju-4588910_960_720.jpg",
-          },
-          {
-            time: "23:35-23:35",
-            type: "Accommodation",
-            name: "스위트호텔 제주",
-            image:
-              "https://cdn.pixabay.com/photo/2019/08/19/13/58/bed-4416515_1280.jpg",
-          },
-        ],
-        travel: { duration: "95분" },
-      },
-    ],
-  };
-
-  const { area, center, itinerary } = travelData;
-
-  const formatDate = (date) => {
-    return date.toLocaleDateString("ko-KR", {
-      year: "numeric",
-      month: "2-digit",
-      day: "2-digit",
-      weekday: "short",
-    });
-  };
-
-  const handlePrevious = () => {
-    navigate("/create");
-  };
-
-  const handleNext = () => {
-    navigate("/mypage");
-  };
-
-  const handleAddAPlace = () => {
-    navigate("/plan/:location");
-  };
+  if (!planData) {
+    return <Typography>Loading plan data...</Typography>;
+  }
 
   return (
-    <>
-      <Box sx={{ display: "flex", justifyContent: "flex-end", mt: 1 }}>
-        <Button variant="contained" onClick={handleAddAPlace} size="small">
-          Add a Place
-        </Button>
+    <Box
+      ref={containerRef}
+      sx={{
+        maxWidth: 600,
+        margin: "auto",
+        p: 2,
+        pb: 10,
+        height: "calc(100vh - 56px)",
+        overflowY: "auto",
+        "&::-webkit-scrollbar": { display: "none" },
+        scrollbarWidth: "none",
+      }}
+    >
+      <Typography
+        variant="h5"
+        align="center"
+        sx={{ mb: 3, fontWeight: "bold" }}
+      >
+        {planData.subject}
+      </Typography>
+
+      <Box
+        sx={{
+          display: "flex",
+          justifyContent: "space-between",
+          alignItems: "center",
+          mb: 2,
+        }}
+      >
+        <FormControlLabel
+          control={
+            <Switch
+              checked={isAllExpanded}
+              onChange={handleToggleAll}
+              sx={{
+                "& .MuiSwitch-switchBase": {
+                  color: "#ff5722",
+                },
+                "& .MuiSwitch-switchBase.Mui-checked": {
+                  color: "#4caf50",
+                },
+                "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
+                  backgroundColor: "#4caf50",
+                },
+                "& .MuiSwitch-track": {
+                  backgroundColor: "#ffccbc",
+                },
+              }}
+            />
+          }
+          label="Check all"
+          sx={{
+            color: "#000",
+          }}
+        />
       </Box>
 
-      {itinerary.map((day, index) => (
-        <Accordion key={index}>
-          <AccordionSummary expandIcon={<ExpandMoreIcon />}>
-            <Typography>{`Day ${day.day} - ${formatDate(day.date)}`}</Typography>
+      {planData.dayPlans.map((dayPlan) => (
+        <Accordion
+          key={dayPlan.day}
+          expanded={expanded[`day${dayPlan.day}`] || false}
+          onChange={handleChange(`day${dayPlan.day}`)}
+          sx={{
+            mb: 2,
+            boxShadow: 3,
+            borderRadius: 2,
+            "&:before": { display: "none" },
+          }}
+        >
+          <AccordionSummary
+            expandIcon={<ExpandMoreIcon />}
+            sx={{
+              backgroundColor: "#98D8C8",
+              color: "primary.contrastText",
+              borderRadius: expanded[`day${dayPlan.day}`] ? "16px 16px 0 0" : 2,
+            }}
+          >
+            <Typography sx={{ fontWeight: "medium" }}>
+              Day {dayPlan.day}
+            </Typography>
           </AccordionSummary>
-          <AccordionDetails>
+          <AccordionDetails sx={{ p: 0 }}>
             <List>
-              {day.places.map((place, placeIndex) => (
-                <React.Fragment key={placeIndex}>
-                  <ListItem>
-                    <Avatar src={place.image} alt={place.name} />
-                    <ListItemText
-                      primary={place.name}
-                      secondary={`${place.time} - ${place.type}`}
-                    />
-                  </ListItem>
-                  {placeIndex < day.places.length - 1 && (
-                    <ListItem>
-                      <DirectionsCarIcon />
-                      <ListItemText
-                        primary={`Travel time: ${day.travel.duration}`}
+              {dayPlan.places.map((place, placeIndex) => (
+                <React.Fragment key={place.placeId}>
+                  <ListItem alignItems="flex-start" sx={{ py: 2 }}>
+                    <ListItemAvatar>
+                      <Avatar
+                        src={place.placeImg}
+                        alt={place.title}
+                        sx={{ width: 56, height: 56 }}
                       />
-                    </ListItem>
+                    </ListItemAvatar>
+                    <ListItemText
+                      primary={
+                        <Typography
+                          variant="subtitle1"
+                          sx={{ fontWeight: "medium" }}
+                        >
+                          {plan.title}
+                        </Typography>
+                      }
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            variant="body2"
+                            color="text.primary"
+                            sx={{ mb: 1 }}
+                          >
+                            {template.placeSummary}
+                          </Typography>
+                          <Typography variant="body2" color="text.secondary">
+                            {template.reasoning}
+                          </Typography>
+                        </React.Fragment>
+                      }
+                      sx={{ ml: 2 }}
+                    />
+                    <Avatar sx={{ bgcolor: "secondary.light", ml: 1 }}>
+                      {getIconByContentType(place.contentType)}
+                    </Avatar>
+                  </ListItem>
+                  {placeIndex < dayPlan.places.length - 1 && (
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        ml: 9,
+                        my: 1,
+                      }}
+                    >
+                      <Box
+                        sx={{
+                          flexGrow: 1,
+                          borderLeft: "2px dashed",
+                          borderColor: "grey.300",
+                          height: "60px",
+                          position: "relative",
+                        }}
+                      >
+                        <Box
+                          sx={{
+                            position: "absolute",
+                            left: "-12px",
+                            top: "50%",
+                            transform: "translateY(-50%)",
+                          }}
+                        >
+                          <Avatar
+                            sx={{
+                              bgcolor: "background.paper",
+                              width: 24,
+                              height: 24,
+                            }}
+                          >
+                            <DirectionsCarIcon
+                              color="action"
+                              sx={{ fontSize: 16 }}
+                            />
+                          </Avatar>
+                        </Box>
+                      </Box>
+                      <Typography
+                        variant="body2"
+                        color="text.secondary"
+                        sx={{ ml: 2, position: "absolute", left: "70px" }}
+                      >
+                        {`${dayPlan.places[placeIndex + 1].moveTime} minutes`}
+                      </Typography>
+                    </Box>
                   )}
-                  {placeIndex < day.places.length - 1 && <Divider />}
                 </React.Fragment>
               ))}
             </List>
@@ -170,16 +254,32 @@ const PlanComplete = () => {
       ))}
 
       <Box
-        sx={{ mt: "auto", display: "flex", justifyContent: "space-between" }}
+        sx={{
+          position: "fixed",
+          bottom: 0,
+          left: "50%",
+          transform: "translateX(-50%)",
+          width: "100%",
+          maxWidth: 600,
+          p: 2,
+          boxSizing: "border-box",
+        }}
       >
-        <Button variant="contained" onClick={handlePrevious}>
-          Previous
-        </Button>
-        <Button variant="contained" onClick={handleNext}>
-          Next
+        <Button
+          variant="contained"
+          color="primary"
+          onClick={handleSavePlan}
+          fullWidth
+          sx={{
+            height: "48px",
+            fontSize: "1.1rem",
+            boxShadow: "0 4px 6px rgba(0,0,0,0.1)",
+          }}
+        >
+          Save Plan
         </Button>
       </Box>
-    </>
+    </Box>
   );
 };
 

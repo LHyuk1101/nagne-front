@@ -5,7 +5,7 @@ import RecommendedSection from "../../components/Template/RecommendedSection";
 import AreaScrollforTravelInfo from "../../components/Template/AreaScrollforTravelInfo";
 
 const TravelInfo = () => {
-  const [selectedArea, setSelectedArea] = useState("SEOUL");
+  const [selectedArea, setSelectedArea] = useState(1);
 
   return (
     <ThemeProvider theme={theme}>

@@ -12,7 +12,7 @@ import {
   Typography,
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlacesByRegion } from "../../services/template/infoMore";
 
@@ -50,6 +50,7 @@ const StyledCardContent = styled(CardContent)({
 
 function TravelInfoMore() {
   const location = useLocation();
+  const navigate = useNavigate();
   const { selectedArea, tabIndex } = location.state || {
     selectedArea: "",
     tabIndex: 2,
@@ -105,6 +106,10 @@ function TravelInfoMore() {
     setSearch(event.target.value);
   };
 
+  const handleCardClick = (item) => {
+    navigate(`/place/${item.id}`, { state: item });
+  };
+
   const filteredData = templateData.filter(
     (item) =>
       item.title?.toLowerCase().includes(search.toLowerCase()) ||
@@ -153,7 +158,15 @@ function TravelInfoMore() {
       <Box sx={{ mt: 2 }}>
         <Grid container spacing={2}>
           {filteredData.map((item) => (
-            <Grid item xs={6} sm={4} md={3} key={item.id}>
+            <Grid
+              item
+              xs={6}
+              sm={4}
+              md={3}
+              key={item.id}
+              onClick={() => handleCardClick(item)} // 카드 클릭 시 상세 페이지로 이동
+              sx={{ cursor: "pointer" }} // 클릭 가능하도록 커서 변경
+            >
               <TemplateCard>
                 <StyledCardMedia
                   image={item.thumbnailUrl || "/default-image-path.jpg"}

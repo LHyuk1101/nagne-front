@@ -32,7 +32,7 @@ const RecommendedSection = ({ selectedArea }) => {
   const restaurants = places.filter((place) => place.contentTypeId === 82);
 
   const handleClick = (item) => {
-    navigate("/place", { state: item });
+    navigate(`/place/${item.id}`, { state: item });
   };
 
   const handleMouseDown = (e, scrollRef) => {

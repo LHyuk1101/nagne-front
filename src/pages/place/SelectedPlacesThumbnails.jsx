@@ -1,6 +1,7 @@
 import { Box, IconButton, styled, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const SelectedPlaces = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -52,13 +53,42 @@ const ThumbnailContent = styled(Box)(({ theme }) => ({
   fontSize: 12,
 }));
 
-const SelectedPlacesThumbnails = () => {
-  const { selectedPlaces, removePlace } = useSelectedPlaces();
+const SelectedPlacesThumbnails = ({ isAccommodation = false }) => {
+  const { selectedPlaces, removePlace, selectedLodgings, removeLodging } =
+    useSelectedPlaces();
   const selectedItemSize = selectedPlaces.length;
-
+  const selectedLodgingSize = selectedLodgings.length;
   return (
     <>
-      {selectedItemSize > 0 && (
+      {isAccommodation && selectedLodgingSize > 0 && (
+        <SelectedPlaces>
+          <Typography variant="subtitle1" gutterBottom>
+            selected Accommodation
+          </Typography>
+          <ThumbnailContainer>
+            {selectedLodgings.map((place) => (
+              <ThumbnailWrapper key={place.id}>
+                <Thumbnail
+                  src={place.imgUrl || defaultImg}
+                  alt={place.title}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = defaultImg;
+                  }}
+                />
+                <ThumbnailContent>{place.title}</ThumbnailContent>
+                <CloseButton
+                  size="small"
+                  onClick={() => removeLodging(place.id)}
+                >
+                  <Close fontSize="small" />
+                </CloseButton>
+              </ThumbnailWrapper>
+            ))}
+          </ThumbnailContainer>
+        </SelectedPlaces>
+      )}
+      {selectedItemSize > 0 && !isAccommodation && (
         <SelectedPlaces>
           <Typography variant="subtitle1" gutterBottom>
             선택한 장소 ({selectedItemSize})
@@ -67,11 +97,11 @@ const SelectedPlacesThumbnails = () => {
             {selectedPlaces.map((place) => (
               <ThumbnailWrapper key={place.id}>
                 <Thumbnail
-                  src={place.placeUrlImages[0] || "기본 이미지 URL"}
+                  src={place.imgUrl || defaultImg}
                   alt={place.title}
                   onError={(e) => {
                     e.target.onerror = null;
-                    e.target.src = "기본 이미지 URL";
+                    e.target.src = defaultImg;
                   }}
                 />
                 <ThumbnailContent>{place.title}</ThumbnailContent>

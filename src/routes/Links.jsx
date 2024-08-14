@@ -52,8 +52,16 @@ const LINKS = {
     link: "/plan",
   },
   PLACE: {
-    path: "/place",
+    path: "/place/:placeId",
     link: "/place",
+  },
+  POLICY: {
+    path: "/user-privacy-policy",
+    link: "/user-privacy-policy",
+  },
+  USER_TOS: {
+    path: "/user-termsofservice",
+    link: "/user-termsofservice",
   },
 };
 
