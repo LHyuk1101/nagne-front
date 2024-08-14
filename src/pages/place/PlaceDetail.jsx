@@ -1,12 +1,14 @@
 import { Box, Typography, IconButton } from "@mui/material";
+import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlaceDetail = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const { id, title, imgUrl, address, contactNumber, overview, likes } =
     location.state;
 
@@ -31,6 +33,10 @@ const PlaceDetail = () => {
     }
   };
 
+  const handleBackBtn = () => {
+    navigate(-1);
+  };
+
   return (
     <Box
       sx={{
@@ -38,8 +44,22 @@ const PlaceDetail = () => {
         display: "flex",
         flexDirection: "column",
         alignItems: "center",
+        position: "relative",
       }}
     >
+      <Box sx={{ marginBottom: "2rem" }}>
+        <IconButton
+          onClick={handleBackBtn}
+          sx={{
+            position: "absolute",
+            top: "1rem",
+            left: "1rem",
+            color: "black",
+          }}
+        >
+          <ArrowBackIcon />
+        </IconButton>
+      </Box>
       <Box
         component="img"
         src={imgUrl || defaultImg}
