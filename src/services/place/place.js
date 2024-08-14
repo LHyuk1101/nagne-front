@@ -2,7 +2,7 @@ import axiosInstance from "../common/axios.js";
 import { RESPONSE_STATUS_ERROR } from "../../constants/constant.js";
 
 const getPlaceByArea = async ({
-  selectedCategory,
+  selectedRegions,
   areaCode,
   page = 1,
   size = 10,
@@ -13,8 +13,7 @@ const getPlaceByArea = async ({
   if (searchTerm) {
     url += `?searchTerm=${searchTerm}`;
   }
-  const regions = selectedCategory.code;
-  console.log(searchTerm);
+  const regions = selectedRegions.code;
   const response = await axiosInstance.get(url, {
     params: {
       regions,

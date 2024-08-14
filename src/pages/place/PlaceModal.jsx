@@ -57,7 +57,7 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
     queryFn: ({ pageParam = 1, signal }) =>
       getPlaceByArea({
         areaCode,
-        selectedCategory,
+        selectedRegions: selectedCategory,
         page: pageParam,
         signal,
         searchTerm,
