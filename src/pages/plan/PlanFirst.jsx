@@ -2,8 +2,6 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
-import { useMutation } from "@tanstack/react-query";
-import LoadingDialog from "../../components/UI/LoadingBar";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import {
   StyledTab,
@@ -13,10 +11,10 @@ import {
 } from "./PlanFirst.style.jsx";
 import PlaceTab from "../place/PlaceTab.jsx";
 import AccommodationTab from "../place/AccommodationTab.jsx";
-import { createPlan } from "../../services/plan/completePlan";
 
 const PlanFirst = () => {
-  const { startDate, endDate, placeName, setSelectedPlaces } = usePlanStore();
+  const { startDate, endDate, placeName, areaCode, setSelectedPlaces } =
+    usePlanStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const { selectedPlaces, selectedLodgings } = useSelectedPlaces();
@@ -41,18 +39,6 @@ const PlanFirst = () => {
   //   }
   // };
 
-  const createPlanMutation = useMutation({
-    mutationFn: createPlan,
-    onSuccess: (data) => {
-      setSelectedPlaces([...selectedPlaces, ...selectedLodgings]);
-      navigate(LINKS.PLAN.path, { state: { planData: data } });
-    },
-    onError: (error) => {
-      console.error("error", error);
-      alert("Failed to make plan.");
-    },
-  });
-
   const renderRefreshNotification = () => {};
 
   const handleTabChange = (event, newValue) => {
@@ -60,9 +46,7 @@ const PlanFirst = () => {
     setTabValue(newValue);
   };
 
-  const handleRedirectButton = (e) => {
-    e.preventDefault();
-
+  const handleCreateSchedule = () => {
     const planData = {
       places: [...selectedPlaces, ...selectedLodgings].map((place) => ({
         id: place.id,
@@ -74,8 +58,8 @@ const PlanFirst = () => {
       endDay: endDate,
       areaCode: areaCode,
     };
-
-    createPlanMutation.mutate(planData);
+    console.log("Navigating to PlanComplete with planData:", planData);
+    navigate(LINKS.PLAN.path, { state: { planData } });
   };
 
   return (
@@ -88,16 +72,9 @@ const PlanFirst = () => {
       {tabValue === 0 && <PlaceTab />}
       {tabValue === 1 && <AccommodationTab />}
 
-      {createPlanMutation.isPending && (
-        <LoadingDialog
-          open={true}
-          message="We are creating your perfect travel plan..."
-        />
-      )}
-
       <ButtonContainer>
         <CreateScheduleButton
-          onClick={handleRedirectButton}
+          onClick={handleCreateSchedule}
           variant="contained"
         >
           Create Schedule
