@@ -15,6 +15,7 @@ import usePreventRefresh from "../../hooks/usePreventRefresh.jsx";
 
 const PlanFirst = () => {
   const { startDate, endDate, areaCode, setSelectedPlaces } = usePlanStore();
+  const { user } = useUserStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const { selectedPlaces, selectedLodgings } = useSelectedPlaces();
@@ -25,6 +26,11 @@ const PlanFirst = () => {
   };
 
   const handleCreateSchedule = () => {
+    if (!user.userId) {
+      alert("Create a scedule.");
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return;
+    }
     const planData = {
       places: [...selectedPlaces, ...selectedLodgings].map((place) => ({
         id: place.id,
