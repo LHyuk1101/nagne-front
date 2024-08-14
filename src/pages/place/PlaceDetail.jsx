@@ -73,9 +73,12 @@ const PlaceDetail = () => {
       <Typography variant="h5" align="center" gutterBottom>
         {title}
       </Typography>
-      <Typography variant="body1" align="center" gutterBottom>
-        {overview}
-      </Typography>
+      <Typography
+        variant="body1"
+        align="center"
+        gutterBottom
+        dangerouslySetInnerHTML={{ __html: overview }}
+      />
       <Box
         sx={{
           borderBottom: 1,
