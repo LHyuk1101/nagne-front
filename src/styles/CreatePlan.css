@@ -1,5 +1,4 @@
 .react-datepicker {
-  font-family: "Montserrat, sans-serif";
   margin-top: 1rem;
   border: none;
   transform: scale(1.2);
@@ -29,6 +28,9 @@
   width: 2.25rem;
   line-height: 2.25rem;
   margin: 0.166rem;
+  text-decoration: none;
+  -webkit-text-decoration: none;
+  -moz-text-decoration: none;
 }
 
 .react-datepicker__day--selected,
@@ -71,4 +73,6 @@ button.react-datepicker__navigation--next {
   outline: none;
   border: none;
   background: none;
+  text-decoration: none;
+  -moz-text-decoration: none;
 }
