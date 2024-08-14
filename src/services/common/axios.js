@@ -2,7 +2,7 @@ import axios from "axios";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
-const axiosInstance = axios.create({
+export const axiosInstance = axios.create({
   baseURL,
   withCredentials: true,
   headers: {
@@ -28,18 +28,15 @@ axiosInstance.interceptors.response.use(
     if (error.response.status === 401 && !originalRequest._retry) {
       originalRequest._retry = true;
       try {
-        const refreshToken = localStorage.getItem("refreshToken");
-        const response = await axios.post(`${baseURL}/auth/refresh`, {
-          refreshToken,
-        });
+        const response = await axios.post(`${baseURL}/api/auth/refresh`);
         const { accessToken } = response.data;
         localStorage.setItem("accessToken", accessToken);
         originalRequest.headers["Authorization"] = `Bearer ${accessToken}`;
         return axiosInstance(originalRequest);
       } catch (refreshError) {
-        // Refresh token is invalid, logout user
+        localStorage.removeItem("userStore");
         localStorage.removeItem("accessToken");
-        window.location.href = "/login";
+        window.location.href = "/";
         return Promise.reject(refreshError);
       }
     }
@@ -48,8 +45,3 @@ axiosInstance.interceptors.response.use(
 );
 
 export default axiosInstance;
-
-export const setAccessTokenToHttpClient = (accessToken) => {
-  axiosInstance.defaults.headers.common["Authorization"] =
-    `Bearer ${accessToken}`;
-};
