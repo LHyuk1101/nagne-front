@@ -6,7 +6,7 @@ import {
   IconButton,
   Button,
 } from "@mui/material";
-import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
+import { Search, ArrowBack, Add, Check, Favorite } from "@mui/icons-material";
 import SelectedPlacesThumbnails from "./SelectedPlacesThumbnails.jsx";
 import defaultImg from "../../assets/images/place/default_img.png";
 import {
@@ -30,6 +30,7 @@ import usePlanStore from "../../store/PlanContext.js";
 import { calculateDaysBetween } from "../../utils/dateUtils.js";
 import WarningDialog from "../../components/UI/WarningDialog.jsx";
 import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
+import Typography from "@mui/material/Typography";
 
 const PlaceModal = ({ open, onClose, areaCode }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -99,9 +100,34 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
                     />
                     <ListItemText
                       primary={place.title}
-                      secondary={place.address}
+                      secondary={
+                        <React.Fragment>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            display="block"
+                          >
+                            {place.address}
+                          </Typography>
+                          <Typography
+                            component="span"
+                            variant="body2"
+                            display="block"
+                            style={{ display: "flex", alignItems: "center" }}
+                          >
+                            <Favorite
+                              fontSize="small"
+                              color="error"
+                              style={{
+                                marginRight: "4px",
+                                transform: "translateY(1px)",
+                              }}
+                            />
+                            {place.likes || 0} likes
+                          </Typography>
+                        </React.Fragment>
+                      }
                       primaryTypographyProps={{ variant: "subtitle1" }}
-                      secondaryTypographyProps={{ variant: "body2" }}
                     />
                     <ListItemSecondaryAction>
                       <IconButton
