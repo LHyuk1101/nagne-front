@@ -57,6 +57,7 @@ const CreatePlan = () => {
             showDisabledMonthNavigation
             calendarStartDay={1}
             filterDate={filterDate}
+            style={{ fontFamily: "Montserrat, sans-serif" }}
           />
         </Box>
         <Button
