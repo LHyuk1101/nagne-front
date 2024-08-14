@@ -38,6 +38,8 @@ const PlanFirst = () => {
         name: place.title,
         contentType: place.contentTypeId,
         overview: place.overview,
+        lat: place.lat,
+        lng: place.lng,
       })),
       startDay: startDate,
       endDay: endDate,
