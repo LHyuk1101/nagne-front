@@ -31,6 +31,7 @@ import { calculateDaysBetween } from "../../utils/dateUtils.js";
 import WarningDialog from "../../components/UI/WarningDialog.jsx";
 import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
 import Typography from "@mui/material/Typography";
+import Box from "@mui/material/Box";
 
 const PlaceModal = ({ open, onClose, areaCode }) => {
   const [searchTerm, setSearchTerm] = useState("");
@@ -52,11 +53,20 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["placeList", selectedCategory.code, areaCode],
-    queryFn: ({ pageParam = 1 }) =>
-      getPlaceByArea(areaCode, selectedCategory.code, pageParam),
-    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
-    enabled: open,
+    queryKey: ["placeList", selectedCategory, searchTerm],
+    queryFn: ({ pageParam = 1, signal }) =>
+      getPlaceByArea({
+        areaCode,
+        selectedCategory,
+        page: pageParam,
+        signal,
+        searchTerm,
+      }),
+    getNextPageParam: (lastPage) =>
+      lastPage.nextPage && lastPage.items.length > 0
+        ? lastPage.nextPage
+        : undefined,
+    enabled: open && searchTerm !== undefined,
   });
 
   useEffect(() => {
@@ -72,11 +82,11 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
 
   const renderContent = () => {
     if (isLoading) {
-      return <div>Loading...</div>;
+      return <Box>Loading...</Box>;
     }
 
     if (error) {
-      return <div>No data found for {selectedCategory.name}.</div>;
+      return <Box>No data found for {selectedCategory.name}.</Box>;
     }
 
     if (data) {
@@ -171,7 +181,9 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
 
   const handleCategorySelect = (category) => {
     setSelectedCategory(category);
+    setSearchTerm("");
   };
+
   const handleValidPlaces = () => {
     const day = calculateDaysBetween(startDate, endDate) + 1;
     if (selectedPlaces.length < day) {
@@ -180,6 +192,7 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
     }
     onClose();
   };
+
   const handlePlaceSelect = (place) => {
     if (selectedPlaces.find((p) => p.id === place.id)) {
       removePlace(place.id);
@@ -190,6 +203,11 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
       }
       addPlace(place);
     }
+  };
+
+  const handleChangeSearch = (e) => {
+    e.preventDefault();
+    setSearchTerm(e.target.value);
   };
 
   return (
@@ -204,7 +222,7 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
               placeholder="enter place name"
               variant="outlined"
               value={searchTerm}
-              onChange={(e) => setSearchTerm(e.target.value)}
+              onChange={handleChangeSearch}
               InputProps={{
                 startAdornment: <Search color="action" />,
               }}
