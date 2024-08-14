@@ -9,7 +9,7 @@ const TravelInfo = () => {
 
   return (
     <ThemeProvider theme={theme}>
-      <Box sx={{ marginTop: "3rem" }}>
+      <Box sx={{ marginTop: "2rem" }}>
         <AreaScrollforTravelInfo onAreaClick={setSelectedArea} />
         <RecommendedSection selectedArea={selectedArea} />
       </Box>
