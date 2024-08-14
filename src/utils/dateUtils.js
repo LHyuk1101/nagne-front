@@ -12,3 +12,21 @@ export const calculateDaysBetween = (startDate, endDate) => {
 
   return end.diff(start, "day");
 };
+
+/**
+ * Date To 'YYYY.MM.DD' 형식으로 변경합니다.
+ * @param {string|Date|dayjs.Dayjs} date
+ * @returns {string}
+ */
+export const formatDate = (date) => {
+  return date ? dayjs(date).format("YYYY.MM.DD") : "N/A";
+};
+
+/**
+ * 현재 요일을 반환합니다.
+ * @param {string|Date|dayjs.Dayjs} date
+ * @returns {string}
+ */
+export const toDate = (date) => {
+  return dayjs(date).format("ddd");
+};

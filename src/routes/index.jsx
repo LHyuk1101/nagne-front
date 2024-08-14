@@ -22,6 +22,9 @@ import TravelInfoMore from "../pages/travelInfo/TravelInfoMore.jsx";
 import PlaceDetail from "../pages/place/PlaceDetail.jsx";
 //error
 import ErrorPage from "../pages/error/ErrorPage.jsx";
+import PrivacyPolicy from "../pages/user/PrivacyPolicy.jsx";
+import Agreements from "../pages/user/TermsOfService.jsx";
+import TermsOfService from "../pages/user/TermsOfService.jsx";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +49,8 @@ const router = createBrowserRouter([
       { path: LINKS.TEMPLATE_DETAIL.path, element: <TemplateDetail /> },
       { path: LINKS.TRAVEL_INFO.path, element: <TravelInfoMore /> },
       { path: LINKS.PLACE.path, element: <PlaceDetail /> },
+      { path: LINKS.POLICY.path, element: <PrivacyPolicy /> },
+      { path: LINKS.USER_TOS.path, element: <TermsOfService /> },
     ],
   },
 ]);
