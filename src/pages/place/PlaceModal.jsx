@@ -175,7 +175,7 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
               <ArrowBack />
             </IconButton>
             <SearchBar
-              placeholder="장소명을 입력해주세요"
+              placeholder="enter place name"
               variant="outlined"
               value={searchTerm}
               onChange={(e) => setSearchTerm(e.target.value)}
