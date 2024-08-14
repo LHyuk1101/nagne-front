@@ -216,7 +216,14 @@ const Home = () => {
           }}
         >
           <Container maxWidth="lg">
-            <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "center",
+                gap: 1,
+                marginLeft: "1.2rem",
+              }}
+            >
               <Link
                 to={LINKS.POLICY.link}
                 style={{ textDecoration: "none", color: "inherit" }}
