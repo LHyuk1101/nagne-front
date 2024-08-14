@@ -7,8 +7,15 @@ import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlaceDetail = () => {
   const location = useLocation();
-  const { imageUrl, title, imgUrl, address, contactNumber, overview, likes } =
-    location.state;
+  const {
+    thumbnailUrl,
+    title,
+    imgUrl,
+    address,
+    contactNumber,
+    overview,
+    likes,
+  } = location.state;
 
   // 좋아요 상태를 관리하는 state
   const [isLiked, setIsLiked] = useState(false);
@@ -38,7 +45,7 @@ const PlaceDetail = () => {
         sx={{
           width: "100%",
           maxWidth: "600px",
-          height: "auto",
+          height: "300px",
           borderRadius: "8px",
         }}
       />
