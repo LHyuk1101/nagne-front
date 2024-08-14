@@ -26,7 +26,8 @@ import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
 import WarningDialog from "../../components/UI/WarningDialog.jsx";
 
 const AccommodationTab = () => {
-  const { selectedLodgings, removeLodging } = useSelectedPlaces();
+  const { selectedLodgings, removeLodging, clearLodgings } =
+    useSelectedPlaces();
   const { areaCode } = usePlanStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isOpen, message, openWarningDialog, closeWarningDialog } =
@@ -43,11 +44,12 @@ const AccommodationTab = () => {
     }
     removeLodging(id);
   };
+
   return (
     <>
       <PlaceHeader>
         <PlaceNumber>{selectedLodgings.length}</PlaceNumber>
-        <PlaceName>Reset</PlaceName>
+        <PlaceName onClick={clearLodgings}>Reset</PlaceName>
         <AddPlaceButton onClick={toggleModal}>
           + Add Accommodation
         </AddPlaceButton>
