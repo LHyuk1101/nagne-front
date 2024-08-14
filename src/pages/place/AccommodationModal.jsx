@@ -5,11 +5,6 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from "@mui/material";
 import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
 import defaultImg from "../../assets/images/place/default_img.png";

@@ -4,7 +4,6 @@ import {
   ListItemText,
   ListItemSecondaryAction,
   IconButton,
-  Box,
   Button,
 } from "@mui/material";
 import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
