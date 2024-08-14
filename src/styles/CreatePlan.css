@@ -73,6 +73,6 @@ button.react-datepicker__navigation--next {
   outline: none;
   border: none;
   background: none;
-  -webkit-text-decoration: none;
+  text-decoration: none;
   -moz-text-decoration: none;
 }
