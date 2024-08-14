@@ -17,6 +17,7 @@ import LoginIcon from "@mui/icons-material/Login";
 import LogoutIcon from "@mui/icons-material/Logout";
 import PersonIcon from "@mui/icons-material/Person";
 import EventNoteIcon from "@mui/icons-material/EventNote";
+import { handleLogout } from "../../services/user/auth.js";
 
 const userStore = JSON.parse(localStorage.getItem("userStore"));
 const user = userStore?.state?.user;
@@ -62,7 +63,8 @@ const NaviItemsTop = (user) => [
     icon: <LogoutIcon />,
     text: "Logout",
     isLogin: true,
-    route: LINKS.LOGOUT.path,
+    route: LINKS.HOME.path,
+    onClick: () => handleLogout(),
   },
 ];
 
@@ -114,14 +116,21 @@ const RightSideMenu = ({ open, onClose }) => {
 
   const naviItemsTop = useMemo(() => NaviItemsTop(user), [user]);
   const renderNavItems = (items) => {
-    return items.map((item) => (
-      <ListItem key={item.text} disablePadding>
-        <ListItemButton component={Link} to={item.route}>
-          <ListItemIcon>{item.icon}</ListItemIcon>
-          <ListItemText primary={item.text} />
-        </ListItemButton>
-      </ListItem>
-    ));
+    return items.map((item) => {
+      const isLogout = item.text === "Logout";
+      return (
+        <ListItem key={item.text} disablePadding>
+          <ListItemButton
+            component={Link}
+            to={item.route}
+            onClick={isLogout ? handleLogout : undefined}
+          >
+            <ListItemIcon>{item.icon}</ListItemIcon>
+            <ListItemText primary={item.text} />
+          </ListItemButton>
+        </ListItem>
+      );
+    });
   };
 
   const list = () => (
