@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
+import useUserStore from "../../store/useUserStore.js";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import {
   StyledTab,
