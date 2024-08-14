@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlacesByRegion } from "../../services/template/info";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const RecommendedSection = ({ selectedArea }) => {
   const navigate = useNavigate();
@@ -25,7 +26,6 @@ const RecommendedSection = ({ selectedArea }) => {
 
   // items 배열에 접근하여 처리
   const places = data.items;
-  console.log(places);
 
   const travelDestinations = places.filter(
     (place) => place.contentTypeId === 76,
@@ -155,7 +155,7 @@ const RecommendedSection = ({ selectedArea }) => {
             onClick={() => handleClick(destination)}
           >
             <img
-              src={destination.thumbnailUrl || destination.imgUrl}
+              src={destination.thumbnailUrl || destination.imgUrl || defaultImg}
               alt={destination.title}
               style={{
                 width: "150px",

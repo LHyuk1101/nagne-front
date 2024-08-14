@@ -15,6 +15,7 @@ import { styled } from "@mui/material/styles";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlacesByRegion } from "../../services/template/infoMore";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const truncateText = (text, maxLength) => {
   if (!text) return ""; // text가 undefined 또는 null인 경우 빈 문자열 반환
@@ -169,7 +170,7 @@ function TravelInfoMore() {
             >
               <TemplateCard>
                 <StyledCardMedia
-                  image={item.thumbnailUrl || "/default-image-path.jpg"}
+                  image={item.thumbnailUrl || defaultImg}
                   title={item.title}
                 />
                 <StyledCardContent>

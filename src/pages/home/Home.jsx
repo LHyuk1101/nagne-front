@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Typography,
   Button,
@@ -13,6 +13,7 @@ import {
   ThemeProvider,
   CssBaseline,
 } from "@mui/material";
+import LINKS from "../../routes/Links";
 
 const theme = createTheme({
   typography: {
@@ -135,7 +136,7 @@ const Home = () => {
           <Grid container spacing={2}>
             {[
               {
-                name: "\n" + "Seongsan Sunrise Peak",
+                name: "Seongsan Sunrise Peak",
                 description: "Experience the magic of tropical paradise",
                 image:
                   "https://cdn.pixabay.com/photo/2019/09/07/09/55/sunrise-4458433_1280.jpg",
@@ -209,13 +210,75 @@ const Home = () => {
           component="footer"
           sx={{
             bgcolor: "text.secondary",
-            py: 6,
+            py: 3,
             color: "white",
             mt: "auto",
           }}
         >
           <Container maxWidth="lg">
-            <Typography variant="body2" align="center" sx={{ fontWeight: 300 }}>
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
+              <Link
+                to={LINKS.POLICY.link}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                User Privacy Policy
+              </Link>
+              <Typography variant="body2" sx={{ mx: 1 }}>
+                |
+              </Typography>
+              <Link
+                to={LINKS.USER_TOS.link}
+                style={{ textDecoration: "none", color: "inherit" }}
+              >
+                User Terms of Service
+              </Link>
+            </Box>
+
+            <Typography
+              variant="body2"
+              align="center"
+              sx={{ fontWeight: 300, marginTop: "1rem" }}
+            >
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 1,
+                  flexWrap: "wrap",
+                }}
+              >
+                <Typography sx={{ color: "white" }}>
+                  Source of images used :
+                </Typography>
+                <Link
+                  to={"https://www.google.co.kr/maps/?hl=en&entry=ttu"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Google Maps
+                </Link>
+                <Typography variant="body2">/</Typography>
+                <Link
+                  to={
+                    "https://www.booking.com/index.ko.html?label=gen173nr-1BCAEoggI46AdICVgEaH2IAQGYARe4AQfIAQzYAQHoAQGIAgGoAgO4Atmi7rUGwAIB0gIkZDJhZDkyZDMtYjQ1ZS00MTY4LTkwYTktZTU5YWNiZTFkZjli2AIF4AIB&sid=9aba5835fa945fb0fe14f7fa08ed0b7f&keep_landing=1&sb_price_type=total&"
+                  }
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Booking.com
+                </Link>
+                <Typography variant="body2">/</Typography>
+                <Link
+                  to={"https://knto.or.kr/eng/index"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Korea Tourism Organization
+                </Link>
+              </Box>
+            </Typography>
+            <Typography
+              variant="body2"
+              align="center"
+              sx={{ fontWeight: 300, marginTop: "1rem" }}
+            >
               © 2024 Nagne Travel. All rights reserved.
             </Typography>
           </Container>

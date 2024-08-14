@@ -1,8 +1,8 @@
 import axiosInstance from "../common/axios";
 
-export const fetchPlacesByRegion = async (region) => {
+export const fetchPlacesByRegion = async (areaCode) => {
   try {
-    const response = await axiosInstance.get(`/api/place/findall/${region}`);
+    const response = await axiosInstance.get(`/api/place/findall/${areaCode}`);
     return response.data;
   } catch (error) {
     console.error("Error fetching places by region:", error);

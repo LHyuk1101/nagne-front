@@ -2,6 +2,7 @@ import { Box, IconButton, styled, Typography } from "@mui/material";
 import { Close } from "@mui/icons-material";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import defaultImg from "../../assets/images/place/default_img.png";
+import ThumbnailContentWithTooltip from "../../components/UI/ThumbnailContent.jsx";
 
 const SelectedPlaces = styled(Box)(({ theme }) => ({
   padding: theme.spacing(2),
@@ -28,6 +29,9 @@ const ThumbnailWrapper = styled(Box)({
   position: "relative",
   width: 60,
   flexShrink: 0,
+  display: "flex",
+  flexDirection: "column",
+  alignItems: "center",
 });
 
 const Thumbnail = styled("img")({
@@ -36,6 +40,16 @@ const Thumbnail = styled("img")({
   borderRadius: 8,
   objectFit: "cover",
 });
+
+const ThumbnailContent = styled(Box)(({ theme }) => ({
+  maxWidth: 60,
+  fontSize: 12,
+  textAlign: "center",
+  whiteSpace: "nowrap",
+  overflow: "hidden",
+  textOverflow: "ellipsis",
+  marginTop: theme.spacing(0.5),
+}));
 
 const CloseButton = styled(IconButton)(({ theme }) => ({
   position: "absolute",
@@ -48,21 +62,45 @@ const CloseButton = styled(IconButton)(({ theme }) => ({
   },
 }));
 
-const ThumbnailContent = styled(Box)(({ theme }) => ({
-  maxWidth: 60,
-  fontSize: 12,
-}));
-
-const SelectedPlacesThumbnails = () => {
-  const { selectedPlaces, removePlace } = useSelectedPlaces();
+const SelectedPlacesThumbnails = ({ isAccommodation = false }) => {
+  const { selectedPlaces, removePlace, selectedLodgings, removeLodging } =
+    useSelectedPlaces();
   const selectedItemSize = selectedPlaces.length;
-
+  const selectedLodgingSize = selectedLodgings.length;
   return (
     <>
-      {selectedItemSize > 0 && (
+      {isAccommodation && selectedLodgingSize > 0 && (
         <SelectedPlaces>
           <Typography variant="subtitle1" gutterBottom>
-            선택한 장소 ({selectedItemSize})
+            selected Accommodation
+          </Typography>
+          <ThumbnailContainer>
+            {selectedLodgings.map((place) => (
+              <ThumbnailWrapper key={place.id}>
+                <Thumbnail
+                  src={place.imgUrl || defaultImg}
+                  alt={place.title}
+                  onError={(e) => {
+                    e.target.onerror = null;
+                    e.target.src = defaultImg;
+                  }}
+                />
+                <ThumbnailContentWithTooltip title={place.title} />
+                <CloseButton
+                  size="small"
+                  onClick={() => removeLodging(place.id)}
+                >
+                  <Close fontSize="small" />
+                </CloseButton>
+              </ThumbnailWrapper>
+            ))}
+          </ThumbnailContainer>
+        </SelectedPlaces>
+      )}
+      {selectedItemSize > 0 && !isAccommodation && (
+        <SelectedPlaces>
+          <Typography variant="subtitle1" gutterBottom>
+            seleted Places ({selectedItemSize})
           </Typography>
           <ThumbnailContainer>
             {selectedPlaces.map((place) => (
@@ -75,7 +113,7 @@ const SelectedPlacesThumbnails = () => {
                     e.target.src = defaultImg;
                   }}
                 />
-                <ThumbnailContent>{place.title}</ThumbnailContent>
+                <ThumbnailContentWithTooltip title={place.title} />
                 <CloseButton size="small" onClick={() => removePlace(place.id)}>
                   <Close fontSize="small" />
                 </CloseButton>
