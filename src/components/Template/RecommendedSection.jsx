@@ -102,13 +102,14 @@ const RecommendedSection = ({ selectedArea }) => {
   };
 
   return (
-    <Box sx={{ padding: "2rem" }}>
+    <Box sx={{ padding: "0.5rem" }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          marginBottom: "1.5rem", // 텍스트와 사진 사이의 간격 조정
+          marginBottom: "0.5rem",
+          marginTop: "0.4rem", // 텍스트와 사진 사이의 간격 조정
         }}
       >
         <Typography variant="h6" align="center" gutterBottom>
@@ -139,7 +140,7 @@ const RecommendedSection = ({ selectedArea }) => {
             display: "none",
           },
           scrollbarWidth: "none",
-          gap: "1rem", // 카드 간의 간격
+          gap: "0.3rem", // 카드 간의 간격
         }}
       >
         {travelDestinations.map((destination, index) => (
@@ -185,8 +186,8 @@ const RecommendedSection = ({ selectedArea }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: "2rem",
-          marginBottom: "1.5rem", // 텍스트와 사진 사이의 간격 조정
+          marginTop: "0.5rem",
+          marginBottom: "0.4rem", // 텍스트와 사진 사이의 간격 조정
         }}
       >
         <Typography variant="h6" align="center" gutterBottom>
@@ -217,7 +218,7 @@ const RecommendedSection = ({ selectedArea }) => {
             display: "none",
           },
           scrollbarWidth: "none",
-          gap: "1rem", // 카드 간의 간격
+          gap: "0.3rem", // 카드 간의 간격
         }}
       >
         {restaurants.map((restaurant, index) => (

@@ -173,6 +173,7 @@ const AreaScrollforTravelInfo = ({ onAreaClick }) => {
           display: "none",
         },
         scrollbarWidth: "none",
+        paddingRight: "1rem",
       }}
     >
       {areas.map((area, index) => (

@@ -53,8 +53,8 @@ export const Carousel = ({ startDate, endDate }) => {
           color: "primary.main",
           fontSize: { xs: "1.5rem", sm: "2rem", md: "2.5rem" },
         }}
-        marginTop={"1rem"}
-        marginBottom={"2rem"}
+        marginTop={"0.7rem"}
+        marginBottom={"1rem"}
       >
         Please select a travel destination!
       </Typography>
@@ -83,11 +83,11 @@ export const Carousel = ({ startDate, endDate }) => {
               key={slide.title}
               style={{
                 backgroundImage: `url(${slide.image})`,
-                backgroundSize: "290px 500px", // 이미지 크기 설정
+                backgroundSize: "297px 400px", // 이미지 크기 설정
                 backgroundRepeat: "no-repeat",
                 backgroundPosition: "center",
-                width: "290px", // 슬라이드의 너비 설정
-                height: "500px", // 슬라이드의 높이 설정
+                width: "297px", // 슬라이드의 너비 설정
+                height: "400px", // 슬라이드의 높이 설정
               }}
             >
               <div>
@@ -113,7 +113,7 @@ export const Carousel = ({ startDate, endDate }) => {
           variant="contained"
           color="primary"
           style={{
-            marginTop: "0.1rem",
+            marginTop: "1.5rem",
             marginBottom: "0.5rem",
             width: "150px",
             height: "45px",
