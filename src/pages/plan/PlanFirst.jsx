@@ -1,7 +1,10 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
+import LoadingDialog from "../../components/UI/LoadingBar";
+
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import {
   StyledTab,
@@ -11,7 +14,6 @@ import {
 } from "./PlanFirst.style.jsx";
 import PlaceTab from "../place/PlaceTab.jsx";
 import AccommodationTab from "../place/AccommodationTab.jsx";
-
 import usePreventRefresh from "../../hooks/usePreventRefresh.jsx";
 import { createPlan } from "../../services/plan/plan.js";
 
@@ -34,7 +36,6 @@ const PlanFirst = () => {
   });
 
   const handleTabChange = (event, newValue) => {
-    console.log(newValue);
     setTabValue(newValue);
   };
 
@@ -51,12 +52,19 @@ const PlanFirst = () => {
       areaCode: areaCode,
     };
 
+    createPlanMutation.mutate(planData);
     console.log("Navigating to PlanComplete with planData:", planData);
-    navigate(LINKS.PLAN.path, { state: { planData } });
   };
 
   return (
     <>
+      {createPlanMutation.isPending && (
+        <LoadingDialog
+          open={true}
+          message="We are creating your perfect travel plan..."
+        />
+      )}
+
       <StyledTabs value={tabValue} onChange={handleTabChange}>
         <StyledTab label="Places" />
         <StyledTab label="Accommodation" />
