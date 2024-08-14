@@ -85,7 +85,7 @@ const GoogleMap = () => {
   }, [selectedPlaces, selectedLodgings]);
 
   return (
-    <APIProvider apiKey={import.meta.env.VITE_API_KEY}>
+    <APIProvider apiKey={import.meta.env.VITE_API_KEY} language="en">
       <Map
         style={{ width: "100%", height: "100%" }}
         defaultCenter={{ lat: parseFloat(lat), lng: parseFloat(lng) }}
