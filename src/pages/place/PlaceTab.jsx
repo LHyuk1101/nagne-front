@@ -27,7 +27,7 @@ import { calculateDaysBetween } from "../../utils/dateUtils.js";
 import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
 
 const PlaceTab = () => {
-  const { selectedPlaces, removePlace } = useSelectedPlaces();
+  const { selectedPlaces, removePlace, clearPlaces } = useSelectedPlaces();
   const { areaCode } = usePlanStore();
   const [isModalOpen, setIsModalOpen] = useState(false);
   const { isOpen, message, openWarningDialog, closeWarningDialog } =
@@ -40,7 +40,6 @@ const PlaceTab = () => {
 
   const handleValidRemoveItems = (id) => {
     const day = calculateDaysBetween(startDate, endDate) + 1;
-    console.log(day);
     if (selectedPlaces.length <= day) {
       openWarningDialog(`A minimum of ${day} places are required.`);
       toggleModal();
@@ -48,11 +47,12 @@ const PlaceTab = () => {
     }
     removePlace(id);
   };
+
   return (
     <>
       <PlaceHeader>
         <PlaceNumber>{selectedPlaces.length}</PlaceNumber>
-        <PlaceName>Reset</PlaceName>
+        <PlaceName onClick={clearPlaces}>Reset</PlaceName>
         <AddPlaceButton onClick={toggleModal}>+ Add Place</AddPlaceButton>
       </PlaceHeader>
       <ContentArea>

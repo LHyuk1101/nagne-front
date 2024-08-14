@@ -2,10 +2,9 @@ import { Box, styled, Typography } from "@mui/material";
 
 export const Header = styled(Box)(({ theme }) => ({
   display: "flex",
-  justifyContent: "space-between",
-  alignItems: "center",
-  minHeight: 80,
-  maxHeight: 100,
+  flexDirection: "column",
+  alignItems: "flex-start",
+  maxHeight: 120,
   backgroundColor: "#ffffff",
   padding: theme.spacing(3),
   boxSizing: "border-box",
@@ -17,23 +16,12 @@ export const HeaderColumn = styled(Box)({
   alignItems: "center",
 });
 
-export const DestinationColumn = styled(HeaderColumn)({
-  flex: "0 0 35%",
-});
-
-export const DateColumn = styled(HeaderColumn)({
-  flex: "0 0 40%",
-});
-
-export const EmptyColumn = styled(HeaderColumn)({
-  flex: "0 0 10%",
-});
-
 export const Destination = styled(Typography)(({ theme }) => ({
-  fontSize: 24,
+  fontSize: 26,
   fontWeight: 700,
   color: "#464555",
   letterSpacing: "-0.5px",
+  marginBottom: theme.spacing(1), // 추가: 하단 여백 추가
 }));
 
 export const DateRange = styled(Box)({
@@ -43,8 +31,15 @@ export const DateRange = styled(Box)({
 });
 
 export const DateText = styled(Typography)(({ theme }) => ({
-  fontSize: 16,
+  fontSize: 18,
   color: "#464555",
   letterSpacing: "0.25px",
   alignSelf: "center",
+  marginRight: "5px",
+  fontWeight: 530,
 }));
+
+export const DateContainer = styled(Box)({
+  display: "flex",
+  alignItems: "center",
+});
