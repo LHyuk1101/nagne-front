@@ -55,6 +55,14 @@ const LINKS = {
     path: "/place/:placeId",
     link: "/place",
   },
+  POLICY: {
+    path: "/user-privacy-policy",
+    link: "/user-privacy-policy",
+  },
+  USER_TOS: {
+    path: "/user-termsofservice",
+    link: "/user-termsofservice",
+  },
 };
 
 export default LINKS;

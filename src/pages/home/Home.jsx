@@ -1,5 +1,5 @@
 import React from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import {
   Typography,
   Button,
@@ -13,6 +13,7 @@ import {
   ThemeProvider,
   CssBaseline,
 } from "@mui/material";
+import LINKS from "../../routes/Links";
 
 const theme = createTheme({
   typography: {
@@ -215,6 +216,24 @@ const Home = () => {
           }}
         >
           <Container maxWidth="lg">
+            <Link to={LINKS.POLICY.link}>User Privacy Policy</Link>
+            <Link to={LINKS.USER_TOS.link}> User Terms of Service</Link>
+            <Typography variant="body2" align="center" sx={{ fontWeight: 300 }}>
+              Source of images used :
+              <Link to={"https://www.google.co.kr/maps/?hl=en&entry=ttu"}>
+                Google Maps,
+              </Link>
+              <Link
+                to={
+                  "https://www.booking.com/index.ko.html?label=gen173nr-1BCAEoggI46AdICVgEaH2IAQGYARe4AQfIAQzYAQHoAQGIAgGoAgO4Atmi7rUGwAIB0gIkZDJhZDkyZDMtYjQ1ZS00MTY4LTkwYTktZTU5YWNiZTFkZjli2AIF4AIB&sid=9aba5835fa945fb0fe14f7fa08ed0b7f&keep_landing=1&sb_price_type=total&"
+                }
+              >
+                Booking.com,
+              </Link>
+              <Link to={"https://knto.or.kr/eng/index"}>
+                Korea Tourism Organization
+              </Link>
+            </Typography>
             <Typography variant="body2" align="center" sx={{ fontWeight: 300 }}>
               © 2024 Nagne Travel. All rights reserved.
             </Typography>
