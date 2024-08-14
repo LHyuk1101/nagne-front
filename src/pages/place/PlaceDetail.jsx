@@ -1,32 +1,34 @@
 import { Box, Typography, IconButton } from "@mui/material";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useLocation } from "react-router-dom";
 import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlaceDetail = () => {
   const location = useLocation();
-  const {
-    thumbnailUrl,
-    title,
-    imgUrl,
-    address,
-    contactNumber,
-    overview,
-    likes,
-  } = location.state;
+  const { id, title, imgUrl, address, contactNumber, overview, likes } =
+    location.state;
 
-  // 좋아요 상태를 관리하는 state
-  const [isLiked, setIsLiked] = useState(false);
-  const [likeCount, setLikeCount] = useState(likes || 0);
+  // 로컬 스토리지 키 생성
+  const localStorageKey = `place-${id}-liked`;
+
+  // 좋아요 상태를 로컬 스토리지에서 가져오기
+  const initialIsLiked = localStorage.getItem(localStorageKey) === "true";
+  const [isLiked, setIsLiked] = useState(initialIsLiked);
+  const [likeCount, setLikeCount] = useState(likes + (initialIsLiked ? 1 : 0));
 
   const handleLikeToggle = () => {
-    // 하트 클릭 시 좋아요 상태 토글 및 좋아요 개수 업데이트
-    setIsLiked((prevIsLiked) => !prevIsLiked);
-    setLikeCount((prevLikeCount) =>
-      isLiked ? prevLikeCount - 1 : prevLikeCount + 1,
-    );
+    const newIsLiked = !isLiked;
+    setIsLiked(newIsLiked);
+    setLikeCount(likeCount + (newIsLiked ? 1 : -1));
+
+    // 로컬 스토리지에 좋아요 상태 저장 또는 삭제
+    if (newIsLiked) {
+      localStorage.setItem(localStorageKey, "true");
+    } else {
+      localStorage.removeItem(localStorageKey);
+    }
   };
 
   return (
