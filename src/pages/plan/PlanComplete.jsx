@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import {
@@ -26,6 +26,7 @@ import LoadingDialog from "../../components/UI/LoadingBar";
 import usePlanStore from "../../store/PlanContext.js";
 import useUserStore from "../../store/useUserStore.js";
 import LINKS from "../../routes/Links.jsx";
+import { debounce } from "lodash";
 
 const PlanComplete = () => {
   const location = useLocation();
@@ -35,9 +36,14 @@ const PlanComplete = () => {
   const [expanded, setExpanded] = useState({});
   const [isAllExpanded, setIsAllExpanded] = useState(false);
   const { user } = useUserStore();
+  const [isCreatingPlan, setIsCreatingPlan] = useState(false);
+  const [hasFetchedData, setHasFetchedData] = useState(false);
 
   const createPlanMutation = useMutation({
     mutationFn: createPlan,
+    onMutate: () => {
+      setIsCreatingPlan(true);
+    },
     onSuccess: (data) => {
       console.log("API response:", data);
       if (data && data.dayPlans && Array.isArray(data.dayPlans)) {
@@ -52,6 +58,8 @@ const PlanComplete = () => {
         console.error("Unexpected API response structure:", data);
         alert("Received unexpected data format from the server.");
       }
+      setIsCreatingPlan(false);
+      setHasFetchedData(true);
     },
     onError: (error) => {
       console.error("API call failed:", error);
@@ -59,29 +67,59 @@ const PlanComplete = () => {
         console.error("Error response:", error.response.data);
         console.error("Error status:", error.response.status);
       }
-      alert("Failed to make plan. Please check the console for more details.");
+      alert("Failed to make plan. Please try again");
+      setIsCreatingPlan(false);
     },
   });
 
+  const debouncedCreatePlan = useCallback(
+    debounce((planDataWithUserId) => {
+      if (!isCreatingPlan && !hasFetchedData) {
+        createPlanMutation.mutate(planDataWithUserId);
+      }
+    }, 500),
+    [createPlanMutation, isCreatingPlan, hasFetchedData],
+  );
+
   useEffect(() => {
     if (!user.userId) {
-      alert("You need to log in to view your plan!");
-      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      localStorage.setItem("returnTo", location.pathname);
+      if (location.state?.planData) {
+        localStorage.setItem(
+          "planData",
+          JSON.stringify(location.state.planData),
+        );
+      }
+      navigate(LINKS.LOGIN.path);
       return;
     }
 
-    if (location.state && location.state.planData) {
+    const storedPlanData = localStorage.getItem("planData");
+    if (storedPlanData && !hasFetchedData) {
+      const parsedPlanData = JSON.parse(storedPlanData);
+      const planDataWithUserId = {
+        ...parsedPlanData,
+        userId: user.userId,
+      };
+      debouncedCreatePlan(planDataWithUserId);
+      localStorage.removeItem("planData");
+    } else if (location.state?.planData && !planData && !hasFetchedData) {
       const planDataWithUserId = {
         ...location.state.planData,
         userId: user.userId,
       };
-
-      console.log("Calling createPlanMutation with:", planDataWithUserId);
-      createPlanMutation.mutate(planDataWithUserId);
-    } else {
-      navigate(LINKS.PATH_FIRST.path);
+      debouncedCreatePlan(planDataWithUserId);
+    } else if (!planData && !location.state?.planData && !hasFetchedData) {
+      navigate(LINKS.PLAN_FIRST.path);
     }
-  }, [location.state, user.userId, navigate]);
+  }, [
+    user.userId,
+    location.state,
+    planData,
+    navigate,
+    debouncedCreatePlan,
+    hasFetchedData,
+  ]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded((prev) => ({ ...prev, [panel]: isExpanded }));
@@ -101,11 +139,18 @@ const PlanComplete = () => {
 
   const handleSavePlan = () => {
     if (!user.userId) {
-      alert("Please log in to save your plan.");
-      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      const currentPath = location.pathname;
+      const currentState = { planData: planData };
+      navigate(LINKS.LOGIN.path, {
+        state: {
+          returnTo: currentPath,
+          planData: currentState.planData,
+        },
+      });
       return;
     }
     console.log("Save plan", planData);
+    navigate(LINKS.MYPAGE.path);
   };
 
   const getIconByContentType = (contentTypeId) => {
@@ -121,7 +166,7 @@ const PlanComplete = () => {
     }
   };
 
-  if (createPlanMutation.isPending) {
+  if (isCreatingPlan || createPlanMutation.isPending) {
     return (
       <LoadingDialog
         open={true}
