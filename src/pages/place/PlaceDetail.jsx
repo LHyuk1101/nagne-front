@@ -59,13 +59,13 @@ const PlaceDetail = () => {
     if (!openTimeStr && placeDetails.items.contentTypeId === 76) {
       return (
         <Typography variant="body2" align="center">
-          Operating hours cannot be confirmed.
+          The operating hours cannot be confirmed at this time.
         </Typography>
       );
     } else if (!openTimeStr && placeDetails.items.contentTypeId === 80) {
       return (
         <Typography variant="body2" align="center">
-          Check-in and check-out times cannot be confirmed
+          Check-in and check-out times cannot be confirmed.
         </Typography>
       );
     }
@@ -96,14 +96,22 @@ const PlaceDetail = () => {
                 {day} : {dayMap[day] || "Closed"}
               </Typography>
             ))}
-            <Box sx={{ color: "red", fontSize: "13px", marginTop: "1rem" }}>
+            <Box sx={{ fontSize: "13px", marginTop: "1rem" }}>
               <Typography align="center">
-                ! The above business hours may differ from actual business
-                hours. !
+                "Please contact the restaurant directly for the most up-to-date
+                information.**"
               </Typography>
             </Box>
           </>
         );
+      } else if (openTimeStr.includes("Check-in time")) {
+        // "Check-in time" 및 "Check-out time" 형식으로 되어 있는 경우 처리
+        const timesArray = openTimeStr.split(", ");
+        return timesArray.map((time, index) => (
+          <Typography key={index} variant="body2" align="center">
+            {time}
+          </Typography>
+        ));
       } else {
         return (
           <Typography variant="body2" align="center">
@@ -114,7 +122,7 @@ const PlaceDetail = () => {
     } catch (error) {
       return (
         <Typography variant="body2" align="center">
-          Operating hours cannot be confirmed.
+          The operating hours cannot be confirmed at this time.
         </Typography>
       );
     }
@@ -237,9 +245,15 @@ const PlaceDetail = () => {
           maxWidth: "600px",
         }}
       />
-      <Typography variant="body2" align="center" gutterBottom>
-        Contact Number: {placeDetails.items.contactNumber}
-      </Typography>
+      {placeDetails.items.contactNumber ? (
+        <Typography variant="body2" align="center" gutterBottom>
+          Contact Number: +82 {placeDetails.items.contactNumber}
+        </Typography>
+      ) : (
+        <Typography variant="body2" align="center" gutterBottom>
+          There's no contact number available for this location.
+        </Typography>
+      )}
     </Box>
   );
 };
