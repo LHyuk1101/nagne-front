@@ -9,11 +9,12 @@ import Router from "./routes/index.jsx";
 const queryClient = new QueryClient();
 
 ReactDOM.createRoot(document.getElementById("root")).render(
-  // <React.StrictMode>
-  <QueryClientProvider client={queryClient}>
-    <ThemeProvider theme={theme}>
-      <Router />
-    </ThemeProvider>
-  </QueryClientProvider>,
-  // </React.StrictMode>,
+  <React.StrictMode>
+    <QueryClientProvider client={queryClient}>
+      <ThemeProvider theme={theme}>
+        <Router />
+      </ThemeProvider>
+    </QueryClientProvider>
+    ,
+  </React.StrictMode>,
 );
