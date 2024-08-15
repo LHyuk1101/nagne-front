@@ -20,7 +20,7 @@ import { createContext, useState, useContext } from "react";
  * @property {number} lng - Longitude coordinate of the place
  * @property {number} likes - Number of likes for the place
  * @property {string} thumbnailUrl - URL of the thumbnail image
- * @property {string[]} placeUrlImages - Array of image URLs for the place
+ * @property {string} placeUrlImages - Array of image URLs for the place
  */
 
 /**
