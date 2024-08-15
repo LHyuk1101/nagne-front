@@ -173,6 +173,7 @@ const AreaScrollforTravelInfo = ({ onAreaClick }) => {
           display: "none",
         },
         scrollbarWidth: "none",
+        paddingRight: "1rem",
       }}
     >
       {areas.map((area, index) => (
@@ -183,7 +184,7 @@ const AreaScrollforTravelInfo = ({ onAreaClick }) => {
             px: 0.5,
             cursor: "pointer",
           }}
-          onClick={() => onAreaClick(area.name)} // 클릭된 지역의 name을 전달
+          onClick={() => onAreaClick(area.areaCode)}
         >
           <AreaCardComponentforTravelInfo
             imageUrl={area.imageUrl}

@@ -20,7 +20,7 @@ export const ContentArea = styled(Box)({
   "&::-webkit-scrollbar": {
     display: "none",
   },
-  "-ms-overflow-style": "none",
+  msOverflowStyle: "none",
   scrollbarWidth: "none",
 });
 

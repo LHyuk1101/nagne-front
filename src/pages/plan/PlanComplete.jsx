@@ -1,5 +1,6 @@
-import React, { useState, useRef, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import React, { useState, useEffect } from "react";
+import { useLocation, useNavigate } from "react-router-dom";
+import { useMutation } from "@tanstack/react-query";
 import {
   Accordion,
   AccordionSummary,
@@ -20,24 +21,67 @@ import LocationOnIcon from "@mui/icons-material/LocationOn";
 import HotelIcon from "@mui/icons-material/Hotel";
 import RestaurantIcon from "@mui/icons-material/Restaurant";
 import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
-import { mockPlanData } from "./mockData";
+import { createPlan } from "../../services/plan/plan.js";
+import LoadingDialog from "../../components/UI/LoadingBar";
+import usePlanStore from "../../store/PlanContext.js";
+import useUserStore from "../../store/useUserStore.js";
+import LINKS from "../../routes/Links.jsx";
 
 const PlanComplete = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [planData, setPlanData] = useState(null);
+  const { setSelectedPlaces } = usePlanStore();
   const [expanded, setExpanded] = useState({});
   const [isAllExpanded, setIsAllExpanded] = useState(false);
-  const containerRef = useRef(null);
+  const { user } = useUserStore();
+
+  const createPlanMutation = useMutation({
+    mutationFn: createPlan,
+    onSuccess: (data) => {
+      console.log("API response:", data);
+      if (data && data.dayPlans && Array.isArray(data.dayPlans)) {
+        setPlanData(data);
+        setSelectedPlaces(data.places || []);
+        const newExpanded = {};
+        data.dayPlans.forEach((day) => {
+          newExpanded[`day${day.day}`] = isAllExpanded;
+        });
+        setExpanded(newExpanded);
+      } else {
+        console.error("Unexpected API response structure:", data);
+        alert("Received unexpected data format from the server.");
+      }
+    },
+    onError: (error) => {
+      console.error("API call failed:", error);
+      if (error.response) {
+        console.error("Error response:", error.response.data);
+        console.error("Error status:", error.response.status);
+      }
+      alert("Failed to make plan. Please check the console for more details.");
+    },
+  });
 
   useEffect(() => {
-    const storedPlanData = localStorage.getItem("planData");
-    if (location.state && location.state.planData) {
-      setPlanData(location.state.planData);
-      localStorage.setItem("planData", JSON.stringify(location.state.planData));
-    } else if (storedPlanData) {
-      setPlanData(JSON.parse(storedPlanData));
+    if (!user.userId) {
+      alert("You need to log in to view your plan!");
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return;
     }
-  }, [location.state]);
+
+    if (location.state && location.state.planData) {
+      const planDataWithUserId = {
+        ...location.state.planData,
+        userId: user.userId,
+      };
+
+      console.log("Calling createPlanMutation with:", planDataWithUserId);
+      createPlanMutation.mutate(planDataWithUserId);
+    } else {
+      navigate(LINKS.PATH_FIRST.path);
+    }
+  }, [location.state, user.userId, navigate]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded((prev) => ({ ...prev, [panel]: isExpanded }));
@@ -46,15 +90,22 @@ const PlanComplete = () => {
   const handleToggleAll = () => {
     const newExpandedState = !isAllExpanded;
     setIsAllExpanded(newExpandedState);
-    const newExpanded = {};
-    planData.dayPlans.forEach((day) => {
-      newExpanded["day${day.day}"] = newExpandedState;
-    });
-    setExpanded(newExpanded);
+    if (planData && planData.dayPlans) {
+      const newExpanded = {};
+      planData.dayPlans.forEach((day) => {
+        newExpanded[`day${day.day}`] = newExpandedState;
+      });
+      setExpanded(newExpanded);
+    }
   };
 
   const handleSavePlan = () => {
-    console.log("Save plan");
+    if (!user.userId) {
+      alert("Please log in to save your plan.");
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return;
+    }
+    console.log("Save plan", planData);
   };
 
   const getIconByContentType = (contentTypeId) => {
@@ -70,13 +121,21 @@ const PlanComplete = () => {
     }
   };
 
-  if (!planData) {
+  if (createPlanMutation.isPending) {
+    return (
+      <LoadingDialog
+        open={true}
+        message="We are creating your perfect travel plan..."
+      />
+    );
+  }
+
+  if (!planData || !planData.dayPlans) {
     return <Typography>Loading plan data...</Typography>;
   }
 
   return (
     <Box
-      ref={containerRef}
       sx={{
         maxWidth: 600,
         margin: "auto",
@@ -93,7 +152,7 @@ const PlanComplete = () => {
         align="center"
         sx={{ mb: 3, fontWeight: "bold" }}
       >
-        {planData.subject}
+        Your Travel Plan
       </Typography>
 
       <Box
@@ -110,25 +169,17 @@ const PlanComplete = () => {
               checked={isAllExpanded}
               onChange={handleToggleAll}
               sx={{
-                "& .MuiSwitch-switchBase": {
-                  color: "#ff5722",
-                },
-                "& .MuiSwitch-switchBase.Mui-checked": {
-                  color: "#4caf50",
-                },
+                "& .MuiSwitch-switchBase": { color: "#ff5722" },
+                "& .MuiSwitch-switchBase.Mui-checked": { color: "#4caf50" },
                 "& .MuiSwitch-switchBase.Mui-checked + .MuiSwitch-track": {
                   backgroundColor: "#4caf50",
                 },
-                "& .MuiSwitch-track": {
-                  backgroundColor: "#ffccbc",
-                },
+                "& .MuiSwitch-track": { backgroundColor: "#ffccbc" },
               }}
             />
           }
-          label="Check all"
-          sx={{
-            color: "#000",
-          }}
+          label="Expand all"
+          sx={{ color: "#000" }}
         />
       </Box>
 
@@ -163,7 +214,7 @@ const PlanComplete = () => {
                   <ListItem alignItems="flex-start" sx={{ py: 2 }}>
                     <ListItemAvatar>
                       <Avatar
-                        src={place.placeImg}
+                        src={place.placeImgUrls || "default_image_url"}
                         alt={place.title}
                         sx={{ width: 56, height: 56 }}
                       />
@@ -174,7 +225,7 @@ const PlanComplete = () => {
                           variant="subtitle1"
                           sx={{ fontWeight: "medium" }}
                         >
-                          {plan.title}
+                          {place.title}
                         </Typography>
                       }
                       secondary={
@@ -184,10 +235,7 @@ const PlanComplete = () => {
                             color="text.primary"
                             sx={{ mb: 1 }}
                           >
-                            {template.placeSummary}
-                          </Typography>
-                          <Typography variant="body2" color="text.secondary">
-                            {template.reasoning}
+                            {place.placeSummary}
                           </Typography>
                         </React.Fragment>
                       }
@@ -242,7 +290,7 @@ const PlanComplete = () => {
                         color="text.secondary"
                         sx={{ ml: 2, position: "absolute", left: "70px" }}
                       >
-                        {`${dayPlan.places[placeIndex + 1].moveTime} minutes`}
+                        {`${dayPlan.places[placeIndex + 1].moveTime || "Unknown"} minutes`}
                       </Typography>
                     </Box>
                   )}

@@ -3,6 +3,7 @@ import { useRef } from "react";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlacesByRegion } from "../../services/template/info";
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const RecommendedSection = ({ selectedArea }) => {
   const navigate = useNavigate();
@@ -101,13 +102,14 @@ const RecommendedSection = ({ selectedArea }) => {
   };
 
   return (
-    <Box sx={{ padding: "2rem" }}>
+    <Box sx={{ padding: "0.5rem" }}>
       <Box
         sx={{
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          marginBottom: "1.5rem", // 텍스트와 사진 사이의 간격 조정
+          marginBottom: "0.5rem",
+          marginTop: "0.4rem", // 텍스트와 사진 사이의 간격 조정
         }}
       >
         <Typography variant="h6" align="center" gutterBottom>
@@ -138,7 +140,7 @@ const RecommendedSection = ({ selectedArea }) => {
             display: "none",
           },
           scrollbarWidth: "none",
-          gap: "1rem", // 카드 간의 간격
+          gap: "0.3rem", // 카드 간의 간격
         }}
       >
         {travelDestinations.map((destination, index) => (
@@ -154,7 +156,7 @@ const RecommendedSection = ({ selectedArea }) => {
             onClick={() => handleClick(destination)}
           >
             <img
-              src={destination.thumbnailUrl || destination.imgUrl}
+              src={destination.thumbnailUrl || destination.imgUrl || defaultImg}
               alt={destination.title}
               style={{
                 width: "150px",
@@ -184,8 +186,8 @@ const RecommendedSection = ({ selectedArea }) => {
           display: "flex",
           justifyContent: "center",
           alignItems: "center",
-          marginTop: "2rem",
-          marginBottom: "1.5rem", // 텍스트와 사진 사이의 간격 조정
+          marginTop: "0.5rem",
+          marginBottom: "0.4rem", // 텍스트와 사진 사이의 간격 조정
         }}
       >
         <Typography variant="h6" align="center" gutterBottom>
@@ -216,7 +218,7 @@ const RecommendedSection = ({ selectedArea }) => {
             display: "none",
           },
           scrollbarWidth: "none",
-          gap: "1rem", // 카드 간의 간격
+          gap: "0.3rem", // 카드 간의 간격
         }}
       >
         {restaurants.map((restaurant, index) => (

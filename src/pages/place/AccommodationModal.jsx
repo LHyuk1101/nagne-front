@@ -5,11 +5,6 @@ import {
   ListItemSecondaryAction,
   IconButton,
   Button,
-  Dialog,
-  DialogTitle,
-  DialogContent,
-  DialogContentText,
-  DialogActions,
 } from "@mui/material";
 import { Search, ArrowBack, Add, Check } from "@mui/icons-material";
 import defaultImg from "../../assets/images/place/default_img.png";
@@ -48,10 +43,20 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
     hasNextPage,
     isFetchingNextPage,
   } = useInfiniteQuery({
-    queryKey: ["placeList", areaCode],
-    queryFn: ({ pageParam = 1 }) => getPlaceByArea(areaCode, 80, pageParam),
-    getNextPageParam: (lastPage) => lastPage.nextPage ?? undefined,
-    enabled: open,
+    queryKey: ["placeList", searchTerm],
+    queryFn: ({ pageParam = 1, signal }) =>
+      getPlaceByArea({
+        areaCode,
+        selectedRegions: { code: 80 },
+        page: pageParam,
+        signal,
+        searchTerm,
+      }),
+    getNextPageParam: (lastPage) =>
+      lastPage.nextPage && lastPage.items.length > 0
+        ? lastPage.nextPage
+        : undefined,
+    enabled: open && searchTerm !== undefined,
   });
 
   useEffect(() => {
