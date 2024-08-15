@@ -3,39 +3,64 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { fetchPlaceDetails } from "../../services/template/info";
 import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlaceDetail = () => {
-  const location = useLocation();
+  const { id } = useParams(); // URL에서 id를 가져옴
   const navigate = useNavigate();
-  const { id, title, imgUrl, address, contactNumber, overview, likes } =
-    location.state;
 
-  // 로컬 스토리지 키 생성
-  const localStorageKey = `place-${id}-liked`;
+  const [placeDetails, setPlaceDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
-  // 좋아요 상태를 로컬 스토리지에서 가져오기
-  const initialIsLiked = localStorage.getItem(localStorageKey) === "true";
-  const [isLiked, setIsLiked] = useState(initialIsLiked);
-  const [likeCount, setLikeCount] = useState(likes + (initialIsLiked ? 1 : 0));
+  // 컴포넌트가 마운트되었을 때 데이터를 가져옴
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const response = await fetchPlaceDetails(id);
+        setPlaceDetails(response);
+        const initialIsLiked =
+          localStorage.getItem(`place-${id}-liked`) === "true";
+        setIsLiked(initialIsLiked);
+        setLikeCount(response.items.likes + (initialIsLiked ? 1 : 0));
+        setIsLoading(false);
+      } catch (error) {
+        setError(error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchDetails();
+  }, [id]);
 
   const handleLikeToggle = () => {
     const newIsLiked = !isLiked;
     setIsLiked(newIsLiked);
-    setLikeCount(likeCount + (newIsLiked ? 1 : -1));
 
-    // 로컬 스토리지에 좋아요 상태 저장 또는 삭제
     if (newIsLiked) {
-      localStorage.setItem(localStorageKey, "true");
+      setLikeCount(likeCount + 1);
+      localStorage.setItem(`place-${id}-liked`, "true");
     } else {
-      localStorage.removeItem(localStorageKey);
+      setLikeCount(likeCount - 1);
+      localStorage.removeItem(`place-${id}-liked`);
     }
   };
 
   const handleBackBtn = () => {
     navigate(-1);
   };
+
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography>Error loading place details.</Typography>;
+  }
 
   return (
     <Box
@@ -62,8 +87,8 @@ const PlaceDetail = () => {
       </Box>
       <Box
         component="img"
-        src={imgUrl || defaultImg}
-        alt={title}
+        src={placeDetails.items.imgUrl || defaultImg}
+        alt={placeDetails.items.title}
         sx={{
           width: "100%",
           maxWidth: "600px",
@@ -71,12 +96,11 @@ const PlaceDetail = () => {
           borderRadius: "8px",
         }}
       />
-      {/* 좋아요 버튼 */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-start", // 좌측 정렬
+          justifyContent: "flex-start",
           mt: 0.5,
           width: "100%",
           maxWidth: "600px",
@@ -93,41 +117,49 @@ const PlaceDetail = () => {
         </Typography>
       </Box>
       <Typography variant="h5" align="center" gutterBottom>
-        {title}
+        {placeDetails.items.title}
       </Typography>
       <Typography
         variant="body1"
         align="center"
         gutterBottom
-        dangerouslySetInnerHTML={{ __html: overview }}
+        dangerouslySetInnerHTML={{ __html: placeDetails.items.overview }}
       />
       <Box
         sx={{
           borderBottom: 1,
           borderColor: "grey.300",
           my: 2,
-          marginTop: "2rem",
-          marginBottom: "2rem",
           width: "100%",
           maxWidth: "600px",
         }}
       />
       <Typography variant="body2" align="center" gutterBottom>
-        주소: {address}
+        Address: {placeDetails.items.address}
       </Typography>
       <Box
         sx={{
           borderBottom: 1,
           borderColor: "grey.300",
           my: 2,
-          marginTop: "2rem",
-          marginBottom: "2rem",
           width: "100%",
           maxWidth: "600px",
         }}
       />
       <Typography variant="body2" align="center" gutterBottom>
-        전화번호: {contactNumber}
+        Operating hours : {placeDetails.items.opentime}
+      </Typography>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "grey.300",
+          my: 2,
+          width: "100%",
+          maxWidth: "600px",
+        }}
+      />
+      <Typography variant="body2" align="center" gutterBottom>
+        Contact Number: {placeDetails.items.contactNumber}
       </Typography>
     </Box>
   );
