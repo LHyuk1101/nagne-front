@@ -115,13 +115,13 @@ export const Carousel = ({ startDate, endDate }) => {
           style={{
             marginTop: "1.5rem",
             marginBottom: "0.5rem",
-            width: "150px",
-            height: "45px",
+            width: "100px",
+            height: "50px",
             fontSize: "18px",
           }}
           onClick={handleRedirectPlan}
         >
-          CREATE PLAN!
+          NEXT
         </Button>
       </Link>
     </>
