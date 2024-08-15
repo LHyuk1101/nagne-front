@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from "react";
-import { useLocation } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useMutation } from "@tanstack/react-query";
 import {
   Accordion,
@@ -24,13 +24,17 @@ import DirectionsCarIcon from "@mui/icons-material/DirectionsCar";
 import { createPlan } from "../../services/plan/plan.js";
 import LoadingDialog from "../../components/UI/LoadingBar";
 import usePlanStore from "../../store/PlanContext.js";
+import useUserStore from "../../store/useUserStore.js";
+import LINKS from "../../routes/Links.jsx";
 
 const PlanComplete = () => {
   const location = useLocation();
+  const navigate = useNavigate();
   const [planData, setPlanData] = useState(null);
   const { setSelectedPlaces } = usePlanStore();
   const [expanded, setExpanded] = useState({});
   const [isAllExpanded, setIsAllExpanded] = useState(false);
+  const { user } = useUserStore();
 
   const createPlanMutation = useMutation({
     mutationFn: createPlan,
@@ -60,11 +64,24 @@ const PlanComplete = () => {
   });
 
   useEffect(() => {
-    if (location.state && location.state.planData) {
-      console.log("Calling createPlanMutation with:", location.state.planData);
-      createPlanMutation.mutate(location.state.planData);
+    if (!user.userId) {
+      alert("You need to log in to view your plan!");
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return;
     }
-  }, [location.state]);
+
+    if (location.state && location.state.planData) {
+      const planDataWithUserId = {
+        ...location.state.planData,
+        userId: user.userId,
+      };
+
+      console.log("Calling createPlanMutation with:", planDataWithUserId);
+      createPlanMutation.mutate(planDataWithUserId);
+    } else {
+      navigate(LINKS.PATH_FIRST.path);
+    }
+  }, [location.state, user.userId, navigate]);
 
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded((prev) => ({ ...prev, [panel]: isExpanded }));
@@ -83,6 +100,11 @@ const PlanComplete = () => {
   };
 
   const handleSavePlan = () => {
+    if (!user.userId) {
+      alert("Please log in to save your plan.");
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return;
+    }
     console.log("Save plan", planData);
   };
 
