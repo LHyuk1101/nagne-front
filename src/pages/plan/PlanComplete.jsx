@@ -26,6 +26,7 @@ import LoadingDialog from "../../components/UI/LoadingBar";
 import usePlanStore from "../../store/PlanContext.js";
 import useUserStore from "../../store/useUserStore.js";
 import LINKS from "../../routes/Links.jsx";
+import axiosInstance from "../../services/common/axios";
 
 const PlanComplete = () => {
   const location = useLocation();
@@ -42,7 +43,10 @@ const PlanComplete = () => {
       console.log("API response:", data);
       if (data && data.dayPlans && Array.isArray(data.dayPlans)) {
         setPlanData(data);
-        setSelectedPlaces(data.places || []);
+        setSelectedPlaces(
+          data.dayPlans.flatMap((dayPlan) => dayPlan.places) || [],
+        );
+
         const newExpanded = {};
         data.dayPlans.forEach((day) => {
           newExpanded[`day${day.day}`] = isAllExpanded;
@@ -99,13 +103,19 @@ const PlanComplete = () => {
     }
   };
 
-  const handleSavePlan = () => {
+  const savePlan = async () => {
     if (!user.userId) {
       navigate(LINKS.LOGIN.path);
       return;
     }
-    console.log("Save plan", planData);
-    navigate(LINKS.MYPAGE.path);
+    try {
+      await axiosInstance.post("/api/plans", planData);
+      console.log("Plan saved successfully");
+      navigate(LINKS.MYPAGE.path);
+    } catch (error) {
+      console.error("Error saving plan:", error);
+      alert("Failed to save plan. Please try again.");
+    }
   };
 
   const getIconByContentType = (contentTypeId) => {
@@ -316,7 +326,7 @@ const PlanComplete = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={handleSavePlan}
+          onClick={savePlan}
           fullWidth
           sx={{
             height: "48px",

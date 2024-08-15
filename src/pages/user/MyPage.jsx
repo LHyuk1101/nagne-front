@@ -3,294 +3,188 @@ import {
   Container,
   Typography,
   Box,
-  List,
-  ListItem,
+  Grid,
+  Card,
+  CardMedia,
+  CardContent,
   Dialog,
   DialogTitle,
   DialogContent,
   DialogActions,
-  Paper,
-  Avatar,
-  Grid,
-  ListItemAvatar,
   Button,
-  Card,
-  CardMedia,
-  CardContent,
+  CircularProgress,
 } from "@mui/material";
-import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlans, fetchPlanDetails } from "../../services/plan/myplans";
 import useUserStore from "../../store/useUserStore";
 
 const MyPage = () => {
-  const navigate = useNavigate();
   const { user } = useUserStore();
+  const [openDialog, setOpenDialog] = useState(false);
+  const [selectedPlan, setSelectedPlan] = useState(null);
 
   const {
     data: plansData,
-    isLoading,
-    error,
+    isLoading: isPlansLoading,
+    error: plansError,
   } = useQuery({
     queryKey: ["plans", user.userId],
     queryFn: () => fetchPlans(user.userId),
     enabled: !!user.userId,
-    onError: (error) => {
-      console.error("Error fetching plans:", error);
-    },
+    refetchOnMount: true,
+    refetchOnWindowFocus: true,
   });
 
-  const [openDialog, setOpenDialog] = useState(false);
-  const [selectedPlan, setSelectedPlan] = useState(null);
-  const [planDetails, setPlanDetails] = useState(null);
+  const {
+    data: planDetailsData,
+    isLoading: isPlanDetailsLoading,
+    error: planDetailsError,
+  } = useQuery({
+    queryKey: ["planDetails", selectedPlan?.id],
+    queryFn: () => fetchPlanDetails(selectedPlan?.id),
+    enabled: !!selectedPlan?.id,
+  });
 
-  const handleCardClick = async (plan) => {
+  const handleCardClick = (plan) => {
     setSelectedPlan(plan);
     setOpenDialog(true);
-
-    try {
-      const details = await fetchPlanDetails(plan.id);
-      setPlanDetails(details);
-    } catch (error) {
-      console.error("Error fetching plan details:", error);
-    }
   };
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setPlanDetails(null);
+    setSelectedPlan(null);
   };
 
-  if (isLoading) {
+  if (isPlansLoading) {
     return (
-      <Container maxWidth="md">
-        <Typography variant="h6" align="center" gutterBottom>
-          Loading...
-        </Typography>
-      </Container>
+      <Box
+        display="flex"
+        justifyContent="center"
+        alignItems="center"
+        height="100vh"
+      >
+        <CircularProgress />
+      </Box>
     );
   }
 
-  if (error) {
+  if (plansError) {
+    console.error("Plans fetch error:", plansError);
     return (
-      <Container maxWidth="md">
-        <Typography variant="h6" align="center" gutterBottom>
-          Error loading plans: {error.message}
-        </Typography>
-      </Container>
+      <Typography color="error">
+        Error: {plansError.message || JSON.stringify(plansError)}
+      </Typography>
     );
   }
 
-  // Ensure plansData is an array
-  const plans = Array.isArray(plansData) ? plansData : [];
-
-  if (plans.length === 0) {
-    return (
-      <Container maxWidth="md">
-        <Typography variant="h6" align="center" gutterBottom>
-          No plans available.
-        </Typography>
-      </Container>
-    );
+  if (!plansData || plansData.length === 0) {
+    return <Typography>No plans available.</Typography>;
   }
 
   return (
     <Container maxWidth="md">
-      <Box sx={{ my: 4, textAlign: "center" }}>
-        <Typography
-          variant="h4"
-          component="h1"
-          gutterBottom
-          sx={{ fontWeight: "bold", color: "#333", marginBottom: 2 }}
-        >
-          My Plans
-        </Typography>
-        <List>
-          {plans.map((plan) => (
-            <Paper
-              key={plan.id}
-              elevation={4}
+      <Typography
+        variant="h4"
+        component="h1"
+        gutterBottom
+        align="center"
+        sx={{ my: 4 }}
+      >
+        My Plans
+      </Typography>
+      <Grid container spacing={3}>
+        {plansData.map((plan) => (
+          <Grid item xs={12} sm={6} md={4} key={plan.id}>
+            <Card
               sx={{
-                marginBottom: 3,
-                padding: 0,
-                borderRadius: "16px",
-                backgroundColor: "#ffffff",
-                transition: "transform 0.3s ease, box-shadow 0.3s ease",
-                "&:hover": {
-                  transform: "translateY(-8px)",
-                  boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
-                },
+                height: "100%",
+                display: "flex",
+                flexDirection: "column",
                 cursor: "pointer",
+                "&:hover": {
+                  boxShadow: 6,
+                },
               }}
               onClick={() => handleCardClick(plan)}
             >
-              <ListItem
-                sx={{
-                  display: "flex",
-                  alignItems: "center",
-                  padding: 0,
-                }}
-              >
-                <ListItemAvatar sx={{ minWidth: 140 }}>
-                  <Avatar
-                    variant="square"
-                    src={plan.thumbnail}
-                    sx={{
-                      width: 140,
-                      height: 140,
-                      borderRadius: "12px",
-                      boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                    }}
-                  />
-                </ListItemAvatar>
-                <Grid
-                  container
-                  direction="column"
-                  justifyContent="space-between"
-                  sx={{ paddingLeft: 3 }}
-                >
-                  <Typography
-                    variant="h6"
-                    component="div"
-                    gutterBottom
-                    sx={{ color: "#333", fontWeight: "bold" }}
-                  >
-                    {plan.subject}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "#777", marginTop: 1 }}
-                  >
-                    {plan.areaCodeName}
-                  </Typography>
-                  <Typography
-                    variant="body2"
-                    sx={{ color: "#777", marginTop: 1 }}
-                  >
-                    {`${plan.startDay} ~ ${plan.endDay}`}
-                  </Typography>
-                </Grid>
-              </ListItem>
-            </Paper>
-          ))}
-        </List>
-      </Box>
+              <CardMedia
+                component="img"
+                height="140"
+                image={plan.thumbnail}
+                alt={plan.subject}
+              />
+              <CardContent sx={{ flexGrow: 1 }}>
+                <Typography gutterBottom variant="h6" component="div">
+                  {plan.subject}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {`${plan.startDay} ~ ${plan.endDay}`}
+                </Typography>
+                <Typography variant="body2" color="text.secondary">
+                  {plan.areaCodeName}
+                </Typography>
+              </CardContent>
+            </Card>
+          </Grid>
+        ))}
+      </Grid>
 
       <Dialog
         open={openDialog}
         onClose={handleCloseDialog}
-        maxWidth="sm"
+        maxWidth="md"
         fullWidth
-        PaperProps={{
-          sx: {
-            width: "600px",
-            height: "auto",
-            maxHeight: "80vh",
-            borderRadius: "16px",
-            padding: "16px",
-            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-          },
-        }}
       >
-        <DialogTitle
-          sx={{
-            textAlign: "center",
-            fontWeight: "bold",
-            fontSize: "1.25rem",
-            color: "#1976d2",
-            padding: "16px",
-          }}
-        >
-          Plan Details
-        </DialogTitle>
-        <DialogContent
-          dividers
-          sx={{
-            padding: "16px",
-            maxHeight: "60vh",
-            overflowY: "scroll",
-            "::-webkit-scrollbar": {
-              display: "none",
-            },
-          }}
-        >
-          {planDetails && (
-            <Box sx={{ py: 2 }}>
-              {planDetails.dayPlans.map((dayPlan, index) => (
-                <Box key={index} sx={{ mb: 3 }}>
-                  <Typography
-                    variant="subtitle1"
-                    sx={{
-                      fontWeight: "bold",
-                      marginBottom: 1,
-                      color: "#1976d2",
-                    }}
-                  >
-                    Day {dayPlan.day}
-                  </Typography>
-                  {dayPlan.places.map((place, idx) => (
-                    <Card
-                      key={idx}
-                      sx={{
-                        display: "flex",
-                        marginBottom: 2,
-                        borderRadius: "12px",
-                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
-                        overflow: "hidden",
-                        transition: "transform 0.3s ease",
-                        "&:hover": {
-                          transform: "translateY(-5px)",
-                        },
-                        height: "120px",
-                      }}
-                    >
-                      <CardMedia
-                        component="img"
-                        sx={{
-                          width: 120,
-                          height: "100%",
-                          objectFit: "cover",
-                        }}
-                        image={place.placeImgUrls}
-                        alt={place.title}
-                      />
-                      <CardContent
-                        sx={{
-                          flexGrow: 1,
-                          display: "flex",
-                          flexDirection: "column",
-                          justifyContent: "center",
-                          padding: "8px 16px",
-                        }}
-                      >
-                        <Typography
-                          variant="h6"
-                          sx={{
-                            fontWeight: "bold",
-                            fontSize: "1rem",
-                            color: "#333",
-                          }}
-                        >
+        <DialogTitle>{selectedPlan?.subject}</DialogTitle>
+        <DialogContent dividers>
+          {isPlanDetailsLoading ? (
+            <Box display="flex" justifyContent="center" alignItems="center">
+              <CircularProgress />
+            </Box>
+          ) : planDetailsError ? (
+            <Typography color="error">
+              Error loading plan details:{" "}
+              {planDetailsError.message || JSON.stringify(planDetailsError)}
+            </Typography>
+          ) : (
+            <>
+              <Typography variant="body1" paragraph>
+                Start Date: {planDetailsData?.startDay}
+              </Typography>
+              <Typography variant="body1" paragraph>
+                End Date: {planDetailsData?.endDay}
+              </Typography>
+              <Typography variant="body1" paragraph>
+                Status: {planDetailsData?.status}
+              </Typography>
+              <Typography variant="h6" gutterBottom>
+                Daily Plans:
+              </Typography>
+              {planDetailsData?.dayPlans?.map((dayPlan, index) => (
+                <Box key={index} mb={2}>
+                  <Typography variant="subtitle1">Day {dayPlan.day}</Typography>
+                  {dayPlan.places.map((place, placeIndex) => (
+                    <Card key={placeIndex} sx={{ mb: 1 }}>
+                      <CardContent>
+                        <Typography variant="subtitle2">
                           {place.title}
                         </Typography>
-                        <Typography
-                          variant="body2"
-                          sx={{ marginTop: 1, color: "#777" }}
-                        >
-                          이동 시간: {place.moveTime}분
+                        <Typography variant="body2">
+                          {place.placeSummary}
+                        </Typography>
+                        <Typography variant="body2">
+                          {place.reasoning}
                         </Typography>
                       </CardContent>
                     </Card>
                   ))}
                 </Box>
               ))}
-            </Box>
+            </>
           )}
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center", padding: "16px" }}>
-          <Button onClick={handleCloseDialog} sx={{ color: "#1976d2" }}>
-            Close
-          </Button>
+        <DialogActions>
+          <Button onClick={handleCloseDialog}>Close</Button>
         </DialogActions>
       </Dialog>
     </Container>
