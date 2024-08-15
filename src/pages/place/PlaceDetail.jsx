@@ -3,12 +3,12 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchPlaceDetails } from "../../services/template/info";
 import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlaceDetail = () => {
-  const { id } = useParams(); // URL에서 id를 가져옴
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [placeDetails, setPlaceDetails] = useState(null);
@@ -17,7 +17,6 @@ const PlaceDetail = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  // 컴포넌트가 마운트되었을 때 데이터를 가져옴
   useEffect(() => {
     const fetchDetails = async () => {
       try {
@@ -52,6 +51,73 @@ const PlaceDetail = () => {
 
   const handleBackBtn = () => {
     navigate(-1);
+  };
+
+  // `open_time` 데이터를 순서대로 변환하는 함수
+  const formatOperatingHours = (openTimeStr) => {
+    // 데이터가 없을 경우
+    if (!openTimeStr && placeDetails.items.contentTypeId === 76) {
+      return (
+        <Typography variant="body2" align="center">
+          Operating hours cannot be confirmed.
+        </Typography>
+      );
+    } else if (!openTimeStr && placeDetails.items.contentTypeId === 80) {
+      return (
+        <Typography variant="body2" align="center">
+          Check-in and check-out times cannot be confirmed
+        </Typography>
+      );
+    }
+
+    const daysOrder = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    try {
+      if (openTimeStr.includes("Monday") || openTimeStr.includes("Tuesday")) {
+        const openTimeArray = JSON.parse(openTimeStr.replace(/'/g, '"'));
+        const dayMap = openTimeArray.reduce((acc, dayStr) => {
+          const [day, time] = dayStr.split(", ");
+          acc[day] = time;
+          return acc;
+        }, {});
+
+        return (
+          <>
+            {daysOrder.map((day) => (
+              <Typography key={day} variant="body2" align="center">
+                {day} : {dayMap[day] || "Closed"}
+              </Typography>
+            ))}
+            <Box sx={{ color: "red", fontSize: "13px", marginTop: "1rem" }}>
+              <Typography align="center">
+                ! The above business hours may differ from actual business
+                hours. !
+              </Typography>
+            </Box>
+          </>
+        );
+      } else {
+        return (
+          <Typography variant="body2" align="center">
+            {openTimeStr}
+          </Typography>
+        );
+      }
+    } catch (error) {
+      return (
+        <Typography variant="body2" align="center">
+          Operating hours cannot be confirmed.
+        </Typography>
+      );
+    }
   };
 
   if (isLoading) {
@@ -134,9 +200,22 @@ const PlaceDetail = () => {
           maxWidth: "600px",
         }}
       />
-      <Typography variant="body2" align="center" gutterBottom>
-        Address: {placeDetails.items.address}
-      </Typography>
+      {placeDetails.items.contentTypeId === 80 && (
+        <Typography variant="h6" align="center" gutterBottom>
+          Check-in and Check-out Time
+        </Typography>
+      )}
+      {placeDetails.items.contentTypeId === 82 && (
+        <Typography variant="h6" align="center" gutterBottom>
+          Business hours
+        </Typography>
+      )}
+      {placeDetails.items.contentTypeId === 76 && (
+        <Typography variant="h6" align="center" gutterBottom>
+          Operating hours
+        </Typography>
+      )}
+      <Box>{formatOperatingHours(placeDetails.items.opentime)}</Box>
       <Box
         sx={{
           borderBottom: 1,
@@ -147,7 +226,7 @@ const PlaceDetail = () => {
         }}
       />
       <Typography variant="body2" align="center" gutterBottom>
-        Operating hours : {placeDetails.items.opentime}
+        Address: {placeDetails.items.address}
       </Typography>
       <Box
         sx={{
