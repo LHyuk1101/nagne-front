@@ -8,7 +8,7 @@ import { fetchPlaceDetails } from "../../services/template/info";
 import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlaceDetail = () => {
-  const { id } = useParams(); // URL에서 id를 가져옴
+  const { id } = useParams();
   const navigate = useNavigate();
 
   const [placeDetails, setPlaceDetails] = useState(null);
@@ -17,7 +17,6 @@ const PlaceDetail = () => {
   const [isLiked, setIsLiked] = useState(false);
   const [likeCount, setLikeCount] = useState(0);
 
-  // 컴포넌트가 마운트되었을 때 데이터를 가져옴
   useEffect(() => {
     const fetchDetails = async () => {
       try {
@@ -67,30 +66,39 @@ const PlaceDetail = () => {
     ];
 
     try {
-      const openTimeArray = JSON.parse(openTimeStr.replace(/'/g, '"'));
-      const dayMap = openTimeArray.reduce((acc, dayStr) => {
-        const [day, time] = dayStr.split(", ");
-        acc[day] = time;
-        return acc;
-      }, {});
+      // 요일 데이터를 포함하는 경우
+      if (openTimeStr.includes("Monday") || openTimeStr.includes("Tuesday")) {
+        const openTimeArray = JSON.parse(openTimeStr.replace(/'/g, '"'));
+        const dayMap = openTimeArray.reduce((acc, dayStr) => {
+          const [day, time] = dayStr.split(", ");
+          acc[day] = time;
+          return acc;
+        }, {});
 
-      return (
-        <>
-          {daysOrder.map((day) => (
-            <Typography key={day} variant="body2" align="center">
-              {day} : {dayMap[day] || "Closed"}
-            </Typography>
-          ))}
-          <Box sx={{ color: "red", fontSize: "13px", marginTop: "1rem" }}>
-            <Typography align="center">
-              ! The above business hours may differ from actual business hours.
-              !
-            </Typography>
-          </Box>
-        </>
-      );
+        return (
+          <>
+            {daysOrder.map((day) => (
+              <Typography key={day} variant="body2" align="center">
+                {day} : {dayMap[day] || "Closed"}
+              </Typography>
+            ))}
+            <Box sx={{ color: "red", fontSize: "13px", marginTop: "1rem" }}>
+              <Typography align="center">
+                ! The above business hours may differ from actual business
+                hours. !
+              </Typography>
+            </Box>
+          </>
+        );
+      } else {
+        // 요일 형식이 아닌 일반 텍스트로 되어있는 경우
+        return (
+          <Typography variant="body2" align="center">
+            {openTimeStr}
+          </Typography>
+        );
+      }
     } catch (error) {
-      // console.error("Error parsing open_time:", error);
       return (
         <Typography variant="body2" align="center">
           Business hours unavailable
@@ -179,11 +187,16 @@ const PlaceDetail = () => {
           maxWidth: "600px",
         }}
       />
-      <Typography variant="h6" align="center" gutterBottom>
-        Business hours
-      </Typography>
+      {placeDetails.items.contentTypeId === 80 ? (
+        <Typography variant="h6" align="center" gutterBottom>
+          Check-in and Check-out Time
+        </Typography>
+      ) : (
+        <Typography variant="h6" align="center" gutterBottom>
+          Business hours
+        </Typography>
+      )}
       <Box>{formatOperatingHours(placeDetails.items.opentime)}</Box>
-
       <Box
         sx={{
           borderBottom: 1,
