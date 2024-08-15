@@ -17,22 +17,24 @@ import {
   Card,
   CardMedia,
   CardContent,
-  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
 import { fetchPlans, fetchPlanDetails } from "../../services/plan/myplans";
+import useUserStore from "../../store/useUserStore";
 
-const MyPage = ({ userId }) => {
+const MyPage = () => {
   const navigate = useNavigate();
+  const { user } = useUserStore();
 
   const {
-    data: items,
+    data: plansData,
     isLoading,
     error,
   } = useQuery({
-    queryKey: ["plans", userId],
-    queryFn: () => fetchPlans(userId),
+    queryKey: ["plans", user.userId],
+    queryFn: () => fetchPlans(user.userId),
+    enabled: !!user.userId,
     onError: (error) => {
       console.error("Error fetching plans:", error);
     },
@@ -40,15 +42,15 @@ const MyPage = ({ userId }) => {
 
   const [openDialog, setOpenDialog] = useState(false);
   const [selectedPlan, setSelectedPlan] = useState(null);
-  const [planDetails, setPlanDetails] = useState(null); // 세부 정보 저장용 상태
+  const [planDetails, setPlanDetails] = useState(null);
 
   const handleCardClick = async (plan) => {
     setSelectedPlan(plan);
     setOpenDialog(true);
 
     try {
-      const details = await fetchPlanDetails(plan.id); // 분리된 함수 호출
-      setPlanDetails(details); // 응답 데이터를 상태에 저장
+      const details = await fetchPlanDetails(plan.id);
+      setPlanDetails(details);
     } catch (error) {
       console.error("Error fetching plan details:", error);
     }
@@ -56,8 +58,9 @@ const MyPage = ({ userId }) => {
 
   const handleCloseDialog = () => {
     setOpenDialog(false);
-    setPlanDetails(null); // 모달을 닫을 때 세부 정보 초기화
+    setPlanDetails(null);
   };
+
   if (isLoading) {
     return (
       <Container maxWidth="md">
@@ -72,13 +75,16 @@ const MyPage = ({ userId }) => {
     return (
       <Container maxWidth="md">
         <Typography variant="h6" align="center" gutterBottom>
-          Error loading plans
+          Error loading plans: {error.message}
         </Typography>
       </Container>
     );
   }
 
-  if (!Array.isArray(items)) {
+  // Ensure plansData is an array
+  const plans = Array.isArray(plansData) ? plansData : [];
+
+  if (plans.length === 0) {
     return (
       <Container maxWidth="md">
         <Typography variant="h6" align="center" gutterBottom>
@@ -97,10 +103,10 @@ const MyPage = ({ userId }) => {
           gutterBottom
           sx={{ fontWeight: "bold", color: "#333", marginBottom: 2 }}
         >
-          My Plan
+          My Plans
         </Typography>
         <List>
-          {items.map((plan) => (
+          {plans.map((plan) => (
             <Paper
               key={plan.id}
               elevation={4}

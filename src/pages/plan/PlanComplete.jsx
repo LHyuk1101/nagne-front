@@ -101,11 +101,11 @@ const PlanComplete = () => {
 
   const handleSavePlan = () => {
     if (!user.userId) {
-      alert("Please log in to save your plan.");
-      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      navigate(LINKS.LOGIN.path);
       return;
     }
     console.log("Save plan", planData);
+    navigate(LINKS.MYPAGE.path);
   };
 
   const getIconByContentType = (contentTypeId) => {
