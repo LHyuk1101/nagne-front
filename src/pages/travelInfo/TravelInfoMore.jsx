@@ -10,15 +10,19 @@ import {
   CardMedia,
   CardContent,
   Typography,
+  CircularProgress, // 추가: 로딩 인디케이터
 } from "@mui/material";
 import { styled } from "@mui/material/styles";
 import { useLocation, useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
-import { fetchPlacesByRegion } from "../../services/template/infoMore";
+import {
+  fetchPlacesByRegion,
+  fetchPlacesBySearch,
+} from "../../services/template/infoMore";
 import defaultImg from "../../assets/images/place/default_img.png";
 
 const truncateText = (text, maxLength) => {
-  if (!text) return ""; // text가 undefined 또는 null인 경우 빈 문자열 반환
+  if (!text) return "";
   if (text.length <= maxLength) return text;
   return text.slice(0, maxLength) + "...";
 };
@@ -36,7 +40,7 @@ const TemplateCard = styled(Card)(({ theme }) => ({
 
 const StyledCardMedia = styled(CardMedia)({
   width: "100%",
-  paddingTop: "75%", // 4:3 aspect ratio
+  paddingTop: "75%",
   backgroundSize: "cover",
   backgroundPosition: "center",
 });
@@ -59,24 +63,27 @@ function TravelInfoMore() {
 
   const [tab, setTab] = useState(tabIndex);
   const [search, setSearch] = useState("");
-
-  const { data, isLoading, error } = useQuery({
-    queryKey: ["places", selectedArea],
-    queryFn: () => fetchPlacesByRegion(selectedArea),
-    enabled: !!selectedArea,
-  });
-
   const [templateData, setTemplateData] = useState([]);
 
+  // useQuery로 데이터 불러오기
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["places", selectedArea, search],
+    queryFn: () =>
+      search
+        ? fetchPlacesBySearch(selectedArea, search)
+        : fetchPlacesByRegion(selectedArea),
+    enabled: !!selectedArea,
+    onError: (err) => {
+      console.error("Error fetching data:", err);
+    },
+  });
+
   useEffect(() => {
-    if (Array.isArray(data)) {
-      const places = data;
-      filterDataByTab(tab, places);
+    if (Array.isArray(data) && data.length > 0) {
+      filterDataByTab(tab, data);
     } else if (data && data.result === "SUCCESS" && Array.isArray(data.items)) {
-      const places = data.items;
-      filterDataByTab(tab, places);
+      filterDataByTab(tab, data.items);
     } else {
-      console.error("Unexpected data format:", data);
       setTemplateData([]);
     }
   }, [tab, data]);
@@ -99,8 +106,9 @@ function TravelInfoMore() {
   };
 
   const handleTabChange = (event, newValue) => {
-    setTab(newValue);
-    setTemplateData([]); // 탭 변경 시 데이터 초기화
+    if (tab !== newValue) {
+      setTab(newValue);
+    }
   };
 
   const handleSearchChange = (event) => {
@@ -117,10 +125,6 @@ function TravelInfoMore() {
       item.overview?.toLowerCase().includes(search.toLowerCase()),
   );
 
-  if (isLoading) {
-    return <Typography>Loading...</Typography>;
-  }
-
   if (error) {
     return <Typography>Error loading data</Typography>;
   }
@@ -134,6 +138,7 @@ function TravelInfoMore() {
         value={search}
         onChange={handleSearchChange}
         sx={{ my: 2 }}
+        inputProps={{ autoComplete: "on" }}
       />
 
       <Tabs
@@ -156,37 +161,55 @@ function TravelInfoMore() {
         />
       </Tabs>
 
-      <Box sx={{ mt: 2 }}>
-        <Grid container spacing={2}>
-          {filteredData.map((item) => (
-            <Grid
-              item
-              xs={6}
-              sm={4}
-              md={3}
-              key={item.id}
-              onClick={() => handleCardClick(item)} // 카드 클릭 시 상세 페이지로 이동
-              sx={{ cursor: "pointer" }} // 클릭 가능하도록 커서 변경
-            >
-              <TemplateCard>
-                <StyledCardMedia
-                  image={item.thumbnailUrl || defaultImg}
-                  title={item.title}
-                />
-                <StyledCardContent>
-                  <Box>
-                    <Typography gutterBottom variant="h6" component="div">
-                      {item.title}
-                    </Typography>
-                    <Typography variant="body2" color="text.secondary">
-                      {truncateText(item.overview, 70)}
-                    </Typography>
-                  </Box>
-                </StyledCardContent>
-              </TemplateCard>
-            </Grid>
-          ))}
-        </Grid>
+      <Box sx={{ mt: 2, position: "relative" }}>
+        {isLoading && (
+          <Box
+            sx={{
+              position: "absolute",
+              top: "50%",
+              left: "50%",
+              transform: "translate(-50%, -50%)",
+            }}
+          >
+            <CircularProgress />
+          </Box>
+        )}
+        {filteredData.length === 0 && !isLoading ? (
+          <Typography variant="h6" sx={{ textAlign: "center", mt: 4 }}>
+            No result
+          </Typography>
+        ) : (
+          <Grid container spacing={2} sx={{ opacity: isLoading ? 0.5 : 1 }}>
+            {filteredData.map((item) => (
+              <Grid
+                item
+                xs={6}
+                sm={4}
+                md={3}
+                key={item.id}
+                onClick={() => handleCardClick(item)}
+                sx={{ cursor: "pointer" }}
+              >
+                <TemplateCard>
+                  <StyledCardMedia
+                    image={item.thumbnailUrl || defaultImg}
+                    title={item.title}
+                  />
+                  <StyledCardContent>
+                    <Box>
+                      <Typography gutterBottom variant="h6" component="div">
+                        {item.title}
+                      </Typography>
+                      <Typography variant="body2" color="text.secondary">
+                        {truncateText(item.overview, 70)}
+                      </Typography>
+                    </Box>
+                  </StyledCardContent>
+                </TemplateCard>
+              </Grid>
+            ))}
+          </Grid>
+        )}
       </Box>
     </Container>
   );
