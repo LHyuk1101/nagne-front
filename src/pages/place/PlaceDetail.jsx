@@ -3,7 +3,7 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate, useParams } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 import { fetchPlaceDetails } from "../../services/template/info";
 import defaultImg from "../../assets/images/place/default_img.png";
 
@@ -52,6 +52,51 @@ const PlaceDetail = () => {
 
   const handleBackBtn = () => {
     navigate(-1);
+  };
+
+  // `open_time` 데이터를 순서대로 변환하는 함수
+  const formatOperatingHours = (openTimeStr) => {
+    const daysOrder = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    try {
+      const openTimeArray = JSON.parse(openTimeStr.replace(/'/g, '"'));
+      const dayMap = openTimeArray.reduce((acc, dayStr) => {
+        const [day, time] = dayStr.split(", ");
+        acc[day] = time;
+        return acc;
+      }, {});
+
+      return (
+        <>
+          {daysOrder.map((day) => (
+            <Typography key={day} variant="body2" align="center">
+              {day} : {dayMap[day] || "Closed"}
+            </Typography>
+          ))}
+          <Box sx={{ color: "red", fontSize: "13px", marginTop: "1rem" }}>
+            <Typography align="center">
+              ! The above business hours may differ from actual business hours.
+              !
+            </Typography>
+          </Box>
+        </>
+      );
+    } catch (error) {
+      // console.error("Error parsing open_time:", error);
+      return (
+        <Typography variant="body2" align="center">
+          Business hours unavailable
+        </Typography>
+      );
+    }
   };
 
   if (isLoading) {
@@ -134,9 +179,11 @@ const PlaceDetail = () => {
           maxWidth: "600px",
         }}
       />
-      <Typography variant="body2" align="center" gutterBottom>
-        Address: {placeDetails.items.address}
+      <Typography variant="h6" align="center" gutterBottom>
+        Business hours
       </Typography>
+      <Box>{formatOperatingHours(placeDetails.items.opentime)}</Box>
+
       <Box
         sx={{
           borderBottom: 1,
@@ -147,7 +194,7 @@ const PlaceDetail = () => {
         }}
       />
       <Typography variant="body2" align="center" gutterBottom>
-        Operating hours : {placeDetails.items.opentime}
+        Address: {placeDetails.items.address}
       </Typography>
       <Box
         sx={{
