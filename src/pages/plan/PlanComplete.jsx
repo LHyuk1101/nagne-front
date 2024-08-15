@@ -29,6 +29,7 @@ import LINKS from "../../routes/Links.jsx";
 import { debounce } from "lodash";
 
 const PlanComplete = () => {
+  const { isPlanCreated, setIsPlanCreated } = usePlanStore();
   const location = useLocation();
   const navigate = useNavigate();
   const [planData, setPlanData] = useState(null);
@@ -37,7 +38,6 @@ const PlanComplete = () => {
   const [isAllExpanded, setIsAllExpanded] = useState(false);
   const { user } = useUserStore();
   const [isCreatingPlan, setIsCreatingPlan] = useState(false);
-  const [hasFetchedData, setHasFetchedData] = useState(false);
 
   const createPlanMutation = useMutation({
     mutationFn: createPlan,
@@ -59,7 +59,7 @@ const PlanComplete = () => {
         alert("Received unexpected data format from the server.");
       }
       setIsCreatingPlan(false);
-      setHasFetchedData(true);
+      setIsPlanCreated(true);
     },
     onError: (error) => {
       console.error("API call failed:", error);
@@ -74,43 +74,25 @@ const PlanComplete = () => {
 
   const debouncedCreatePlan = useCallback(
     debounce((planDataWithUserId) => {
-      if (!isCreatingPlan && !hasFetchedData) {
+      if (!isCreatingPlan) {
         createPlanMutation.mutate(planDataWithUserId);
       }
     }, 500),
-    [createPlanMutation, isCreatingPlan, hasFetchedData],
+    [createPlanMutation, isCreatingPlan],
   );
 
   useEffect(() => {
     if (!user.userId) {
-      localStorage.setItem("returnTo", location.pathname);
-      if (location.state?.planData) {
-        localStorage.setItem(
-          "planData",
-          JSON.stringify(location.state.planData),
-        );
-      }
       navigate(LINKS.LOGIN.path);
       return;
     }
 
-    const storedPlanData = localStorage.getItem("planData");
-    if (storedPlanData && !hasFetchedData) {
-      const parsedPlanData = JSON.parse(storedPlanData);
-      const planDataWithUserId = {
-        ...parsedPlanData,
-        userId: user.userId,
-      };
-      debouncedCreatePlan(planDataWithUserId);
-      localStorage.removeItem("planData");
-    } else if (location.state?.planData && !planData && !hasFetchedData) {
+    if (location.state?.planData && !planData && !isPlanCreated) {
       const planDataWithUserId = {
         ...location.state.planData,
         userId: user.userId,
       };
       debouncedCreatePlan(planDataWithUserId);
-    } else if (!planData && !location.state?.planData && !hasFetchedData) {
-      navigate(LINKS.PLAN_FIRST.path);
     }
   }, [
     user.userId,
@@ -118,7 +100,7 @@ const PlanComplete = () => {
     planData,
     navigate,
     debouncedCreatePlan,
-    hasFetchedData,
+    isPlanCreated,
   ]);
 
   const handleChange = (panel) => (event, isExpanded) => {
@@ -139,14 +121,7 @@ const PlanComplete = () => {
 
   const handleSavePlan = () => {
     if (!user.userId) {
-      const currentPath = location.pathname;
-      const currentState = { planData: planData };
-      navigate(LINKS.LOGIN.path, {
-        state: {
-          returnTo: currentPath,
-          planData: currentState.planData,
-        },
-      });
+      navigate(LINKS.LOGIN.path);
       return;
     }
     console.log("Save plan", planData);

@@ -46,6 +46,13 @@ const PlanFirst = () => {
       areaCode: areaCode,
     };
 
+    if (!user.userId) {
+      localStorage.setItem("planData", JSON.stringify(planData));
+      localStorage.setItem("returnTo", LINKS.PLAN.path);
+      navigate(LINKS.LOGIN.path);
+      return;
+    }
+
     setSelectedPlaces([...selectedPlaces, ...selectedLodgings]);
     navigate(LINKS.PLAN.path, { state: { planData } });
   };
