@@ -1,4 +1,5 @@
 import { create } from "zustand";
+import { persist } from "zustand/middleware";
 
 /**
  * @typedef {Object} PlanState
@@ -17,21 +18,32 @@ import { create } from "zustand";
 /**
  * @type {import('zustand').UseBoundStore<PlanState>}
  */
-const usePlanStore = create((set) => ({
-  startDate: null,
-  endDate: null,
-  placeName: "",
-  areaCode: 0,
-  lat: "",
-  lng: "",
-  selectedPlaces: [],
-  setSelectedPlaces: (selectedItems) => set({ selectedPlaces: selectedItems }),
-  setStartDate: (date) => set({ startDate: date }),
-  setEndDate: (date) => set({ endDate: date }),
-  setPlaceName: (name) => set({ placeName: name }),
-  setLat: (lat) => set({ lat: lat }),
-  setLng: (lng) => set({ lng: lng }),
-  setAreaCode: (code) => set({ areaCode: code }),
-}));
+const usePlanStore = create(
+  persist(
+    (set) => ({
+      startDate: null,
+      endDate: null,
+      placeName: "",
+      areaCode: 0,
+      lat: "",
+      lng: "",
+      selectedPlaces: [],
+      isPlanCreated: false,
+      setSelectedPlaces: (selectedItems) =>
+        set({ selectedPlaces: selectedItems }),
+      setStartDate: (date) => set({ startDate: date }),
+      setEndDate: (date) => set({ endDate: date }),
+      setPlaceName: (name) => set({ placeName: name }),
+      setLat: (lat) => set({ lat: lat }),
+      setLng: (lng) => set({ lng: lng }),
+      setAreaCode: (code) => set({ areaCode: code }),
+      setIsPlanCreated: (value) => set({ isPlanCreated: value }),
+    }),
+    {
+      name: "plan-storage",
+      getStorage: () => localStorage,
+    },
+  ),
+);
 
 export default usePlanStore;

@@ -51,7 +51,21 @@ const LoginPage = () => {
         localStorage.setItem("accessToken", accessToken);
         setUser({ userId, nickname, email, role, userProfileImg });
 
-        window.location.href = "/";
+        const tempPlanData = localStorage.getItem("tempPlanData");
+        const returnTo = localStorage.getItem("returnTo");
+
+        if (tempPlanData && returnTo) {
+          localStorage.removeItem("tempPlanData");
+          localStorage.removeItem("returnTo");
+          navigate(LINKS.PLAN_FIRST.path, {
+            state: {
+              planData: JSON.parse(tempPlanData),
+              fromLogin: true,
+            },
+          });
+        } else {
+          navigate("/");
+        }
       }
     };
 
