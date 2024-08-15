@@ -22,12 +22,11 @@ const PlaceDetail = () => {
     const fetchDetails = async () => {
       try {
         const response = await fetchPlaceDetails(id);
-        console.log(response);
         setPlaceDetails(response);
-        setLikeCount(response.items.likes);
         const initialIsLiked =
           localStorage.getItem(`place-${id}-liked`) === "true";
         setIsLiked(initialIsLiked);
+        setLikeCount(response.items.likes + (initialIsLiked ? 1 : 0));
         setIsLoading(false);
       } catch (error) {
         setError(error);
@@ -41,8 +40,14 @@ const PlaceDetail = () => {
   const handleLikeToggle = () => {
     const newIsLiked = !isLiked;
     setIsLiked(newIsLiked);
-    setLikeCount(likeCount + (newIsLiked ? 1 : -1));
-    localStorage.setItem(`place-${id}-liked`, newIsLiked ? "true" : "false");
+
+    if (newIsLiked) {
+      setLikeCount(likeCount + 1);
+      localStorage.setItem(`place-${id}-liked`, "true");
+    } else {
+      setLikeCount(likeCount - 1);
+      localStorage.removeItem(`place-${id}-liked`);
+    }
   };
 
   const handleBackBtn = () => {
