@@ -96,10 +96,10 @@ const PlaceDetail = () => {
                 {day} : {dayMap[day] || "Closed"}
               </Typography>
             ))}
-            <Box sx={{ color: "red", fontSize: "13px", marginTop: "1rem" }}>
+            <Box sx={{ fontSize: "13px", marginTop: "1rem" }}>
               <Typography align="center">
-                ! The above business hours may differ from actual business
-                hours. !
+                "Please contact the restaurant directly for the most up-to-date
+                information.**"
               </Typography>
             </Box>
           </>
@@ -238,7 +238,7 @@ const PlaceDetail = () => {
         }}
       />
       <Typography variant="body2" align="center" gutterBottom>
-        Contact Number: {placeDetails.items.contactNumber}
+        Contact Number: +82 {placeDetails.items.contactNumber}
       </Typography>
     </Box>
   );
