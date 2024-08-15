@@ -55,6 +55,21 @@ const PlaceDetail = () => {
 
   // `open_time` 데이터를 순서대로 변환하는 함수
   const formatOperatingHours = (openTimeStr) => {
+    // 데이터가 없을 경우
+    if (!openTimeStr && placeDetails.items.contentTypeId === 76) {
+      return (
+        <Typography variant="body2" align="center">
+          Operating hours cannot be confirmed.
+        </Typography>
+      );
+    } else if (!openTimeStr && placeDetails.items.contentTypeId === 80) {
+      return (
+        <Typography variant="body2" align="center">
+          Check-in and check-out times cannot be confirmed
+        </Typography>
+      );
+    }
+
     const daysOrder = [
       "Sunday",
       "Monday",
@@ -66,7 +81,6 @@ const PlaceDetail = () => {
     ];
 
     try {
-      // 요일 데이터를 포함하는 경우
       if (openTimeStr.includes("Monday") || openTimeStr.includes("Tuesday")) {
         const openTimeArray = JSON.parse(openTimeStr.replace(/'/g, '"'));
         const dayMap = openTimeArray.reduce((acc, dayStr) => {
@@ -91,7 +105,6 @@ const PlaceDetail = () => {
           </>
         );
       } else {
-        // 요일 형식이 아닌 일반 텍스트로 되어있는 경우
         return (
           <Typography variant="body2" align="center">
             {openTimeStr}
@@ -101,7 +114,7 @@ const PlaceDetail = () => {
     } catch (error) {
       return (
         <Typography variant="body2" align="center">
-          Business hours unavailable
+          Operating hours cannot be confirmed.
         </Typography>
       );
     }
@@ -187,13 +200,19 @@ const PlaceDetail = () => {
           maxWidth: "600px",
         }}
       />
-      {placeDetails.items.contentTypeId === 80 ? (
+      {placeDetails.items.contentTypeId === 80 && (
         <Typography variant="h6" align="center" gutterBottom>
           Check-in and Check-out Time
         </Typography>
-      ) : (
+      )}
+      {placeDetails.items.contentTypeId === 82 && (
         <Typography variant="h6" align="center" gutterBottom>
           Business hours
+        </Typography>
+      )}
+      {placeDetails.items.contentTypeId === 76 && (
+        <Typography variant="h6" align="center" gutterBottom>
+          Operating hours
         </Typography>
       )}
       <Box>{formatOperatingHours(placeDetails.items.opentime)}</Box>
