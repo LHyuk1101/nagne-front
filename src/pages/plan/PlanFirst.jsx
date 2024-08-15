@@ -1,4 +1,4 @@
-import { useState } from "react";
+import React, { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
@@ -13,6 +13,8 @@ import {
 import PlaceTab from "../place/PlaceTab.jsx";
 import AccommodationTab from "../place/AccommodationTab.jsx";
 import usePreventRefresh from "../../hooks/usePreventRefresh.jsx";
+import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
+import WarningDialog from "../../components/UI/WarningDialog.jsx";
 
 const PlanFirst = () => {
   const { startDate, endDate, areaCode, setSelectedPlaces } = usePlanStore();
@@ -21,17 +23,42 @@ const PlanFirst = () => {
   const [tabValue, setTabValue] = useState(0);
   const { selectedPlaces, selectedLodgings } = useSelectedPlaces();
   usePreventRefresh();
+  const { isOpen, message, openWarningDialog, closeWarningDialog } =
+    useWarningDialog();
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
-  const handleCreateSchedule = () => {
+  const validatedCreateSchedule = () => {
     if (!user.userId) {
-      alert("Create a scedule.");
+      alert("You need to log in");
       navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return false;
+    }
+
+    if (!selectedPlaces.length > 0) {
+      openWarningDialog(
+        "No places have been selected. Please select at least one place.",
+      );
+      return false;
+    }
+
+    if (!selectedLodgings.length > 0) {
+      openWarningDialog(
+        "No accommodations have been selected. Please select at least one accommodation.",
+      );
+      return false;
+    }
+
+    return true;
+  };
+
+  const handleCreateSchedule = () => {
+    if (!validatedCreateSchedule()) {
       return;
     }
+
     const planData = {
       places: [...selectedPlaces, ...selectedLodgings].map((place) => ({
         id: place.id,
@@ -68,6 +95,11 @@ const PlanFirst = () => {
           Create Schedule
         </CreateScheduleButton>
       </ButtonContainer>
+      <WarningDialog
+        isOpen={isOpen}
+        message={message}
+        onClose={closeWarningDialog}
+      />
     </>
   );
 };
