@@ -1,15 +1,12 @@
-import axios from 'axios';
-
-const API_BASE_URL = '/api'; 
+import axiosInstance from "../common/axios.js";
 
 export const fetchPopularDestinations = async () => {
   try {
-    const response = await axios.get(`${API_BASE_URL}/popular-destinations`);
-    
+    const response = await axiosInstance.get(`/api/populardestinations`);
+
     return response.data;
   } catch (error) {
     console.error("Error fetching popular destinations:", error);
-    throw error;  
+    throw error;
   }
 };
-

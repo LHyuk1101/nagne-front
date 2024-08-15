@@ -49,19 +49,17 @@ const theme = createTheme({
 
 const Home = () => {
   const navigate = useNavigate();
-  const [destinations, setDestinations] = useState([]); // Initialize as an empty array
+  const [destinations, setDestinations] = useState([]);
   const [error, setError] = useState(null);
 
   useEffect(() => {
     const getDestinations = async () => {
       try {
         const data = await fetchPopularDestinations();
-
-        // Ensure data is an array before setting it
         if (Array.isArray(data)) {
           setDestinations(data);
         } else {
-          setDestinations([]); // Fallback to an empty array
+          setDestinations([]);
         }
       } catch (error) {
         console.error("Failed to fetch destinations", error);
@@ -79,7 +77,9 @@ const Home = () => {
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
+      <Box
+        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
+      >
         <Box
           sx={{
             backgroundImage:
@@ -117,7 +117,8 @@ const Home = () => {
                 fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
               }}
             >
-              Explore breathtaking destinations and create unforgettable memories
+              Explore breathtaking destinations and create unforgettable
+              memories
             </Typography>
             <Button
               variant="contained"
@@ -133,7 +134,7 @@ const Home = () => {
                 fontSize: { xs: "0.875rem", sm: "1rem" },
               }}
             >
-              Start Planning!
+              Start Planning
             </Button>
           </Box>
         </Box>
@@ -154,52 +155,59 @@ const Home = () => {
           >
             Popular Destinations
           </Typography>
-          <Grid container spacing={2}>
-            {destinations.map((destination, index) => (
-              <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      transition: "transform 0.3s ease",
-                    },
-                  }}
-                >
-                  <CardMedia
-                    component="img"
-                    sx={{ height: { xs: 120, sm: 140, md: 160 } }}
-                    image={destination.thumbnailUrl}
-                    alt={destination.title}
-                  />
-                  <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                    <Typography
-                      gutterBottom
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: { xs: "1rem", sm: "1.25rem" },
-                      }}
-                    >
-                      {destination.title}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: 300,
-                        fontSize: { xs: "0.875rem", sm: "1rem" },
-                      }}
-                    >
-                      {destination.overview}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+
+          {error ? (
+            <Typography variant="h6" color="error" align="center">
+              {error}
+            </Typography>
+          ) : (
+            <Grid container spacing={2}>
+              {destinations.map((destination, index) => (
+                <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                        transition: "transform 0.3s ease",
+                      },
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      sx={{ height: { xs: 120, sm: 140, md: 160 } }}
+                      image={destination.thumbnailUrl}
+                      alt={destination.title}
+                    />
+                    <CardContent sx={{ flexGrow: 1, p: 2 }}>
+                      <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: { xs: "1rem", sm: "1.25rem" },
+                        }}
+                      >
+                        {destination.title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 300,
+                          fontSize: { xs: "0.875rem", sm: "1rem" },
+                        }}
+                      >
+                        {destination.overview}
+                      </Typography>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Container>
 
         <Box
@@ -212,14 +220,7 @@ const Home = () => {
           }}
         >
           <Container maxWidth="lg">
-            <Box
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                gap: 1,
-                marginLeft: "1.2rem",
-              }}
-            >
+            <Box sx={{ display: "flex", justifyContent: "center", gap: 1 }}>
               <Link
                 to={LINKS.POLICY.link}
                 style={{ textDecoration: "none", color: "inherit" }}
@@ -237,45 +238,46 @@ const Home = () => {
               </Link>
             </Box>
 
-            <Box
+            <Typography
               variant="body2"
               align="center"
-              sx={{
-                display: "flex",
-                justifyContent: "center",
-                gap: 1,
-                flexWrap: "wrap",
-                fontWeight: 300,
-                marginTop: "1rem",
-                fontSize: "15px",
-              }}
+              sx={{ fontWeight: 300, marginTop: "1rem" }}
             >
-              <Typography sx={{ color: "white" }}>
-                Source of images used :
-              </Typography>
-              <Link
-                to={"https://www.google.co.kr/maps/?hl=en&entry=ttu"}
-                style={{ textDecoration: "none", color: "inherit" }}
+              <Box
+                sx={{
+                  display: "flex",
+                  justifyContent: "center",
+                  gap: 1,
+                  flexWrap: "wrap",
+                }}
               >
-                Google Maps
-              </Link>
-              <Typography variant="body2">/</Typography>
-              <Link
-                to={
-                  "https://www.booking.com/index.ko.html?label=gen173nr-1BCAEoggI46AdICVgEaH2IAQGYARe4AQfIAQzYAQHoAQGIAgGoAgO4Atmi7rUGwAIB0gIkZDJhZDkyZDMtYjQ1ZS00MTY4LTkwYTktZTU5YWNiZTFkZjli2AIF4AIB&sid=9aba5835fa945fb0fe14f7fa08ed0b7f&keep_landing=1&sb_price_type=total&"
-                }
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                Booking.com
-              </Link>
-              <Typography variant="body2">/</Typography>
-              <Link
-                to={"https://knto.or.kr/eng/index"}
-                style={{ textDecoration: "none", color: "inherit" }}
-              >
-                Korea Tourism Organization
-              </Link>
-            </Box>
+                <Typography sx={{ color: "white" }}>
+                  Source of images used :
+                </Typography>
+                <Link
+                  to={"https://www.google.co.kr/maps/?hl=en&entry=ttu"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Google Maps
+                </Link>
+                <Typography variant="body2">/</Typography>
+                <Link
+                  to={
+                    "https://www.booking.com/index.ko.html?label=gen173nr-1BCAEoggI46AdICVgEaH2IAQGYARe4AQfIAQzYAQHoAQGIAgGoAgO4Atmi7rUGwAIB0gIkZDJhZDkyZDMtYjQ1ZS00MTY4LTkwYTktZTU5YWNiZTFkZjli2AIF4AIB&sid=9aba5835fa945fb0fe14f7fa08ed0b7f&keep_landing=1&sb_price_type=total&"
+                  }
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Booking.com
+                </Link>
+                <Typography variant="body2">/</Typography>
+                <Link
+                  to={"https://knto.or.kr/eng/index"}
+                  style={{ textDecoration: "none", color: "inherit" }}
+                >
+                  Korea Tourism Organization
+                </Link>
+              </Box>
+            </Typography>
             <Typography
               variant="body2"
               align="center"
