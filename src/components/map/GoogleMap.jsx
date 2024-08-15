@@ -10,6 +10,7 @@ import { useCallback, useMemo, useState } from "react";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import usePlanStore from "../../store/PlanContext.js";
 import { IconColor } from "../../constants/constant.js";
+import CustomPoiModal from "./CustomPoiModal.jsx";
 const PoiMarker = ({ poi, index, isOpen, onMarkerClick, color }) => {
   const [markerRef, marker] = useAdvancedMarkerRef();
 
@@ -33,16 +34,11 @@ const PoiMarker = ({ poi, index, isOpen, onMarkerClick, color }) => {
         />
       </AdvancedMarker>
       {isOpen && (
-        <InfoWindow
-          anchor={marker}
+        <CustomPoiModal
+          poi={poi}
+          open={isOpen}
           onClose={() => onMarkerClick(null)}
-          position={{ lat: poi.lat, lng: poi.lng }}
-        >
-          <div>
-            <h2>{poi.title}</h2>
-            <p>{poi.address}</p>
-          </div>
-        </InfoWindow>
+        />
       )}
     </>
   );
