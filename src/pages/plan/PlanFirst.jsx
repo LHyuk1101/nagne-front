@@ -2,6 +2,7 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
+import useUserStore from "../../store/useUserStore.js";
 import { useSelectedPlaces } from "../../store/place/PlaceContext.jsx";
 import {
   StyledTab,
@@ -15,6 +16,7 @@ import usePreventRefresh from "../../hooks/usePreventRefresh.jsx";
 
 const PlanFirst = () => {
   const { startDate, endDate, areaCode, setSelectedPlaces } = usePlanStore();
+  const { user } = useUserStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
   const { selectedPlaces, selectedLodgings } = useSelectedPlaces();
@@ -25,12 +27,19 @@ const PlanFirst = () => {
   };
 
   const handleCreateSchedule = () => {
+    if (!user.userId) {
+      alert("Create a scedule.");
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return;
+    }
     const planData = {
       places: [...selectedPlaces, ...selectedLodgings].map((place) => ({
         id: place.id,
         name: place.title,
         contentType: place.contentTypeId,
         overview: place.overview,
+        lat: place.lat,
+        lng: place.lng,
       })),
       startDay: startDate,
       endDay: endDate,
