@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
@@ -31,12 +31,6 @@ const PlanFirst = () => {
   };
 
   const validatedCreateSchedule = () => {
-    if (!user.userId) {
-      alert("You need to log in");
-      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
-      return false;
-    }
-
     if (!selectedPlaces.length > 0) {
       openWarningDialog(
         "No places have been selected. Please select at least one place.",
@@ -74,9 +68,9 @@ const PlanFirst = () => {
     };
 
     if (!user.userId) {
-      localStorage.setItem("planData", JSON.stringify(planData));
       localStorage.setItem("returnTo", LINKS.PLAN.path);
-      navigate(LINKS.LOGIN.path);
+      localStorage.setItem("planData", JSON.stringify(planData));
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
       return;
     }
 

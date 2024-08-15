@@ -31,6 +31,7 @@ export const Carousel = ({ startDate, endDate }) => {
     const selectedPlace = AREA_COMMONS.find(
       (area) => area.title === selectedSlide,
     );
+    sessionStorage.setItem("redirectToCreate", "false");
     setStartDate(startDate);
     setEndDate(endDate);
     setPlaceName(selectedSlide);
