@@ -59,7 +59,7 @@ const PlaceDetail = () => {
     if (!openTimeStr && placeDetails.items.contentTypeId === 76) {
       return (
         <Typography variant="body2" align="center">
-          Operating hours cannot be confirmed.
+          The operating hours cannot be confirmed at this time.
         </Typography>
       );
     } else if (!openTimeStr && placeDetails.items.contentTypeId === 80) {
@@ -245,9 +245,15 @@ const PlaceDetail = () => {
           maxWidth: "600px",
         }}
       />
-      <Typography variant="body2" align="center" gutterBottom>
-        Contact Number: +82 {placeDetails.items.contactNumber}
-      </Typography>
+      {placeDetails.items.contactNumber ? (
+        <Typography variant="body2" align="center" gutterBottom>
+          Contact Number: +82 {placeDetails.items.contactNumber}
+        </Typography>
+      ) : (
+        <Typography variant="body2" align="center" gutterBottom>
+          There's no contact number available for this location.
+        </Typography>
+      )}
     </Box>
   );
 };
