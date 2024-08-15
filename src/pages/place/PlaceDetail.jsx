@@ -65,7 +65,7 @@ const PlaceDetail = () => {
     } else if (!openTimeStr && placeDetails.items.contentTypeId === 80) {
       return (
         <Typography variant="body2" align="center">
-          Check-in and check-out times cannot be confirmed
+          Check-in and check-out times cannot be confirmed.
         </Typography>
       );
     }
@@ -104,6 +104,14 @@ const PlaceDetail = () => {
             </Box>
           </>
         );
+      } else if (openTimeStr.includes("Check-in time")) {
+        // "Check-in time" 및 "Check-out time" 형식으로 되어 있는 경우 처리
+        const timesArray = openTimeStr.split(", ");
+        return timesArray.map((time, index) => (
+          <Typography key={index} variant="body2" align="center">
+            {time}
+          </Typography>
+        ));
       } else {
         return (
           <Typography variant="body2" align="center">
@@ -114,7 +122,7 @@ const PlaceDetail = () => {
     } catch (error) {
       return (
         <Typography variant="body2" align="center">
-          Operating hours cannot be confirmed.
+          The operating hours cannot be confirmed at this time.
         </Typography>
       );
     }
