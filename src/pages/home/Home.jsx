@@ -51,6 +51,7 @@ const Home = () => {
   const navigate = useNavigate();
   const [destinations, setDestinations] = useState([]);
   const [error, setError] = useState(null);
+  const [expanded, setExpanded] = useState({});
 
   useEffect(() => {
     const getDestinations = async () => {
@@ -74,12 +75,21 @@ const Home = () => {
     navigate("/create");
   };
 
+  const handleClick = (destination) => {
+    navigate(`/place/${destination.id}`, { state: destination });
+  };
+
+  const handleExpandClick = (index) => {
+    setExpanded((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
+  };
+
   return (
     <ThemeProvider theme={theme}>
       <CssBaseline />
-      <Box
-        sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
-      >
+      <Box sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}>
         <Box
           sx={{
             backgroundImage:
@@ -163,7 +173,16 @@ const Home = () => {
           ) : (
             <Grid container spacing={2}>
               {destinations.map((destination, index) => (
-                <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
+                <Grid
+                  item
+                  key={index}
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={3}
+                  onClick={() => handleClick(destination)}
+                  sx={{ cursor: "pointer" }}
+                >
                   <Card
                     sx={{
                       height: "100%",
@@ -177,7 +196,7 @@ const Home = () => {
                   >
                     <CardMedia
                       component="img"
-                      sx={{ height: { xs: 120, sm: 140, md: 160 } }}
+                      sx={{ height: { xs: 200, sm: 250, md: 300 } }}
                       image={destination.thumbnailUrl}
                       alt={destination.title}
                     />
@@ -200,8 +219,18 @@ const Home = () => {
                           fontSize: { xs: "0.875rem", sm: "1rem" },
                         }}
                       >
-                        {destination.overview}
+                        {expanded[index]
+                          ? destination.overview
+                          : `${destination.overview.substring(0, 200)}...`}
                       </Typography>
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() => handleExpandClick(index)}
+                        sx={{ mt: 1 }}
+                      >
+                        {expanded[index] ? "Show Less" : "More"}
+                      </Button>
                     </CardContent>
                   </Card>
                 </Grid>
