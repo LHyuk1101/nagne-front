@@ -67,7 +67,7 @@ const PlanComplete = () => {
 
   useEffect(() => {
     if (!user.userId) {
-      alert("You need to log in to view your plan!");
+      alert("You need to login to view your plan!");
       navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
       return;
     }
@@ -80,7 +80,6 @@ const PlanComplete = () => {
         ...location.state.planData,
         userId: user.userId,
       };
-
       console.log("Calling createPlanMutation with:", planDataWithUserId);
       createPlanMutation.mutate(planDataWithUserId);
     } else {
@@ -116,11 +115,11 @@ const PlanComplete = () => {
 
   const handleSavePlan = () => {
     if (!user.userId) {
-      alert("Please log in to save your plan.");
-      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      alert("Please log in to view your plan!");
+      navigate(LINKS.LOGIN.path, { state: { returnTo: LINKS.MYPLAN.path } });
       return;
     }
-    console.log("Save plan", planData);
+    navigate(LINKS.MYPLAN.path);
   };
 
   const getIconByContentType = (contentTypeId) => {
