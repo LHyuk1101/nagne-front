@@ -9,43 +9,11 @@ import {
   CardContent,
   CardMedia,
   Box,
-  createTheme,
-  ThemeProvider,
   CssBaseline,
 } from "@mui/material";
 import LINKS from "../../routes/Links";
 import { fetchPopularDestinations } from "../../services/home/home";
-
-const theme = createTheme({
-  typography: {
-    fontFamily: "Montserrat, sans-serif",
-  },
-  palette: {
-    mode: "light",
-    primary: {
-      main: "#3a86ff",
-    },
-    secondary: {
-      main: "#ff006e",
-    },
-  },
-  components: {
-    MuiCssBaseline: {
-      styleOverrides: `
-        body {
-          margin: 0;
-          padding: 0;
-          min-height: 100vh;
-        }
-        #root {
-          display: flex;
-          flex-direction: column;
-          min-height: 100vh;
-        }
-      `,
-    },
-  },
-});
+import defaultImg from "../../assets/images/place/default_img.png";
 
 const Home = () => {
   const navigate = useNavigate();
@@ -87,7 +55,7 @@ const Home = () => {
   };
 
   return (
-    <ThemeProvider theme={theme}>
+    <>
       <CssBaseline />
       <Box
         sx={{ display: "flex", flexDirection: "column", minHeight: "100vh" }}
@@ -199,7 +167,7 @@ const Home = () => {
                     <CardMedia
                       component="img"
                       sx={{ height: { xs: 200, sm: 250, md: 300 } }}
-                      image={destination.thumbnailUrl}
+                      image={destination.thumbnailUrl || defaultImg}
                       alt={destination.title}
                     />
                     <CardContent sx={{ flexGrow: 1, p: 2 }}>
@@ -325,7 +293,7 @@ const Home = () => {
           </Container>
         </Box>
       </Box>
-    </ThemeProvider>
+    </>
   );
 };
 
