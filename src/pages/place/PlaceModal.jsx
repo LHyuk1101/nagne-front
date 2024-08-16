@@ -197,7 +197,7 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
     if (selectedPlaces.find((p) => p.id === place.id)) {
       removePlace(place.id);
     } else {
-      if (selectedPlaces.length >= 10) {
+      if (selectedPlaces.length >= 20) {
         openWarningDialog("You can select a maximum of 10 places.");
         return;
       }

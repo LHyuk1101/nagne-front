@@ -140,10 +140,10 @@ const AccommodationModal = ({ open, onClose, areaCode }) => {
   };
 
   const handlePlaceSelect = (place) => {
-    if (selectedLodgings.length > 0) {
-      openWarningDialog("You cannot select more than one accommodation.");
-      return;
-    }
+    // if (selectedLodgings.length > 0) {
+    //   openWarningDialog("You cannot select more than one accommodation.");
+    //   return;
+    // }
 
     if (selectedLodgings.find((p) => p.id === place.id)) {
       removeLodging(place.id);

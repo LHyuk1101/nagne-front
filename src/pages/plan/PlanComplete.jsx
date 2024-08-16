@@ -15,6 +15,7 @@ import {
   Button,
   Switch,
   FormControlLabel,
+  Divider,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -26,6 +27,7 @@ import LoadingDialog from "../../components/UI/LoadingBar";
 import usePlanStore from "../../store/PlanContext.js";
 import useUserStore from "../../store/useUserStore.js";
 import LINKS from "../../routes/Links.jsx";
+import { useDebounceClick } from "../../hooks/useDebounce";
 
 const PlanComplete = () => {
   const location = useLocation();
@@ -70,7 +72,10 @@ const PlanComplete = () => {
       return;
     }
 
-    if (location.state && location.state.planData) {
+    const storedPlan = sessionStorage.getItem("currentPlan");
+    if (storedPlan) {
+      setPlanData(JSON.parse(storedPlan));
+    } else if (location.state && location.state.planData) {
       const planDataWithUserId = {
         ...location.state.planData,
         userId: user.userId,
@@ -86,6 +91,16 @@ const PlanComplete = () => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded((prev) => ({ ...prev, [panel]: isExpanded }));
   };
+
+  const debouncedCreatePlan = useDebounceClick(() => {
+    if (location.state && location.state.planData) {
+      const planDataWithUserId = {
+        ...location.state.planData,
+        userId: user.userId,
+      };
+      createPlanMutation.mutate(planDataWithUserId);
+    }
+  }, 500);
 
   const handleToggleAll = () => {
     const newExpandedState = !isAllExpanded;
@@ -152,8 +167,14 @@ const PlanComplete = () => {
         align="center"
         sx={{ mb: 3, fontWeight: "bold" }}
       >
-        Your Travel Plan
+        {planData.subject || "Your Travel Plan"}
       </Typography>
+
+      {planData.reasoning && (
+        <Typography variant="body1" sx={{ mb: 2, fontStyle: "italic" }}>
+          {planData.reasoning}
+        </Typography>
+      )}
 
       <Box
         sx={{
@@ -229,7 +250,7 @@ const PlanComplete = () => {
                         </Typography>
                       }
                       secondary={
-                        <React.Fragment>
+                        <Box sx={{ mt: 1 }}>
                           <Typography
                             variant="body2"
                             color="text.primary"
@@ -237,7 +258,34 @@ const PlanComplete = () => {
                           >
                             {place.placeSummary}
                           </Typography>
-                        </React.Fragment>
+                          {(place.subject || place.reasoning) && (
+                            <Box
+                              sx={{
+                                mt: 1,
+                                pl: 2,
+                                borderLeft: "2px solid #e0e0e0",
+                              }}
+                            >
+                              {place.subject && (
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  sx={{ mb: 0.5 }}
+                                >
+                                  <strong>Subject:</strong> {place.subject}
+                                </Typography>
+                              )}
+                              {place.reasoning && (
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  {place.reasoning}
+                                </Typography>
+                              )}
+                            </Box>
+                          )}
+                        </Box>
                       }
                       sx={{ ml: 2 }}
                     />
@@ -293,6 +341,9 @@ const PlanComplete = () => {
                         {`${dayPlan.places[placeIndex + 1].moveTime || "Unknown"} minutes`}
                       </Typography>
                     </Box>
+                  )}
+                  {placeIndex < dayPlan.places.length - 1 && (
+                    <Divider variant="inset" component="li" />
                   )}
                 </React.Fragment>
               ))}
