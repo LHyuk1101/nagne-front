@@ -131,6 +131,7 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
                               style={{
                                 marginRight: "4px",
                                 transform: "translateY(1px)",
+                                color: "black",
                               }}
                             />
                             {place.likes || 0} likes
@@ -197,7 +198,7 @@ const PlaceModal = ({ open, onClose, areaCode }) => {
     if (selectedPlaces.find((p) => p.id === place.id)) {
       removePlace(place.id);
     } else {
-      if (selectedPlaces.length >= 20) {
+      if (selectedPlaces.length >= 10) {
         openWarningDialog("You can select a maximum of 10 places.");
         return;
       }
