@@ -14,8 +14,8 @@ import PlanFirst from "../pages/plan/PlanFirst.jsx";
 import Plan from "../pages/plan/Plan.jsx";
 import PlanComplete from "../pages/plan/PlanComplete.jsx";
 //templete
-import TemplateMain from "../pages/templete/TemplateMain.jsx";
-import TemplateDetail from "../pages/templete/TemplateDetail.jsx";
+// import TemplateMain from "../pages/templete/TemplateMain.jsx";
+// import TemplateDetail from "../pages/templete/TemplateDetail.jsx";
 //travel-Info
 import TravelInfo from "../pages/travelInfo/TravelInfo.jsx";
 import TravelInfoMore from "../pages/travelInfo/TravelInfoMore.jsx";
@@ -24,7 +24,7 @@ import PlaceDetail from "../pages/place/PlaceDetail.jsx";
 //error
 import ErrorPage from "../pages/error/ErrorPage.jsx";
 import PrivacyPolicy from "../pages/user/PrivacyPolicy.jsx";
-import Agreements from "../pages/user/TermsOfService.jsx";
+// import Agreements from "../pages/user/TermsOfService.jsx";
 import TermsOfService from "../pages/user/TermsOfService.jsx";
 import { LinkSharp } from "@mui/icons-material";
 
@@ -47,8 +47,8 @@ const router = createBrowserRouter([
       },
       { path: LINKS.MYPLAN.path, element: <MyPlan /> },
       { path: LINKS.TRAVEL.path, element: <TravelInfo /> },
-      { path: LINKS.TEMPLATE.path, element: <TemplateMain /> },
-      { path: LINKS.TEMPLATE_DETAIL.path, element: <TemplateDetail /> },
+      // { path: LINKS.TEMPLATE.path, element: <TemplateMain /> },
+      // { path: LINKS.TEMPLATE_DETAIL.path, element: <TemplateDetail /> },
       { path: LINKS.TRAVEL_INFO.path, element: <TravelInfoMore /> },
       { path: LINKS.PLACE.path, element: <PlaceDetail /> },
       { path: LINKS.POLICY.path, element: <PrivacyPolicy /> },

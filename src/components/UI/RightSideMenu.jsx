@@ -45,7 +45,7 @@ const NaviItemsTop = (user) => [
     icon: <Avatar src={user.userProfileImg} alt={user.nickname} />,
     text: user.nickname,
     isLogin: true,
-    route: "/profile",
+    route: LINKS.MYPLAN.path,
   },
   {
     icon: <EventNoteIcon />,
@@ -53,12 +53,12 @@ const NaviItemsTop = (user) => [
     isLogin: true,
     route: LINKS.MYPLAN.path,
   },
-  {
-    icon: <PersonIcon />,
-    text: "Profile",
-    isLogin: true,
-    route: "/profile",
-  },
+  // {
+  //   icon: <PersonIcon />,
+  //   text: "Profile",
+  //   isLogin: true,
+  //   route: "/profile",
+  // },
   {
     icon: <LogoutIcon />,
     text: "Logout",
@@ -82,11 +82,11 @@ const NaviItemsBottom = [
     text: "Travel Info",
     route: LINKS.TRAVEL.path,
   },
-  {
-    icon: <TemplateIcon />,
-    text: "Templates",
-    route: LINKS.TEMPLATE.path,
-  },
+  // {
+  //   icon: <TemplateIcon />,
+  //   text: "Templates",
+  //   route: LINKS.TEMPLATE.path,
+  // },
   // {
   //   icon: <ForumIcon />,
   //   text: "Community",
