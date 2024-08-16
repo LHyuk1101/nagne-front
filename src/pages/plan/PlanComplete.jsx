@@ -27,6 +27,7 @@ import LoadingDialog from "../../components/UI/LoadingBar";
 import usePlanStore from "../../store/PlanContext.js";
 import useUserStore from "../../store/useUserStore.js";
 import LINKS from "../../routes/Links.jsx";
+import { useDebounceClick } from "../../hooks/useDebounce";
 
 const PlanComplete = () => {
   const location = useLocation();
@@ -71,7 +72,10 @@ const PlanComplete = () => {
       return;
     }
 
-    if (location.state && location.state.planData) {
+    const storedPlan = sessionStorage.getItem("currentPlan");
+    if (storedPlan) {
+      setPlanData(JSON.parse(storedPlan));
+    } else if (location.state && location.state.planData) {
       const planDataWithUserId = {
         ...location.state.planData,
         userId: user.userId,
@@ -87,6 +91,16 @@ const PlanComplete = () => {
   const handleChange = (panel) => (event, isExpanded) => {
     setExpanded((prev) => ({ ...prev, [panel]: isExpanded }));
   };
+
+  const debouncedCreatePlan = useDebounceClick(() => {
+    if (location.state && location.state.planData) {
+      const planDataWithUserId = {
+        ...location.state.planData,
+        userId: user.userId,
+      };
+      createPlanMutation.mutate(planDataWithUserId);
+    }
+  }, 500);
 
   const handleToggleAll = () => {
     const newExpandedState = !isAllExpanded;
