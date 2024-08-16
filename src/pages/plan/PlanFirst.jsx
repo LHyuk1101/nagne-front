@@ -91,6 +91,7 @@ const PlanFirst = () => {
       };
       localStorage.setItem("returnTo", LINKS.PLAN.path);
       setSelectedPlacesData(placeData);
+      alert("Login is required to create a schedule.");
       navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
       return;
     }
