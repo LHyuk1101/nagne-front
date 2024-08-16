@@ -21,7 +21,7 @@ export const refreshAccessToken = async () => {
 
 export const handleLogout = async () => {
   try {
-    logout();
+    await logout();
     console.log(document.cookie);
   } catch (error) {
     console.error("API 서버에 logout 요청이 실패 했습니다.");
