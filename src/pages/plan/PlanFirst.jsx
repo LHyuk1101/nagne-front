@@ -1,4 +1,4 @@
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
 import LINKS from "../../routes/Links.jsx";
 import usePlanStore from "../../store/PlanContext.js";
@@ -13,25 +13,63 @@ import {
 import PlaceTab from "../place/PlaceTab.jsx";
 import AccommodationTab from "../place/AccommodationTab.jsx";
 import usePreventRefresh from "../../hooks/usePreventRefresh.jsx";
+import { useWarningDialog } from "../../hooks/useWarningDialog.jsx";
+import WarningDialog from "../../components/UI/WarningDialog.jsx";
 
 const PlanFirst = () => {
-  const { startDate, endDate, areaCode, setSelectedPlaces } = usePlanStore();
+  const {
+    startDate,
+    endDate,
+    areaCode,
+    setSelectedPlacesData,
+    selectedPlacesData,
+    clearPlacesData,
+  } = usePlanStore();
   const { user } = useUserStore();
   const navigate = useNavigate();
   const [tabValue, setTabValue] = useState(0);
-  const { selectedPlaces, selectedLodgings } = useSelectedPlaces();
+  const { selectedPlaces, selectedLodgings, addPlaces, addLodgings } =
+    useSelectedPlaces();
   usePreventRefresh();
+  const { isOpen, message, openWarningDialog, closeWarningDialog } =
+    useWarningDialog();
+
+  useEffect(() => {
+    if (localStorage.getItem("returnTo")) {
+      localStorage.removeItem("returnTo");
+      addPlaces(selectedPlacesData.places);
+      addLodgings(selectedPlacesData.lodgings);
+      clearPlacesData();
+    }
+  }, []);
 
   const handleTabChange = (event, newValue) => {
     setTabValue(newValue);
   };
 
+  const validatedCreateSchedule = () => {
+    if (!selectedPlaces.length > 0) {
+      openWarningDialog(
+        "No places have been selected. Please select at least one place.",
+      );
+      return false;
+    }
+
+    if (!selectedLodgings.length > 0) {
+      openWarningDialog(
+        "No accommodations have been selected. Please select at least one accommodation.",
+      );
+      return false;
+    }
+
+    return true;
+  };
+
   const handleCreateSchedule = () => {
-    if (!user.userId) {
-      alert("Create a scedule.");
-      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+    if (!validatedCreateSchedule()) {
       return;
     }
+
     const planData = {
       places: [...selectedPlaces, ...selectedLodgings].map((place) => ({
         id: place.id,
@@ -46,7 +84,18 @@ const PlanFirst = () => {
       areaCode: areaCode,
     };
 
-    setSelectedPlaces([...selectedPlaces, ...selectedLodgings]);
+    if (!user.userId) {
+      const placeData = {
+        places: [...selectedPlaces],
+        lodgings: [...selectedLodgings],
+      };
+      localStorage.setItem("returnTo", LINKS.PLAN.path);
+      setSelectedPlacesData(placeData);
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return;
+    }
+
+    setSelectedPlacesData([...selectedPlaces, ...selectedLodgings]);
     navigate(LINKS.PLAN.path, { state: { planData } });
   };
 
@@ -68,6 +117,11 @@ const PlanFirst = () => {
           Create Schedule
         </CreateScheduleButton>
       </ButtonContainer>
+      <WarningDialog
+        isOpen={isOpen}
+        message={message}
+        onClose={closeWarningDialog}
+      />
     </>
   );
 };

@@ -31,13 +31,14 @@ export const Carousel = ({ startDate, endDate }) => {
     const selectedPlace = AREA_COMMONS.find(
       (area) => area.title === selectedSlide,
     );
+    sessionStorage.setItem("redirectToCreate", "false");
     setStartDate(startDate);
     setEndDate(endDate);
     setPlaceName(selectedSlide);
     setLat(selectedPlace.lat);
     setLng(selectedPlace.lng);
     setAreaCode(selectedPlace.areaCode);
-    navigate(`${LINKS.PLAN_FIRST.link}/${selectedSlide}`);
+    navigate(`${LINKS.PLAN_FIRST.link}${selectedSlide}`);
   };
   return (
     <>
@@ -100,7 +101,7 @@ export const Carousel = ({ startDate, endDate }) => {
         </Swiper>
       </section>
       <Link
-        to={`${LINKS.PLAN_FIRST.link}/${selectedSlide}`}
+        to={`${LINKS.PLAN_FIRST.link}${selectedSlide}`}
         state={{
           startDate,
           endDate,

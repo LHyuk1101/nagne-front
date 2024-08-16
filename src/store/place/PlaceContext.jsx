@@ -20,7 +20,7 @@ import { createContext, useState, useContext } from "react";
  * @property {number} lng - Longitude coordinate of the place
  * @property {number} likes - Number of likes for the place
  * @property {string} thumbnailUrl - URL of the thumbnail image
- * @property {string} placeUrlImages - Array of image URLs for the place
+ * @property {string} imgUrl - Array of image URLs for the place
  */
 
 /**
@@ -50,6 +50,24 @@ export const SelectedPlacesProvider = ({ children }) => {
     setSelectedLodgings((prev) => [...prev, lodging]);
   };
 
+  const addPlaces = (newPlaces) => {
+    setSelectedPlaces((prev) => {
+      const uniqueNewPlaces = newPlaces.filter(
+        (newPlace) => !prev.some((p) => p.id === newPlace.id),
+      );
+      return [...prev, ...uniqueNewPlaces];
+    });
+  };
+
+  const addLodgings = (newLodgings) => {
+    setSelectedLodgings((prev) => {
+      const uniqueNewLodgings = newLodgings.filter(
+        (newLodging) => !prev.some((l) => l.id === newLodging.id),
+      );
+      return [...prev, ...uniqueNewLodgings];
+    });
+  };
+
   const removePlace = (placeId) => {
     setSelectedPlaces((prev) => prev.filter((p) => p.id !== placeId));
   };
@@ -73,6 +91,8 @@ export const SelectedPlacesProvider = ({ children }) => {
         selectedLodgings,
         addPlace,
         addLodging,
+        addPlaces,
+        addLodgings,
         removePlace,
         removeLodging,
         clearPlaces,

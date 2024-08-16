@@ -6,12 +6,13 @@ import App from "../pages/App.jsx";
 import Home from "../pages/home/Home.jsx";
 //user
 import LoginPage from "../pages/user/LoginPage.jsx";
+import MyPage from "../pages/user/MyPage.jsx";
+import Support from "../pages/user/Support.jsx";
 //plan
 import CreatePlan from "../pages/plan/CreatePlan.jsx";
 import PlanFirst from "../pages/plan/PlanFirst.jsx";
 import Plan from "../pages/plan/Plan.jsx";
 import PlanComplete from "../pages/plan/PlanComplete.jsx";
-import MyPlan from "../pages/user/MyPlan.jsx";
 //templete
 import TemplateMain from "../pages/templete/TemplateMain.jsx";
 import TemplateDetail from "../pages/templete/TemplateDetail.jsx";
@@ -25,6 +26,7 @@ import ErrorPage from "../pages/error/ErrorPage.jsx";
 import PrivacyPolicy from "../pages/user/PrivacyPolicy.jsx";
 import Agreements from "../pages/user/TermsOfService.jsx";
 import TermsOfService from "../pages/user/TermsOfService.jsx";
+import { LinkSharp } from "@mui/icons-material";
 
 const router = createBrowserRouter([
   {
@@ -43,7 +45,7 @@ const router = createBrowserRouter([
           { path: ":location", element: <PlanFirst /> },
         ],
       },
-      { path: LINKS.MYPLAN.path, element: <MyPlan /> },
+      { path: LINKS.MYPAGE.path, element: <MyPage /> },
       { path: LINKS.TRAVEL.path, element: <TravelInfo /> },
       { path: LINKS.TEMPLATE.path, element: <TemplateMain /> },
       { path: LINKS.TEMPLATE_DETAIL.path, element: <TemplateDetail /> },
@@ -51,6 +53,7 @@ const router = createBrowserRouter([
       { path: LINKS.PLACE.path, element: <PlaceDetail /> },
       { path: LINKS.POLICY.path, element: <PrivacyPolicy /> },
       { path: LINKS.USER_TOS.path, element: <TermsOfService /> },
+      { path: LINKS.SUPPORT.path, element: <Support /> },
     ],
   },
 ]);

@@ -26,13 +26,12 @@ import LoadingDialog from "../../components/UI/LoadingBar";
 import usePlanStore from "../../store/PlanContext.js";
 import useUserStore from "../../store/useUserStore.js";
 import LINKS from "../../routes/Links.jsx";
-import axiosInstance from "../../services/common/axios";
 
 const PlanComplete = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [planData, setPlanData] = useState(null);
-  const { setSelectedPlaces } = usePlanStore();
+  const { setSelectedPlacesData } = usePlanStore();
   const [expanded, setExpanded] = useState({});
   const [isAllExpanded, setIsAllExpanded] = useState(false);
   const { user } = useUserStore();
@@ -43,10 +42,7 @@ const PlanComplete = () => {
       console.log("API response:", data);
       if (data && data.dayPlans && Array.isArray(data.dayPlans)) {
         setPlanData(data);
-        setSelectedPlaces(
-          data.dayPlans.flatMap((dayPlan) => dayPlan.places) || [],
-        );
-
+        setSelectedPlacesData(data.places || []);
         const newExpanded = {};
         data.dayPlans.forEach((day) => {
           newExpanded[`day${day.day}`] = isAllExpanded;
@@ -103,8 +99,13 @@ const PlanComplete = () => {
     }
   };
 
-  const savePlan = async () => {
-    navigate(LINKS.MYPLAN.path);
+  const handleSavePlan = () => {
+    if (!user.userId) {
+      alert("Please log in to save your plan.");
+      navigate(LINKS.LOGIN.path, { state: { returnTo: location.pathname } });
+      return;
+    }
+    console.log("Save plan", planData);
   };
 
   const getIconByContentType = (contentTypeId) => {
@@ -315,7 +316,7 @@ const PlanComplete = () => {
         <Button
           variant="contained"
           color="primary"
-          onClick={savePlan}
+          onClick={handleSavePlan}
           fullWidth
           sx={{
             height: "48px",

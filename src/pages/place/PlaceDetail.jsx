@@ -3,39 +3,138 @@ import ArrowBackIcon from "@mui/icons-material/ArrowBack";
 import FavoriteIcon from "@mui/icons-material/Favorite";
 import FavoriteBorderIcon from "@mui/icons-material/FavoriteBorder";
 import { useState, useEffect } from "react";
-import { useLocation, useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
+import { fetchPlaceDetails } from "../../services/template/info";
 import defaultImg from "../../assets/images/place/default_img.png";
 
 const PlaceDetail = () => {
-  const location = useLocation();
+  const { id } = useParams();
   const navigate = useNavigate();
-  const { id, title, imgUrl, address, contactNumber, overview, likes } =
-    location.state;
 
-  // 로컬 스토리지 키 생성
-  const localStorageKey = `place-${id}-liked`;
+  const [placeDetails, setPlaceDetails] = useState(null);
+  const [isLoading, setIsLoading] = useState(true);
+  const [error, setError] = useState(null);
+  const [isLiked, setIsLiked] = useState(false);
+  const [likeCount, setLikeCount] = useState(0);
 
-  // 좋아요 상태를 로컬 스토리지에서 가져오기
-  const initialIsLiked = localStorage.getItem(localStorageKey) === "true";
-  const [isLiked, setIsLiked] = useState(initialIsLiked);
-  const [likeCount, setLikeCount] = useState(likes + (initialIsLiked ? 1 : 0));
+  useEffect(() => {
+    const fetchDetails = async () => {
+      try {
+        const response = await fetchPlaceDetails(id);
+        setPlaceDetails(response);
+        const initialIsLiked =
+          localStorage.getItem(`place-${id}-liked`) === "true";
+        setIsLiked(initialIsLiked);
+        setLikeCount(response.items.likes + (initialIsLiked ? 1 : 0));
+        setIsLoading(false);
+      } catch (error) {
+        setError(error);
+        setIsLoading(false);
+      }
+    };
+
+    fetchDetails();
+  }, [id]);
 
   const handleLikeToggle = () => {
     const newIsLiked = !isLiked;
     setIsLiked(newIsLiked);
-    setLikeCount(likeCount + (newIsLiked ? 1 : -1));
 
-    // 로컬 스토리지에 좋아요 상태 저장 또는 삭제
     if (newIsLiked) {
-      localStorage.setItem(localStorageKey, "true");
+      setLikeCount(likeCount + 1);
+      localStorage.setItem(`place-${id}-liked`, "true");
     } else {
-      localStorage.removeItem(localStorageKey);
+      setLikeCount(likeCount - 1);
+      localStorage.removeItem(`place-${id}-liked`);
     }
   };
 
   const handleBackBtn = () => {
     navigate(-1);
   };
+
+  // `open_time` 데이터를 순서대로 변환하는 함수
+  const formatOperatingHours = (openTimeStr) => {
+    // 데이터가 없을 경우
+    if (!openTimeStr && placeDetails.items.contentTypeId === 76) {
+      return (
+        <Typography variant="body2" align="center">
+          The operating hours cannot be confirmed at this time.
+        </Typography>
+      );
+    } else if (!openTimeStr && placeDetails.items.contentTypeId === 80) {
+      return (
+        <Typography variant="body2" align="center">
+          Check-in and check-out times cannot be confirmed.
+        </Typography>
+      );
+    }
+
+    const daysOrder = [
+      "Sunday",
+      "Monday",
+      "Tuesday",
+      "Wednesday",
+      "Thursday",
+      "Friday",
+      "Saturday",
+    ];
+
+    try {
+      if (openTimeStr.includes("Monday") || openTimeStr.includes("Tuesday")) {
+        const openTimeArray = JSON.parse(openTimeStr.replace(/'/g, '"'));
+        const dayMap = openTimeArray.reduce((acc, dayStr) => {
+          const [day, time] = dayStr.split(", ");
+          acc[day] = time;
+          return acc;
+        }, {});
+
+        return (
+          <>
+            {daysOrder.map((day) => (
+              <Typography key={day} variant="body2" align="center">
+                {day} : {dayMap[day] || "Closed"}
+              </Typography>
+            ))}
+            <Box sx={{ fontSize: "13px", marginTop: "1rem" }}>
+              <Typography align="center">
+                "Please contact the restaurant directly for the most up-to-date
+                information.**"
+              </Typography>
+            </Box>
+          </>
+        );
+      } else if (openTimeStr.includes("Check-in time")) {
+        // "Check-in time" 및 "Check-out time" 형식으로 되어 있는 경우 처리
+        const timesArray = openTimeStr.split(", ");
+        return timesArray.map((time, index) => (
+          <Typography key={index} variant="body2" align="center">
+            {time}
+          </Typography>
+        ));
+      } else {
+        return (
+          <Typography variant="body2" align="center">
+            {openTimeStr}
+          </Typography>
+        );
+      }
+    } catch (error) {
+      return (
+        <Typography variant="body2" align="center">
+          The operating hours cannot be confirmed at this time.
+        </Typography>
+      );
+    }
+  };
+
+  if (isLoading) {
+    return <Typography>Loading...</Typography>;
+  }
+
+  if (error) {
+    return <Typography>Error loading place details.</Typography>;
+  }
 
   return (
     <Box
@@ -62,8 +161,8 @@ const PlaceDetail = () => {
       </Box>
       <Box
         component="img"
-        src={imgUrl || defaultImg}
-        alt={title}
+        src={placeDetails.items.imgUrl || defaultImg}
+        alt={placeDetails.items.title}
         sx={{
           width: "100%",
           maxWidth: "600px",
@@ -71,12 +170,11 @@ const PlaceDetail = () => {
           borderRadius: "8px",
         }}
       />
-      {/* 좋아요 버튼 */}
       <Box
         sx={{
           display: "flex",
           alignItems: "center",
-          justifyContent: "flex-start", // 좌측 정렬
+          justifyContent: "flex-start",
           mt: 0.5,
           width: "100%",
           maxWidth: "600px",
@@ -93,42 +191,69 @@ const PlaceDetail = () => {
         </Typography>
       </Box>
       <Typography variant="h5" align="center" gutterBottom>
-        {title}
+        {placeDetails.items.title}
       </Typography>
       <Typography
         variant="body1"
         align="center"
         gutterBottom
-        dangerouslySetInnerHTML={{ __html: overview }}
+        dangerouslySetInnerHTML={{ __html: placeDetails.items.overview }}
       />
       <Box
         sx={{
           borderBottom: 1,
           borderColor: "grey.300",
           my: 2,
-          marginTop: "2rem",
-          marginBottom: "2rem",
+          width: "100%",
+          maxWidth: "600px",
+        }}
+      />
+      {placeDetails.items.contentTypeId === 80 && (
+        <Typography variant="h6" align="center" gutterBottom>
+          Check-in and Check-out Time
+        </Typography>
+      )}
+      {placeDetails.items.contentTypeId === 82 && (
+        <Typography variant="h6" align="center" gutterBottom>
+          Business hours
+        </Typography>
+      )}
+      {placeDetails.items.contentTypeId === 76 && (
+        <Typography variant="h6" align="center" gutterBottom>
+          Operating hours
+        </Typography>
+      )}
+      <Box>{formatOperatingHours(placeDetails.items.opentime)}</Box>
+      <Box
+        sx={{
+          borderBottom: 1,
+          borderColor: "grey.300",
+          my: 2,
           width: "100%",
           maxWidth: "600px",
         }}
       />
       <Typography variant="body2" align="center" gutterBottom>
-        주소: {address}
+        Address: {placeDetails.items.address}
       </Typography>
       <Box
         sx={{
           borderBottom: 1,
           borderColor: "grey.300",
           my: 2,
-          marginTop: "2rem",
-          marginBottom: "2rem",
           width: "100%",
           maxWidth: "600px",
         }}
       />
-      <Typography variant="body2" align="center" gutterBottom>
-        전화번호: {contactNumber}
-      </Typography>
+      {placeDetails.items.contactNumber ? (
+        <Typography variant="body2" align="center" gutterBottom>
+          Contact Number: +82 {placeDetails.items.contactNumber}
+        </Typography>
+      ) : (
+        <Typography variant="body2" align="center" gutterBottom>
+          There's no contact number available for this location.
+        </Typography>
+      )}
     </Box>
   );
 };

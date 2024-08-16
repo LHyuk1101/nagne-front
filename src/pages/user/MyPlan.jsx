@@ -1,5 +1,3 @@
-// MyPage.jsx
-
 import React, { useState, useEffect } from "react";
 import {
   Container,
@@ -17,6 +15,10 @@ import {
   ListItemAvatar,
   Button,
   CircularProgress,
+  Card,
+  CardMedia,
+  CardContent,
+  Divider,
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useQuery } from "@tanstack/react-query";
@@ -77,38 +79,108 @@ const MyPage = () => {
     if (!planDetailsData) return null;
 
     return (
-      <Box>
-        <Typography variant="h6">{planDetailsData.subject}</Typography>
-        <Typography>
-          {planDetailsData.startDay} - {planDetailsData.endDay}
-        </Typography>
-        <Typography>{planDetailsData.areaCodeName}</Typography>
+      <Box sx={{ py: 2 }}>
+        <Paper
+          elevation={2}
+          sx={{
+            padding: 2,
+            borderRadius: "12px",
+            backgroundColor: "#f0f4f8",
+            marginBottom: 3,
+          }}
+        >
+          <Typography
+            variant="h6"
+            sx={{ fontWeight: "bold", marginBottom: 1, color: "#333" }}
+          >
+            {planDetailsData.subject}
+          </Typography>
+          <Divider sx={{ marginBottom: 2 }} />
+          <Typography variant="body1" sx={{ marginBottom: 1 }}>
+            <strong>Location:</strong> {planDetailsData.areaCodeName}
+          </Typography>
+          <Typography variant="body1" sx={{ marginBottom: 1 }}>
+            <strong>Start Date:</strong> {planDetailsData.startDay}
+          </Typography>
+          <Typography variant="body1" sx={{ marginBottom: 1 }}>
+            <strong>End Date:</strong> {planDetailsData.endDay}
+          </Typography>
+        </Paper>
 
-        {planDetailsData.dayPlans && planDetailsData.dayPlans.length > 0 ? (
-          planDetailsData.dayPlans.map((dayPlan, index) => (
-            <Box key={index} mt={2}>
-              <Typography variant="subtitle1">Day {dayPlan.day}</Typography>
-              {dayPlan.places &&
-                dayPlan.places.map((place, placeIndex) => (
-                  <Box key={placeIndex} mt={1}>
-                    <Typography>{place.title}</Typography>
-                    <Typography variant="body2">
-                      {place.placeSummary}
-                    </Typography>
-                    {place.placeImgUrls && (
-                      <img
-                        src={place.placeImgUrls}
+        <Box sx={{ mt: 4 }}>
+          {planDetailsData.dayPlans && planDetailsData.dayPlans.length > 0 && (
+            <>
+              {planDetailsData.dayPlans.map((dayPlan, index) => (
+                <Box key={index} sx={{ mb: 3 }}>
+                  <Typography
+                    variant="subtitle1"
+                    sx={{
+                      fontWeight: "bold",
+                      marginBottom: 1,
+                      color: "#1976d2",
+                    }}
+                  >
+                    Day {dayPlan.day}
+                  </Typography>
+                  {dayPlan.places.map((place, idx) => (
+                    <Card
+                      key={idx}
+                      sx={{
+                        display: "flex",
+                        marginBottom: 2,
+                        borderRadius: "12px",
+                        boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                        overflow: "hidden",
+                        transition: "transform 0.3s ease",
+                        "&:hover": {
+                          transform: "translateY(-5px)",
+                        },
+                        height: "120px",
+                      }}
+                    >
+                      <CardMedia
+                        component="img"
+                        sx={{
+                          width: 120,
+                          height: "100%",
+                          objectFit: "cover",
+                        }}
+                        image={place.placeImgUrls}
                         alt={place.title}
-                        style={{ maxWidth: "100%", height: "auto" }}
                       />
-                    )}
-                  </Box>
-                ))}
-            </Box>
-          ))
-        ) : (
-          <Typography>No detailed plans available for this trip.</Typography>
-        )}
+                      <CardContent
+                        sx={{
+                          flexGrow: 1,
+                          display: "flex",
+                          flexDirection: "column",
+                          justifyContent: "center",
+                          padding: "8px 16px",
+                        }}
+                      >
+                        <Typography
+                          variant="h6"
+                          sx={{
+                            fontWeight: "bold",
+                            fontSize: "1rem",
+                            color: "#333",
+                          }}
+                        >
+                          {place.title}
+                        </Typography>
+                        <Typography
+                          variant="body2"
+                          sx={{ marginTop: 1, color: "#777" }}
+                        >
+                          {place.placeSummary}
+                        </Typography>
+                      </CardContent>
+                    </Card>
+                  ))}
+                </Box>
+              ))}
+            </>
+          )}
+        </Box>
       </Box>
     );
   };
@@ -143,7 +215,7 @@ const MyPage = () => {
           variant="h4"
           component="h1"
           gutterBottom
-          sx={{ fontWeight: "bold", color: "black", marginBottom: 2 }}
+          sx={{ fontWeight: "bold", color: "#333", marginBottom: 2 }}
         >
           My Plan
         </Typography>
@@ -151,70 +223,76 @@ const MyPage = () => {
           <Typography>No plans available.</Typography>
         ) : (
           <List>
-            {plans.map((plan) => (
-              <Paper
-                key={plan.id}
-                elevation={3}
-                sx={{
-                  marginBottom: 3,
-                  padding: 0,
-                  borderRadius: "16px",
-                  backgroundColor: "#ffffff",
-                  transition: "transform 0.2s ease-in-out",
-                  "&:hover": {
-                    transform: "translateY(-5px)",
-                  },
-                  cursor: "pointer",
-                }}
-                onClick={() => handleCardClick(plan)}
-              >
-                <ListItem
-                  sx={{ display: "flex", alignItems: "center", padding: 0 }}
+            {plans
+              .slice() // 원본 배열을 변형하지 않기 위해 slice() 사용
+              .reverse() // 배열의 순서를 역순으로 변경
+              .map((plan) => (
+                <Paper
+                  key={plan.id}
+                  elevation={4}
+                  sx={{
+                    marginBottom: 3,
+                    padding: 0,
+                    borderRadius: "16px",
+                    backgroundColor: "#ffffff",
+                    transition: "transform 0.3s ease, box-shadow 0.3s ease",
+                    "&:hover": {
+                      transform: "translateY(-8px)",
+                      boxShadow: "0 8px 16px rgba(0, 0, 0, 0.2)",
+                    },
+                    cursor: "pointer",
+                  }}
+                  onClick={() => handleCardClick(plan)}
                 >
-                  <ListItemAvatar sx={{ minWidth: 140 }}>
-                    <Avatar
-                      variant="square"
-                      src={plan.thumbnail || plan.thumbnailUrl} // 'thumbnail' 또는 'thumbnailUrl' 사용
-                      sx={{
-                        width: 140,
-                        height: 140,
-                        marginLeft: 0,
-                        borderRadius: "15px",
-                      }}
-                    />
-                  </ListItemAvatar>
-                  <Grid
-                    container
-                    direction="column"
-                    justifyContent="space-between"
-                    sx={{ paddingLeft: 5 }}
+                  <ListItem
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      padding: 0,
+                    }}
                   >
-                    <Typography
-                      variant="body1"
-                      component="div"
-                      gutterBottom
-                      sx={{ color: "primary.main", fontWeight: "bold" }}
+                    <ListItemAvatar sx={{ minWidth: 140 }}>
+                      <Avatar
+                        variant="square"
+                        src={plan.thumbnail || plan.thumbnailUrl} // 'thumbnail' 또는 'thumbnailUrl' 사용
+                        sx={{
+                          width: 140,
+                          height: 140,
+                          borderRadius: "12px",
+                          boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
+                        }}
+                      />
+                    </ListItemAvatar>
+                    <Grid
+                      container
+                      direction="column"
+                      justifyContent="space-between"
+                      sx={{ paddingLeft: 3 }}
                     >
-                      {plan.subject}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      sx={{ marginTop: 4 }}
-                    >
-                      {plan.areaCodeName}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      color="textSecondary"
-                      sx={{ marginTop: 1 }}
-                    >
-                      {`${plan.startDay} ~ ${plan.endDay}`}
-                    </Typography>
-                  </Grid>
-                </ListItem>
-              </Paper>
-            ))}
+                      <Typography
+                        variant="h6"
+                        component="div"
+                        gutterBottom
+                        sx={{ color: "#333", fontWeight: "bold" }}
+                      >
+                        {plan.subject}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#777", marginTop: 1 }}
+                      >
+                        {plan.areaCodeName}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{ color: "#777", marginTop: 1 }}
+                      >
+                        {`${plan.startDay} ~ ${plan.endDay}`}
+                      </Typography>
+                    </Grid>
+                  </ListItem>
+                </Paper>
+              ))}
           </List>
         )}
       </Box>
@@ -226,12 +304,12 @@ const MyPage = () => {
         fullWidth
         PaperProps={{
           sx: {
-            width: "600px",
-            maxHeight: "80vh",
-            height: "auto",
+            width: "600px", // 원하는 너비로 설정
+            height: "auto", // 자동 높이
+            maxHeight: "80vh", // 높이를 화면의 80%로 설정
             borderRadius: "16px",
-            padding: "2px",
-            overflow: "hidden",
+            padding: "16px",
+            boxShadow: "0 4px 8px rgba(0, 0, 0, 0.1)",
           },
         }}
       >
@@ -239,8 +317,9 @@ const MyPage = () => {
           sx={{
             textAlign: "center",
             fontWeight: "bold",
-            fontSize: "1.5rem",
+            fontSize: "1.25rem",
             color: "#1976d2",
+            padding: "16px",
           }}
         >
           Plan Details
@@ -248,9 +327,12 @@ const MyPage = () => {
         <DialogContent
           dividers
           sx={{
-            overflowY: "auto",
-            maxHeight: "70vh",
-            "::-webkit-scrollbar": { display: "none" },
+            padding: "16px",
+            maxHeight: "60vh", // 필요한 최대 높이로 설정
+            overflowY: "scroll", // 스크롤 허용
+            "::-webkit-scrollbar": {
+              display: "none", // 스크롤바 숨기기
+            },
           }}
         >
           {isPlanDetailsLoading ? (
@@ -266,7 +348,7 @@ const MyPage = () => {
             renderPlanDetails()
           )}
         </DialogContent>
-        <DialogActions sx={{ justifyContent: "center" }}>
+        <DialogActions sx={{ justifyContent: "center", padding: "16px" }}>
           <Button onClick={handleCloseDialog} sx={{ color: "#1976d2" }}>
             Close
           </Button>
