@@ -25,8 +25,9 @@ import { useQuery } from "@tanstack/react-query";
 import useUserStore from "../../store/useUserStore";
 import LINKS from "../../routes/Links";
 import { fetchPlans, fetchPlanDetails } from "../../services/plan/myplans.js";
+import default_img from "../../assets/images/place/default_img.png";
 
-const MyPage = () => {
+const MyPlan = () => {
   const navigate = useNavigate();
   const { user } = useUserStore();
   const [openDialog, setOpenDialog] = useState(false);
@@ -254,7 +255,7 @@ const MyPage = () => {
                     <ListItemAvatar sx={{ minWidth: 140 }}>
                       <Avatar
                         variant="square"
-                        src={plan.thumbnail || plan.thumbnailUrl} // 'thumbnail' 또는 'thumbnailUrl' 사용
+                        src={plan.thumbnail || plan.thumbnailUrl || default_img}
                         sx={{
                           width: 140,
                           height: 140,
@@ -358,4 +359,4 @@ const MyPage = () => {
   );
 };
 
-export default MyPage;
+export default MyPlan;

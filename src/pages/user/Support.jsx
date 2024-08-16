@@ -7,11 +7,11 @@ const Support = () => {
   return (
     <ThemeProvider theme={theme}>
       <Container maxWidth="md" sx={{ py: 4 }}>
-        <Box sx={{ textAlign: 'center', mb: 4 }}>
-          <img 
-            src="https://nordace.com/wp-content/uploads/2022/09/Nordace_PBV-11-800x800-2.jpg" 
-            alt="Nordace Backpack" 
-            style={{ maxWidth: "100%", height: "auto", borderRadius: '8px' }}
+        <Box sx={{ textAlign: "center", mb: 4 }}>
+          <img
+            src="https://nordace.com/wp-content/uploads/2022/09/Nordace_PBV-11-800x800-2.jpg"
+            alt="Nordace Backpack"
+            style={{ maxWidth: "100%", height: "auto", borderRadius: "8px" }}
           />
         </Box>
         <Box sx={{ mb: 4 }}>
@@ -45,11 +45,11 @@ const Support = () => {
             Who We Are
           </Typography>
           <Typography variant="body1" paragraph>
-            At Nagne, we are passionate about travel and committed
-            to helping you explore the world's most exciting destinations.
-            Whether you're planning a luxurious vacation, a quick weekend
-            getaway, or an adventurous backpacking trip, we provide all the
-            tools and resources to make your dream journey a reality.
+            At Nagne, we are passionate about travel and committed to helping
+            you explore the world's most exciting destinations. Whether you're
+            planning a luxurious vacation, a quick weekend getaway, or an
+            adventurous backpacking trip, we provide all the tools and resources
+            to make your dream journey a reality.
           </Typography>
           <Typography variant="body1" paragraph>
             We connect with top hotels, airlines, and tour providers to bring
