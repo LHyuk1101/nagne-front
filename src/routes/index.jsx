@@ -6,7 +6,7 @@ import App from "../pages/App.jsx";
 import Home from "../pages/home/Home.jsx";
 //user
 import LoginPage from "../pages/user/LoginPage.jsx";
-import MyPage from "../pages/user/MyPage.jsx";
+import MyPlan from "../pages/user/MyPlan.jsx";
 import Support from "../pages/user/Support.jsx";
 //plan
 import CreatePlan from "../pages/plan/CreatePlan.jsx";
@@ -45,7 +45,7 @@ const router = createBrowserRouter([
           { path: ":location", element: <PlanFirst /> },
         ],
       },
-      { path: LINKS.MYPAGE.path, element: <MyPage /> },
+      { path: LINKS.MYPLAN.path, element: <MyPlan /> },
       { path: LINKS.TRAVEL.path, element: <TravelInfo /> },
       { path: LINKS.TEMPLATE.path, element: <TemplateMain /> },
       { path: LINKS.TEMPLATE_DETAIL.path, element: <TemplateDetail /> },
