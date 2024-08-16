@@ -63,7 +63,7 @@ const Home = () => {
         <Box
           sx={{
             backgroundImage:
-              'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://ifh.cc/g/CDKS51.jpg")',
+              'linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url("https://scontent-ssn1-1.xx.fbcdn.net/v/t39.30808-6/433443094_286681727786402_6906666408086787766_n.jpg?_nc_cat=106&ccb=1-7&_nc_sid=833d8c&_nc_ohc=SNjKU8Q-AVcQ7kNvgGJ6q2J&_nc_ht=scontent-ssn1-1.xx&oh=00_AYCZTEduvw0UYGiRChmn-lWYT-d8UWn_cSDwORpI_ZsLkg&oe=66C4D72B")',
             backgroundSize: "cover",
             backgroundPosition: "center",
             height: "100vh",
@@ -86,7 +86,7 @@ const Home = () => {
                 fontSize: { xs: "2rem", sm: "3rem", md: "4rem" },
               }}
             >
-              Discover Your Next Adventure
+              Start Your Next Adventure
             </Typography>
             <Typography
               variant="h5"
@@ -97,8 +97,7 @@ const Home = () => {
                 fontSize: { xs: "1rem", sm: "1.25rem", md: "1.5rem" },
               }}
             >
-              Explore breathtaking destinations and create unforgettable
-              memories
+              Explore beautiful places and create memories you’ll never forget!
             </Typography>
             <Button
               variant="contained"

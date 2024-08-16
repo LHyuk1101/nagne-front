@@ -44,8 +44,13 @@ const LoginPage = () => {
           event.data;
         localStorage.setItem("accessToken", accessToken);
         setUser({ userId, nickname, email, role, userProfileImg });
+        const returnTo = localStorage.getItem("returnTo");
 
-        window.location.href = "/";
+        if (returnTo) {
+          navigate(LINKS.PLAN_FIRST.link + placeName);
+        } else {
+          window.location.href = "/";
+        }
       }
     };
 
