@@ -10,21 +10,12 @@ import usePlanStore from "../../store/PlanContext.js";
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
 const handleSocialMediaAccountLogin = (selectedSocialMedia) => () => {
-  let apiCallURL = "";
-  console.log(selectedSocialMedia);
-  switch (selectedSocialMedia) {
-    case "Google":
-      apiCallURL = `${baseURL}/api/login/oauth2/authorization/google`;
-      break;
-    case "Facebook":
-      apiCallURL = `${baseURL}/api/login/oauth2/authorization/facebook`;
-      break;
-    default:
-      console.error("Unknown SocialMedia", selectedSocialMedia);
-      return;
-  }
+  const socialMediaURLs = {
+    Google: `${baseURL}/api/login/oauth2/authorization/google`,
+    Facebook: `${baseURL}/api/login/oauth2/authorization/facebook`,
+  };
 
-  console.log(apiCallURL);
+  const apiCallURL = socialMediaURLs[selectedSocialMedia];
   const width = window.innerWidth;
   const height = window.innerHeight;
   const left = window.screenX;
@@ -86,7 +77,7 @@ const LoginPage = () => {
           onClick={handleSocialMediaAccountLogin("Facebook")}
           style={{
             cursor: "pointer",
-            height: "100px",
+            height: "60px",
             marginRight: "10px",
           }}
         />
@@ -96,7 +87,7 @@ const LoginPage = () => {
           onClick={handleSocialMediaAccountLogin("Google")}
           style={{
             cursor: "pointer",
-            height: "100px",
+            height: "60px",
             marginRight: "10px",
           }}
         />
