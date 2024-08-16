@@ -19,9 +19,9 @@ const LINKS = {
     path: "/plan",
     link: "/plan",
   },
-  MYPAGE: {
-    path: "/user/mypage",
-    link: "/user/mypage",
+  MYPLAN: {
+    path: "/user/myplan",
+    link: "/user/myplan",
   },
   TRAVEL: {
     path: "/travel",

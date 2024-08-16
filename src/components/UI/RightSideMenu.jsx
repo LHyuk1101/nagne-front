@@ -51,7 +51,7 @@ const NaviItemsTop = (user) => [
     icon: <EventNoteIcon />,
     text: "My Plan",
     isLogin: true,
-    route: "/my-plan",
+    route: LINKS.MYPLAN.path,
   },
   {
     icon: <PersonIcon />,

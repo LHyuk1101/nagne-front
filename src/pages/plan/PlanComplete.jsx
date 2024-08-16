@@ -104,18 +104,7 @@ const PlanComplete = () => {
   };
 
   const savePlan = async () => {
-    if (!user.userId) {
-      navigate(LINKS.LOGIN.path);
-      return;
-    }
-    try {
-      await axiosInstance.post("/api/plans", planData);
-      console.log("Plan saved successfully");
-      navigate(LINKS.MYPAGE.path);
-    } catch (error) {
-      console.error("Error saving plan:", error);
-      alert("Failed to save plan. Please try again.");
-    }
+    navigate(LINKS.MYPLAN.path);
   };
 
   const getIconByContentType = (contentTypeId) => {
