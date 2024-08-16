@@ -15,6 +15,7 @@ import {
   Button,
   Switch,
   FormControlLabel,
+  Divider,
 } from "@mui/material";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import LocationOnIcon from "@mui/icons-material/LocationOn";
@@ -152,8 +153,14 @@ const PlanComplete = () => {
         align="center"
         sx={{ mb: 3, fontWeight: "bold" }}
       >
-        Your Travel Plan
+        {planData.subject || "Your Travel Plan"}
       </Typography>
+
+      {planData.reasoning && (
+        <Typography variant="body1" sx={{ mb: 2, fontStyle: "italic" }}>
+          {planData.reasoning}
+        </Typography>
+      )}
 
       <Box
         sx={{
@@ -229,7 +236,7 @@ const PlanComplete = () => {
                         </Typography>
                       }
                       secondary={
-                        <React.Fragment>
+                        <Box sx={{ mt: 1 }}>
                           <Typography
                             variant="body2"
                             color="text.primary"
@@ -237,7 +244,34 @@ const PlanComplete = () => {
                           >
                             {place.placeSummary}
                           </Typography>
-                        </React.Fragment>
+                          {(place.subject || place.reasoning) && (
+                            <Box
+                              sx={{
+                                mt: 1,
+                                pl: 2,
+                                borderLeft: "2px solid #e0e0e0",
+                              }}
+                            >
+                              {place.subject && (
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                  sx={{ mb: 0.5 }}
+                                >
+                                  <strong>Subject:</strong> {place.subject}
+                                </Typography>
+                              )}
+                              {place.reasoning && (
+                                <Typography
+                                  variant="body2"
+                                  color="text.secondary"
+                                >
+                                  {place.reasoning}
+                                </Typography>
+                              )}
+                            </Box>
+                          )}
+                        </Box>
                       }
                       sx={{ ml: 2 }}
                     />
@@ -293,6 +327,9 @@ const PlanComplete = () => {
                         {`${dayPlan.places[placeIndex + 1].moveTime || "Unknown"} minutes`}
                       </Typography>
                     </Box>
+                  )}
+                  {placeIndex < dayPlan.places.length - 1 && (
+                    <Divider variant="inset" component="li" />
                   )}
                 </React.Fragment>
               ))}
