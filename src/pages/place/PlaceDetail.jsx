@@ -27,6 +27,7 @@ const PlaceDetail = () => {
         setIsLiked(initialIsLiked);
         setLikeCount(response.items.likes + (initialIsLiked ? 1 : 0));
         setIsLoading(false);
+        window.scrollTo({ top: 0 });
       } catch (error) {
         setError(error);
         setIsLoading(false);
@@ -36,7 +37,7 @@ const PlaceDetail = () => {
     fetchDetails();
   }, [id]);
 
-  const handleLikeToggle = () => {
+  const handleLikeToggle = (event) => {
     const newIsLiked = !isLiked;
     setIsLiked(newIsLiked);
 
@@ -47,6 +48,8 @@ const PlaceDetail = () => {
       setLikeCount(likeCount - 1);
       localStorage.removeItem(`place-${id}-liked`);
     }
+
+    event.currentTarget.blur();
   };
 
   const handleBackBtn = () => {
