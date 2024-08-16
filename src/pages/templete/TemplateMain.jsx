@@ -2,47 +2,87 @@ import React, { useState, useEffect } from "react";
 import { Box, Typography, useTheme, useMediaQuery } from "@mui/material";
 import AreaScroll from "../../components/Template/AreaScroll";
 import TemplateCardComponent from "../../components/Template/TemplateCard";
-
+import { useQuery } from "@tanstack/react-query";
+import { fetchTemplates } from "../../services/template/template.js";
 const TemplateMain = () => {
-  const [selectedArea, setSelectedArea] = useState("Seoul");
-  const [templateData, setTemplateData] = useState([
-    {
-      title: "Seoul 2-Day Urban Adventure",
-      description:
-        "Explore Seoul's vibrant neighborhoods, historical sites, and modern attractions in just 2 days. Perfect for first-time visitors.",
-      image: "https://cdn.myro.co.kr/prod/image/city/Seoul.jpg",
-    },
-    {
-      title: "Seoul 3-Day Cultural Journey",
-      description:
-        "Immerse yourself in Seoul's rich cultural heritage, from ancient palaces to contemporary art scenes over a delightful 3-day itinerary.",
-      image:
-        "https://search.pstatic.net/sunny/?src=https%3A%2F%2Fus.123rf.com%2F450wm%2Fnattanaicj%2Fnattanaicj1512%2Fnattanaicj151200188%2F50305740-%25EC%2584%259C%25EC%259A%25B8-%25ED%2595%259C%25EA%25B5%25AD%25EC%2597%2590%25EC%2584%259C-%25EB%25B0%25A4%25EC%2597%2590-%25EA%25B2%25BD%25EB%25B3%25B5%25EA%25B6%2581-%25EA%25B6%2581%25EC%25A0%2584.jpg%3Fver%3D6&type=a340",
-    },
-    {
-      title: "Seoul Weekend Foodie Tour",
-      description:
-        "Discover Seoul's best culinary experiences in a weekend. From street food markets to high-end dining, indulge in the city's diverse flavors.",
-      image:
-        "https://search.pstatic.net/common/?src=http%3A%2F%2Fblogfiles.naver.net%2FMjAyMDEyMjZfMTk2%2FMDAxNjA4OTQ1NzI5NTE5.oPy3QNmBGExmibZdqtxM0Kn2hT6I6XObRoMixDbrKqYg.K_GDEWk-LFCfFzcqe_rvZ2ZiMjlgo5-wuR4Lf4hT2C4g.JPEG.mbillionaire7%2Fresized%25A3%25DF62bbd03c863788a9b76f074b229a8630.jpg&type=ofullfill340_600_png",
-    },
-  ]);
+  const [selectedArea, setSelectedArea] = useState({
+    name: "Seoul",
+    code: 1,
+  });
+  const [templateData, setTemplateData] = useState([]);
 
   const theme = useTheme();
   const isMobile = useMediaQuery(theme.breakpoints.down("sm"));
+  //
+  // useEffect(() => {
+  //   fetchTemplates(selectedArea);
+  // }, [selectedArea]);
 
-  useEffect(() => {
-    fetchTemplates(selectedArea);
-  }, [selectedArea]);
+  //
+  const { data, isLoading, error } = useQuery({
+    queryKey: ["templateList", selectedArea],
+    queryFn: () => fetchTemplates(selectedArea),
+    staleTime: 5 * 60 * 1000,
+  });
 
-  const fetchTemplates = async (area) => {
-    try {
-      const response = await fetch(`/api/templates?area=${area}`);
-      const data = await response.json();
-      setTemplateData(data);
-    } catch (error) {
-      console.error("Error fetching template data:", error);
+  const areacodes = [
+    { name: "Seoul", code: 1 },
+    { name: "Incheon", code: 2 },
+    { name: "Daejeon", code: 3 },
+    { name: "Daegu", code: 4 },
+    { name: "Gwangju", code: 5 },
+    { name: "Busan", code: 6 },
+    { name: "Ulsan", code: 7 },
+    { name: "Gyeonggi", code: 31 },
+    { name: "Gangwon", code: 32 },
+    { name: "Chungbuk", code: 33 },
+    { name: "Chungnam", code: 34 },
+    { name: "Gyeongbuk", code: 35 },
+    { name: "Gyeongnam", code: 36 },
+    { name: "Jeonbuk", code: 37 },
+    { name: "Jeonnam", code: 38 },
+    { name: "Jeju", code: 39 },
+  ];
+
+  const renderContent = () => {
+    if (isLoading) {
+      return <div>Loading...</div>;
     }
+
+    if (error) {
+      return <div>Error: {error.message}</div>;
+    }
+
+    if (data) {
+      const mappedData = data.items.map((template) => ({
+        title: template.subject,
+        description: template.overview,
+        image: template.thumbnailUrl,
+      }));
+      return (
+        <>
+          <Box>
+            {mappedData.map((template, index) => (
+              <TemplateCardComponent
+                key={index}
+                title={template.title}
+                description={template.description}
+                image={template.image}
+              />
+            ))}
+          </Box>
+        </>
+      );
+    }
+
+    return null;
+  };
+
+  const handleAreaCode = (areaName) => {
+    const selectedArea = areacodes
+      .filter((area) => area.name === areaName)
+      .slice(0, 1);
+    setSelectedArea(selectedArea);
   };
 
   return (
@@ -70,17 +110,13 @@ const TemplateMain = () => {
         Popular Areas
       </Typography>
       <Box sx={{ mb: 6 }}>
-        <AreaScroll onAreaClick={setSelectedArea} />
+        <AreaScroll onAreaClick={handleAreaCode} />
       </Box>
 
       <Typography variant="h5" gutterBottom sx={{ mb: 3 }}>
         Featured Templates
       </Typography>
-      <Box>
-        {templateData.map((template, index) => (
-          <TemplateCardComponent key={index} template={template} />
-        ))}
-      </Box>
+      {renderContent()}
     </Box>
   );
 };

@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
 import {
   Typography,
@@ -14,6 +14,7 @@ import {
   CssBaseline,
 } from "@mui/material";
 import LINKS from "../../routes/Links";
+import { fetchPopularDestinations } from "../../services/home/home";
 
 const theme = createTheme({
   typography: {
@@ -48,8 +49,41 @@ const theme = createTheme({
 
 const Home = () => {
   const navigate = useNavigate();
+  const [destinations, setDestinations] = useState([]);
+  const [error, setError] = useState(null);
+  const [expanded, setExpanded] = useState({});
+
+  useEffect(() => {
+    const getDestinations = async () => {
+      try {
+        const data = await fetchPopularDestinations();
+        if (Array.isArray(data)) {
+          setDestinations(data);
+        } else {
+          setDestinations([]);
+        }
+      } catch (error) {
+        console.error("Failed to fetch destinations", error);
+        setError("Failed to load popular destinations.");
+      }
+    };
+
+    getDestinations();
+  }, []);
+
   const handleStartPlanning = () => {
     navigate("/create");
+  };
+
+  const handleClick = (destination) => {
+    navigate(`/place/${destination.id}`, { state: destination });
+  };
+
+  const handleExpandClick = (index) => {
+    setExpanded((prevState) => ({
+      ...prevState,
+      [index]: !prevState[index],
+    }));
   };
 
   return (
@@ -133,77 +167,78 @@ const Home = () => {
           >
             Popular Destinations
           </Typography>
-          <Grid container spacing={2}>
-            {[
-              {
-                name: "Seongsan Sunrise Peak",
-                description: "Experience the magic of tropical paradise",
-                image:
-                  "https://cdn.pixabay.com/photo/2019/09/07/09/55/sunrise-4458433_1280.jpg",
-              },
-              {
-                name: "Gyeongbokgung (Palace)",
-                description: "Indulge in romance and culture",
-                image:
-                  "https://cdn.pixabay.com/photo/2020/11/02/15/16/palace-5707010_1280.jpg",
-              },
-              {
-                name: "Changgyeonggung (Palace)",
-                description: "Discover the city that never sleeps",
-                image:
-                  "https://cdn.pixabay.com/photo/2020/11/21/23/55/changgyeonggung-5765370_1280.jpg",
-              },
-              {
-                name: "Yeosu",
-                description: "Immerse yourself in futuristic wonders",
-                image:
-                  "https://cdn.pixabay.com/photo/2018/10/21/04/05/night-view-3762230_1280.jpg",
-              },
-            ].map((destination, index) => (
-              <Grid item key={index} xs={12} sm={6} md={6} lg={3}>
-                <Card
-                  sx={{
-                    height: "100%",
-                    display: "flex",
-                    flexDirection: "column",
-                    "&:hover": {
-                      transform: "translateY(-5px)",
-                      transition: "transform 0.3s ease",
-                    },
-                  }}
+
+          {error ? (
+            <Typography variant="h6" color="error" align="center">
+              {error}
+            </Typography>
+          ) : (
+            <Grid container spacing={2}>
+              {destinations.map((destination, index) => (
+                <Grid
+                  item
+                  key={index}
+                  xs={12}
+                  sm={6}
+                  md={6}
+                  lg={3}
+                  onClick={() => handleClick(destination)}
+                  sx={{ cursor: "pointer" }}
                 >
-                  <CardMedia
-                    component="img"
-                    sx={{ height: { xs: 120, sm: 140, md: 160 } }}
-                    image={destination.image}
-                    alt={destination.name}
-                  />
-                  <CardContent sx={{ flexGrow: 1, p: 2 }}>
-                    <Typography
-                      gutterBottom
-                      variant="h6"
-                      component="h2"
-                      sx={{
-                        fontWeight: 600,
-                        fontSize: { xs: "1rem", sm: "1.25rem" },
-                      }}
-                    >
-                      {destination.name}
-                    </Typography>
-                    <Typography
-                      variant="body2"
-                      sx={{
-                        fontWeight: 300,
-                        fontSize: { xs: "0.875rem", sm: "1rem" },
-                      }}
-                    >
-                      {destination.description}
-                    </Typography>
-                  </CardContent>
-                </Card>
-              </Grid>
-            ))}
-          </Grid>
+                  <Card
+                    sx={{
+                      height: "100%",
+                      display: "flex",
+                      flexDirection: "column",
+                      "&:hover": {
+                        transform: "translateY(-5px)",
+                        transition: "transform 0.3s ease",
+                      },
+                    }}
+                  >
+                    <CardMedia
+                      component="img"
+                      sx={{ height: { xs: 200, sm: 250, md: 300 } }}
+                      image={destination.thumbnailUrl}
+                      alt={destination.title}
+                    />
+                    <CardContent sx={{ flexGrow: 1, p: 2 }}>
+                      <Typography
+                        gutterBottom
+                        variant="h6"
+                        component="h2"
+                        sx={{
+                          fontWeight: 600,
+                          fontSize: { xs: "1rem", sm: "1.25rem" },
+                        }}
+                      >
+                        {destination.title}
+                      </Typography>
+                      <Typography
+                        variant="body2"
+                        sx={{
+                          fontWeight: 300,
+                          fontSize: { xs: "0.875rem", sm: "1rem" },
+                        }}
+                      >
+                        {expanded[index]
+                          ? destination.overview
+                          : `${destination.overview.substring(0, 200)}...`}
+                      </Typography>
+                      <Button
+                        size="small"
+                        color="primary"
+                        onClick={() => handleExpandClick(index)}
+                        sx={{ mt: 1 }}
+                      >
+                        {expanded[index] ? "Show Less" : "More"}
+                      </Button>
+                    </CardContent>
+                  </Card>
+                </Grid>
+              ))}
+            </Grid>
+          )}
         </Container>
 
         <Box
