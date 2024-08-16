@@ -115,7 +115,11 @@ const RecommendedSection = ({ selectedArea }) => {
         <Typography variant="h6" align="center" gutterBottom>
           Recommended travel destination
         </Typography>
-        <Button variant="text" onClick={() => handleMoreClick("travel")}>
+        <Button
+          variant="text"
+          onClick={() => handleMoreClick("travel")}
+          style={{ marginBottom: "0.25rem" }}
+        >
           More
         </Button>
       </Box>
@@ -193,7 +197,11 @@ const RecommendedSection = ({ selectedArea }) => {
         <Typography variant="h6" align="center" gutterBottom>
           Recommended restaurants
         </Typography>
-        <Button variant="text" onClick={() => handleMoreClick("restaurants")}>
+        <Button
+          variant="text"
+          onClick={() => handleMoreClick("restaurants")}
+          style={{ marginBottom: "0.35rem" }}
+        >
           More
         </Button>
       </Box>
