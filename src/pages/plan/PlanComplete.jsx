@@ -33,7 +33,7 @@ const PlanComplete = () => {
   const location = useLocation();
   const navigate = useNavigate();
   const [planData, setPlanData] = useState(null);
-  const { setSelectedPlaces } = usePlanStore();
+  const { setSelectedPlacesData } = usePlanStore();
   const [expanded, setExpanded] = useState({});
   const [isAllExpanded, setIsAllExpanded] = useState(false);
   const { user } = useUserStore();
@@ -48,7 +48,7 @@ const PlanComplete = () => {
       console.log("API response:", data);
       if (data && data.dayPlans && Array.isArray(data.dayPlans)) {
         setPlanData(data);
-        setSelectedPlaces(data.places || []);
+        setSelectedPlacesData(data.places || []);
         const newExpanded = {};
         data.dayPlans.forEach((day) => {
           newExpanded[`day${day.day}`] = isAllExpanded;

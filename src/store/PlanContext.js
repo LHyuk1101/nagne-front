@@ -27,10 +27,10 @@ const usePlanStore = create(
       areaCode: 0,
       lat: "",
       lng: "",
-      selectedPlaces: [],
+      selectedPlacesData: [],
       isPlanCreated: false,
-      setSelectedPlaces: (selectedItems) =>
-        set({ selectedPlaces: selectedItems }),
+      setSelectedPlacesData: (selectedItems) =>
+        set({ selectedPlacesData: selectedItems }),
       setStartDate: (date) => set({ startDate: date }),
       setEndDate: (date) => set({ endDate: date }),
       setPlaceName: (name) => set({ placeName: name }),
@@ -38,6 +38,7 @@ const usePlanStore = create(
       setLng: (lng) => set({ lng: lng }),
       setAreaCode: (code) => set({ areaCode: code }),
       setIsPlanCreated: (value) => set({ isPlanCreated: value }),
+      clearPlacesData: () => set([]),
     }),
     {
       name: "plan-storage",

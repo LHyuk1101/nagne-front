@@ -11,6 +11,7 @@ const useUserStore = create(
         email: "",
         role: "",
         userProfileImg: "",
+        isLogin: false,
       },
       setUser: (user) => set({ user }),
       clearUser: () =>
@@ -21,6 +22,7 @@ const useUserStore = create(
             email: "",
             role: "",
             userProfileImg: "",
+            isLogin: false,
           },
         }),
     }),

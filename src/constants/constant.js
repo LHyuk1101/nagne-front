@@ -168,3 +168,5 @@ export const AREA_COMMONS = [
     lng: "126.5312",
   },
 ];
+
+export const ACCOMMODATION_TYPE = 80;

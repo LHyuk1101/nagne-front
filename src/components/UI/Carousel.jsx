@@ -38,7 +38,7 @@ export const Carousel = ({ startDate, endDate }) => {
     setLat(selectedPlace.lat);
     setLng(selectedPlace.lng);
     setAreaCode(selectedPlace.areaCode);
-    navigate(`${LINKS.PLAN_FIRST.link}/${selectedSlide}`);
+    navigate(`${LINKS.PLAN_FIRST.link}${selectedSlide}`);
   };
   return (
     <>
@@ -101,7 +101,7 @@ export const Carousel = ({ startDate, endDate }) => {
         </Swiper>
       </section>
       <Link
-        to={`${LINKS.PLAN_FIRST.link}/${selectedSlide}`}
+        to={`${LINKS.PLAN_FIRST.link}${selectedSlide}`}
         state={{
           startDate,
           endDate,

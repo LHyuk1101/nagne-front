@@ -18,12 +18,20 @@ const PoiMarker = ({ poi, index, isOpen, onMarkerClick, color }) => {
     onMarkerClick(poi.id);
   }, [onMarkerClick, poi.id]);
 
+  const lat = parseFloat(poi.lat);
+  const lng = parseFloat(poi.lng);
+
+  if (isNaN(lat) || isNaN(lng)) {
+    console.error(`Invalid coordinates for POI: ${poi.id}`, poi);
+    return null; // 유효하지 않은 좌표인 경우 마커를 렌더링하지 않음
+  }
+
   return (
     <>
       <AdvancedMarker
         ref={markerRef}
         onClick={handleMarkerClick}
-        position={{ lat: poi.lat, lng: poi.lng }}
+        position={{ lat, lng }}
       >
         <Pin
           background={color}

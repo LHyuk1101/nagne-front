@@ -49,7 +49,7 @@ const LINKS = {
   },
   PLAN_FIRST: {
     path: "/plan/:location",
-    link: "/plan",
+    link: "/plan/",
   },
   PLACE: {
     path: "/place/:placeId",

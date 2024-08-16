@@ -4,6 +4,8 @@ import useUserStore from "../../store/useUserStore";
 import { Container, Typography, Box } from "@mui/material";
 import FacebookLogo from "../../assets/images/logo/Facebook_login_icon.svg";
 import GoogleLogo from "../../assets/images/logo/google_login_icon.svg";
+import LINKS from "../../routes/Links.jsx";
+import usePlanStore from "../../store/PlanContext.js";
 
 const baseURL = import.meta.env.VITE_API_BASE_URL;
 
@@ -42,6 +44,7 @@ const handleSocialMediaAccountLogin = (selectedSocialMedia) => () => {
 const LoginPage = () => {
   const navigate = useNavigate();
   const setUser = useUserStore((state) => state.setUser);
+  const { placeName } = usePlanStore();
 
   useEffect(() => {
     const handleAuthComplete = (event) => {
@@ -51,18 +54,10 @@ const LoginPage = () => {
         localStorage.setItem("accessToken", accessToken);
         setUser({ userId, nickname, email, role, userProfileImg });
 
-        const tempPlanData = localStorage.getItem("tempPlanData");
         const returnTo = localStorage.getItem("returnTo");
 
-        if (tempPlanData && returnTo) {
-          localStorage.removeItem("tempPlanData");
-          localStorage.removeItem("returnTo");
-          navigate(LINKS.PLAN_FIRST.path, {
-            state: {
-              planData: JSON.parse(tempPlanData),
-              fromLogin: true,
-            },
-          });
+        if (returnTo) {
+          navigate(LINKS.PLAN_FIRST.link + placeName);
         } else {
           navigate("/");
         }

@@ -2,7 +2,12 @@ import { Outlet } from "react-router-dom";
 import { Box, styled } from "@mui/material";
 import GoogleMap from "../../components/map/GoogleMap.jsx";
 import PlanHeader from "./PlanHeader.jsx";
-import { SelectedPlacesProvider } from "../../store/place/PlaceContext.jsx";
+import {
+  SelectedPlacesProvider,
+  useSelectedPlaces,
+} from "../../store/place/PlaceContext.jsx";
+import { ACCOMMODATION_TYPE } from "../../constants/constant.js";
+import { useEffect } from "react";
 
 const Map = styled(Box)(({ theme }) => ({
   width: "100%",
