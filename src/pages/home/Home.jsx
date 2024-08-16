@@ -166,8 +166,14 @@ const Home = () => {
                   >
                     <CardMedia
                       component="img"
-                      sx={{ height: { xs: 200, sm: 250, md: 300 } }}
-                      image={destination.thumbnailUrl || defaultImg}
+                      sx={{
+                        aspectRatio: "16/9",
+                        objectFit: "cover",
+                        width: "100%",
+                        maxWidth: "600px",
+                        height: "300px",
+                      }}
+                      image={destination.imgUrl || defaultImg}
                       alt={destination.title}
                     />
                     <CardContent sx={{ flexGrow: 1, p: 2 }}>
